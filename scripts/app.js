@@ -12,10 +12,19 @@ const saveTasksToLocalStorage = () => {
 
 const loadTasksFromLocalStorage = () => {
     const savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-        tasks = JSON.parse(savedTasks);
+    try {
+        const parsedTasks = JSON.parse(savedTasks);
+        if (Array.isArray(parsedTasks)) {
+            tasks = parsedTasks;
+        } else {
+            tasks = []; 
+        }
+    } catch (e) {
+        console.error("Failed to parse tasks from localStorage:", e);
+        tasks = []; 
     }
 }
+
 
 // show and hide popup to add new task
 
