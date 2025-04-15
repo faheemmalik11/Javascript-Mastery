@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./styles/output.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/240b0bf0d2.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body class="m-0 p-0 bg-gray-100 box-border">
+    <header class="p-5 bg-blue-600 text-white font-extrabold text-2xl flex justify-around">
+        <span class="">Task Flow Manager</span>
+        <span class="" id="total-task-count"></span>
+    </header>
+    <!-- Remainder: Due Task Today -->
+    <section id="Due-task-today">
+
+    </section>
+
+    <main class="">
+        <!-- Add task Button -->
+        <section class="flex justify-center max-w-7xl mx-auto p-3  mt-3">
+            <button id="add-task-button"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold border-none p-5 w-1/2 max-w-sm rounded-lg cursor-pointer text-lg"
+                onclick="showAddTaskForm()">Add Task</button>
+        </section>
+
+
+     
+        <!-- Add Task Form Popup -->
+        <section id="add-task-form"
+            class="absolute top-40 left-1/2 transform -translate-x-1/2 z-50 p-4 sm:p-6 w-[90%] sm:w-[400px] md:w-[500px] hidden">
+            <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-full sm:max-w-md relative">
+                <!-- Close Button -->
+                <button id="close-add-task-form-button" onclick="closeAddTaskWindow()"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-extrabold cursor-pointer">x</button>
+
+                <h2 class="text-2xl font-bold mb-4 text-center">Add New Task</h2>
+                <form id="taskForm" class="space-y-4" onsubmit="SubmitFormData()">
+                    <input id="task-title" type="text" placeholder="Title"
+                        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <textarea id="task-description" placeholder="Description"
+                        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <input id="task-date" type="date"
+                        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="task-priority"
+                        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option disabled>Priority</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <select id="task-category"
+                        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option disabled>Select Category</option>
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="health">Health</option>
+                        <option value="finance">Finance</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="education">Education</option>
+                    </select>
+                    <button id="task-submit-button" type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg w-full cursor-pointer">Save
+                        Task</button>
+                </form>
+                <div id="task-added-popup"
+                    class="absolute top-1/2 left-1/9 lg:left-1/6 -translate-y-20 z-99 bg-blue-600 text-center p-8 rounded-md hidden">
+                    <i class="fa-regular fa-circle-check text-5xl mb-4 text-white"></i>
+                    <span class="text-xl text-white font-bold block">
+                        Task Added Successfully
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task List -->
+        <section class="min-h-[400px] border-y-1 mt-8 border-gray-500">
+            <!--  Heading -->
+            <div
+                class="bg-blue-600 text-white last-border-b-null text-xl font-extrabold flex justify-around gap-4 items-center p-3 ">
+                <h4 class="w-1/6">Title</h4>
+                <p class="w-1/6">Description</p>
+                <span class="w-1/6">
+                    <span class="">Due Date</span>
+                    <button class="" onclick="sortByDate()">
+                        <i class="fa-solid fa-sort text-sm text-white cursor-pointer hover:opacity-70"></i>
+                    </button></span>
+                <span class="w-1/6">
+                    <span class="">Priority</span>
+                    <button class="" onclick="sortByPriority()">
+                        <i class="fa-solid fa-sort text-sm text-white cursor-pointer hover:opacity-70"></i>
+                    </button>
+                </span>
+                <span class="w-1/6">
+                    <span class="">category</span>
+                    <button class="" onclick="displayGroupedTasks()">
+                        <i class="fa-solid fa-sort text-sm text-white cursor-pointer hover:opacity-70"></i>
+                    </button>
+                </span>
+                <span class="w-1/6">Status</span>
+            </div>
+            <!-- Task data -->
+            <div id="task-list" class=" text-xl font-bold flex flex-col gap-4 p-3 ">
+
+
+            </div>
+        </section>
+
+    
+        <!-- History -->
+        <section id="task-history" class="p-4 py-8 pb-20 max-w-7xl mx-auto text-center">
+            <h4 class="text-3xl font-bold text-blue-600">Completed Tasks</h4>
+
+        </section>
+
+    </main>
+
+    <script src="./scripts/app.js"></script>
+    <script type="module">
+        
+    </script>
+</body>
+
+</html>
