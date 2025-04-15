@@ -1,29 +1,160 @@
+"use strict";
 
+// const { Temporal } = require("@js-temporal/polyfill");
 
+const taskManager = {
+    _tasks: [],
 
-let tasks = [];
-const reminders = [];
-let currentEditTaskId = null;
-
-// setting and getting Data from Local Sto 
-const saveTasksToLocalStorage = () => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-const loadTasksFromLocalStorage = () => {
-    const savedTasks = localStorage.getItem("tasks");
-    try {
-        const parsedTasks = JSON.parse(savedTasks);
-        if (Array.isArray(parsedTasks)) {
-            tasks = parsedTasks;
-        } else {
-            tasks = []; 
-        }
-    } catch (e) {
-        console.error("Failed to parse tasks from localStorage:", e);
-        tasks = []; 
+    get tasks() {
+        return this._tasks;
+    },
+    set tasks(newTasks) {
+        this._tasks = newTasks;
+        this.updateTaskCountDisplay();
+    },
+    get totalCount() {
+        return this._tasks.length;
+    },
+    updateTaskCountDisplay() {
+        const countText = this.totalCount ? `Total Tasks: ${this.totalCount}` : "Total Tasks: No Tasks";
+        document.getElementById("total-task-count").innerText = countText;
     }
 }
+
+// let tasks = taskManager.tasks;
+const reminders = [];
+const deletedTask = [];
+let currentEditTaskId = null;
+
+// setting and getting Data from Local Storage 
+const saveTasksToLocalStorage = () => {
+    console.log("Saving tasks to localStorage:", taskManager.tasks);
+    localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
+}
+
+const saveDeletedTasksToLocalStorage = (task) => {
+    deletedTask.push(task);
+    localStorage.setItem("deleted", JSON.stringify(deletedTask));
+}
+
+const loadDeletedTasksFromLocalStorage = () => {
+    return JSON.parse(localStorage.getItem("deleted")) || [];
+}
+
+// simply load data 
+const loadTasksFromLocalStorage = () => {
+    try {
+        const savedTasks = localStorage.getItem("tasks");
+        if (savedTasks) {
+            taskManager.tasks = JSON.parse(savedTasks);
+        }
+    } catch (err) {
+        // manually throw error
+        throw err;
+    }
+
+}
+
+// load task using callback function
+const loadTasksWithCallback = (callback) => {
+    try {
+        const savedTasks = localStorage.getItem("tasks");
+
+        if (savedTasks) {
+            taskManager.tasks = JSON.parse(savedTasks);
+        }
+        callback(null, taskManager.tasks);
+    } catch (error) {
+        callback(error);
+    }
+}
+
+// load task using promices rsolve/reject
+const loadTasksWithPromise = () => {
+    return new Promise((resolve, reject) => {
+        try {
+            const savedTasks = localStorage.getItem("tasks");
+            if (savedTasks) {
+                taskManager.tasks = JSON.parse(savedTasks);
+            }
+            resolve(taskManager.tasks);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+// Load data using async/await
+const loadTasksAsync = async () => {
+    try {
+        const savedTasks = localStorage.getItem("tasks");
+        if (savedTasks) {
+            taskManager.tasks = JSON.parse(savedTasks);
+        }
+        return taskManager.tasks;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// closure : undo deleted task 
+
+const UndoManager = (() => {
+    let deleted = JSON.parse(localStorage.getItem("deleted"));
+    return {
+        undoDelete() {
+            if (deleted.length === 0){
+                return null;
+            } 
+            const lastDeleted = deleted.pop();
+            localStorage.setItem("deleted", JSON.stringify(deleted));
+            return lastDeleted;
+        }
+    };
+})();
+
+// uodate count using Call method
+const fakeTaskManager = {
+    _tasks: [1, 2, 3, 4, 5],
+    get totalCount() {
+        return this._tasks.length;
+    }
+};
+
+
+// add some sample task using apply method
+const addTasks = (...newTasks) => {
+    if (!taskManager.tasks) {
+        taskManager.tasks = loadTasksFromLocalStorage();
+    }
+    taskManager.tasks = [...taskManager.tasks, ...newTasks];
+    saveTasksToLocalStorage();
+}
+
+// use apply to pass multiple tasks
+const tasksToAdd = [
+    { id: Date.now(), title: "Bulk 2", date: "2025-04-16", priority: "low", category: "work", completed: false },
+    { id: Date.now() + 1, title: "Bulk 3", date: "2025-04-16", priority: "high", category: "personal", completed: false }
+];
+
+// addTasks.apply(null, tasksToAdd);
+
+// Display sample task using bind
+const displaySampleTask = () => {
+    const taskList = document.getElementById("Due-task-today");
+    if (!taskList) {
+        console.error('Task list element not found.');
+        return;
+    }
+    const taskItem = document.createElement("div");
+    taskItem.className = "p-3 border border-gray-300";
+    taskItem.innerText = `Task: ${this.title} | Priority: ${this.description}`;
+    taskList.appendChild(taskItem);
+}
+
+// now bind it to a task and call
+const someTask = { title: "Sample Task", description: "Hurray No Upcoming Deadline" };
+const boundDisplay = displaySampleTask.bind(someTask);
 
 
 // show and hide popup to add new task
@@ -36,40 +167,35 @@ const closeAddTaskWindow = () => {
     document.getElementById("add-task-form").style.display = "none"
 }
 
-// Get totalcount to Task's
-const totalTaskCount = () => {
-    document.getElementById("total-task-count").innerText = `Total Tasks: ${tasks.length ? tasks.length : "No Tasks"}`;
-}
-
-
 // Reminder Task that are Due Today
 function ReminderDueTask(id, title, message) {
     this.id = id;
     this.title = title;
     this.message = message;
 }
+ReminderDueTask.prototype.remainingTime = "Less Then 6 Hours"
 
 const dueTodayTask = () => {
-    let currentTime = Date.now();
 
-    tasks.forEach((task) => {
+    let currentTime = Date.now();
+    let message = "";
+    taskManager.tasks.forEach((task) => {
         const taskTime = new Date(task.date).getTime();
         if (!task.completed && taskTime - currentTime <= 20000000) {
-            const message = `Reminder: Task "${task.title}" is due soon!`;
             const reminder = new ReminderDueTask(task.id, task.title, message);
+            reminder.message = `Reminder: Task "${task.title}" is due soon! </br> Remaining Time is ${reminder.remainingTime}`;
             reminders.push(reminder);
-            console.log("reminders:", reminders)
         }
     })
+    if (reminders.length <= 0) {
+        boundDisplay();
+    }
     displayDuetaskToday();
 }
 
 const displayDuetaskToday = () => {
-    console.log("enter displayDuetaskToday fun ")
-
     const taskList = document.getElementById("Due-task-today");
     taskList.innerHTML = "";
-
     const DueTodayTaskHeader = document.createElement("h2");
     DueTodayTaskHeader.className = "text-lg font-bold  p-3 mt-6 mb-2";
     DueTodayTaskHeader.innerHTML = `
@@ -93,38 +219,31 @@ const displayDuetaskToday = () => {
     })
 }
 
-
 // Sorting Functions
 const sortByDate = () => {
-    console.log("tasks befre sort:", tasks)
-    tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
-    console.log("tasks after sort:", tasks)
+    taskManager.tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
     saveTasksToLocalStorage();
     window.location.reload();
 }
 
 const sortByPriority = () => {
-    console.log("tasks befre sort:", tasks)
     const priorityOrder = {
         high: 1,
         medium: 2,
         low: 3
     }
-    tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-    console.log("tasks after sort:", tasks)
+    taskManager.tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
     saveTasksToLocalStorage();
     window.location.reload();
 }
 
 const sortByCategoryFun = () => {
-    const groupTask = Map.groupBy(tasks, task => task.category)
-    console.log("group by catrgory tasks:", groupTask)
-    return groupTask;
+    return Map.groupBy(taskManager.tasks, task => task.category);
 }
 
 // Updata Task
 const updateTask = (id) => {
-    const task = tasks.find(t => t.id === id);
+    const task = taskManager.tasks.find(t => t.id === id);
     if (!task) return;
     showAddTaskForm();
     currentEditTaskId = id;
@@ -141,7 +260,6 @@ const updateTask = (id) => {
 const displayGroupedTasks = () => {
     const taskList = document.getElementById("task-list");
     taskList.innerHTML = "";
-
     const groupedTasks = sortByCategoryFun();
 
     for (const [category, categoryTasks] of groupedTasks) {
@@ -180,19 +298,35 @@ const displayGroupedTasks = () => {
 // Delete Task
 const deleteTask = (id) => {
     try {
-        tasks = tasks.filter(task => task.id !== id);
-        saveTasksToLocalStorage();
-        window.location.reload();
+        const taskToDelete = taskManager.tasks.find(task => task.id === id);
+        if (taskToDelete) {
+            saveDeletedTasksToLocalStorage(taskToDelete);
+            taskManager.tasks = taskManager.tasks.filter(task => task.id !== id);
+            saveTasksToLocalStorage();
+            window.location.reload();
+        }
     }
     catch (e) {
         console.log("Internal Server Error:", e)
     }
 }
+const undoDeleteTask = () => {
+    const lastDeletedTask = UndoManager.undoDelete();
+    if (lastDeletedTask) {
+        taskManager.tasks = [...taskManager.tasks, lastDeletedTask];
+        saveTasksToLocalStorage();
+        alert(`Task "${lastDeletedTask.title}" has been restored.`);
+        window.location.reload();
+    } else {
+        alert("No task to undo.");
+    }
+};
+
 
 // Mark Task As Completed
 const taskCompleted = (id) => {
     try {
-        const task = tasks.find(task => task.id == id)
+        const task = taskManager.tasks.find(task => task.id === id);
         if (task) {
             task.completed = true
             saveTasksToLocalStorage();
@@ -223,7 +357,7 @@ const SubmitFormData = () => {
 
         if (currentEditTaskId) {
             // UPDATE mode
-            const task = tasks.find(t => t.id === currentEditTaskId);
+            const task = taskManager.tasks.find(t => t.id === currentEditTaskId);
             if (task) {
                 task.title = taskTitle;
                 task.description = taskDescription;
@@ -233,7 +367,7 @@ const SubmitFormData = () => {
             }
         } else {
             // ADD mode
-            const taskTitles = new Set(tasks.map(task => task.title.toLowerCase()));
+            const taskTitles = new Set(taskManager.tasks.map(task => task.title.toLowerCase()));
             if (taskTitles.has(taskTitle.toLowerCase())) {
                 alert("A task with this title already exists!");
                 return;
@@ -242,38 +376,44 @@ const SubmitFormData = () => {
             const containsOnlyValidChars = (str) => {
                 return /^[a-zA-Z0-9_ ]*$/.test(str);
             };
-            
-            
+
+
             if (!containsOnlyValidChars(taskTitle)) {
                 alert("Task title should only contain letters, numbers, underscores, or spaces.");
                 return;
             }
-              
+
             const task = {
                 id: Date.now(),
                 title: taskTitle,
                 description: taskDescription,
                 date: taskDate,
             };
-            const taskDetail={
+
+            const taskDetail = {
                 priority: taskPriority,
                 category: taskCategory,
                 completed: false
             }
 
             // Copies properties form obj2 to obj1
-            Object.assign(task,taskDetail)
-            
+            Object.assign(task, taskDetail)
+
             // make id property only readable
-            Object.defineProperty(task,"id",{
-                writable:false,     // cannot change value
+            Object.defineProperty(task, "id", {
+                writable: false,     // cannot change value
                 enumerable: true,    // shows up in loops
                 configurable: false  // can't delete or modify descriptor
             })
+
             // Prevent Extension
             Object.preventExtensions(task)
 
-            tasks.push(task);
+            Object.freeze(task)
+
+            // console.log("Object properties:",Object.getOwnPropertyDescriptor(task,id))
+
+            taskManager.tasks = [...taskManager.tasks, task];
         }
         saveTasksToLocalStorage();
         taskAddedPopup.style.display = "block";
@@ -282,14 +422,14 @@ const SubmitFormData = () => {
             taskAddedPopup.style.display = "none";
             document.getElementById("taskForm").reset();
             currentEditTaskId = null;
-            window.location.reload();
+            // window.location.reload();
         }, 900);
     } catch (e) {
-        console.log("Internal Server Error:", e);
+        console.log("Internal Server Error in submiting form data:", e);
     }
     finally {
         addTaskButton.innerText = "Save Task";
-      }
+    }
 }
 
 // Display Task's that are to be Completed 
@@ -297,7 +437,7 @@ const displayTaskData = () => {
     const taskList = document.getElementById("task-list");
     taskList.innerHTML = "";
     try {
-        tasks.forEach(task => {
+        taskManager.tasks.forEach(task => {
             if (!task.completed) {
                 const taskItem = document.createElement("div");
                 taskItem.className = "text-gray-800 flex justify-around gap-4 items-center p-3 border-b last:border-0 border-gray-300";
@@ -325,10 +465,10 @@ const displayTaskData = () => {
 }
 
 // Display Completed task's
-const displayHistory = () => {
+const displayHistory = function () {
     const taskHistory = document.getElementById("task-history");
     try {
-        tasks.forEach((task => {
+        taskManager.tasks.forEach(task => {
             if (task.completed) {
                 const taskItem = document.createElement("div")
                 taskItem.className = "text-gray-800 flex justify-around gap-4 items-center p-3 border-b last:border-0  border-gray-300";
@@ -341,16 +481,56 @@ const displayHistory = () => {
             `;
                 taskHistory.appendChild(taskItem)
             }
-        }))
+        })
     } catch (e) {
         console.log("error while display history:", e)
     }
 }
 
-// call function every time on load page
 window.onload = () => {
-    loadTasksFromLocalStorage();
-    totalTaskCount();
+
+    // loadTasksFromLocalStorage();
+
+    // load tak using callBack Function
+
+    // This is the callback function, defined separately
+    // const handleTasksResult=(err, tasks) =>{
+    //     if (err) {
+    //         console.log("Something went wrong:", err);
+    //     } else {
+
+    //         console.log("Tasks loaded using callBack Function:", tasks);
+    //     }
+    // }
+
+    // Passing it as an argument
+
+    // loadTasksWithCallback(handleTasksResult);
+
+
+    // load task using promices rsolve/reject
+
+    // loadTasksWithPromise()
+    // .then(tasks => console.log("Tasks loaded using promices:", tasks))
+    // .catch(err => console.error("Error loading tasks:", err));
+
+    // Self-Invoking Functions
+    // load data using async/await
+
+    (async () => {
+        try {
+            const tasks = await loadTasksAsync();
+            console.log("Tasks loaded by async/await:", tasks);
+        } catch (err) {
+            console.error("Error loading tasks:", err);
+        }
+    })();
+
+    taskManager.updateTaskCountDisplay();
+
+    // fake count of task using call
+    // taskManager.updateTaskCountDisplay.call(fakeTaskManager)
+
     displayHistory();
     displayTaskData();
     dueTodayTask();
