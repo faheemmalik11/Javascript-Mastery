@@ -1,0 +1,542 @@
+[2025-05-29T19:07:22.787Z] [CONSOLE] [Avatar] Vidage du cache avatar
+
+[2025-05-29T19:09:05.055Z] [CONSOLE] [Main] Début de la génération du profil avatar
+
+[2025-05-29T19:09:05.055Z] [CONSOLE] [Main] Deep research length: 23518
+Data: [
+  23518
+]
+
+[2025-05-29T19:09:05.055Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Avatar Display] Section avatar créée et insérée dans avatarSection
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Main] Utilisation de la fonction generateAvatarProfile pour extraire le profil avatar
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Avatar] === DÉBUT GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Avatar] Deep Research reçu: Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin..."
+]
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Avatar] Nom du produit: Water pistol Adult
+Data: [
+  "Water pistol Adult"
+]
+
+[2025-05-29T19:09:05.056Z] [CONSOLE] [Avatar] Timestamp: 2025-05-29T19:09:05.056Z
+Data: [
+  "2025-05-29T19:09:05.056Z"
+]
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Utilisation de la nouvelle implémentation avatarDisplay
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar Display] Section avatar déjà existante
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Appel de simulateAvatarProfileExtraction...
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Début de l'extraction du profil avatar
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Prompt envoyé à ChatGPT (extrait): En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.
+
+IMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais "je ne sais pas" ou "information manquante". Fais toujours une supposition éclairée basée sur le type de produit et son marché.
+
+RÈGLES SPÉCIALES POUR L'ÂGE:
+- Si la ...
+Data: [
+  "En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.\n\nIMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais \"je ne sais pas\" ou \"information manquante\". Fais toujours une supposition éclairée basée sur le type de produit et son marché.\n\nRÈGLES SPÉCIALES POUR L'ÂGE:\n- Si la ..."
+]
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Longueur du prompt: 26188
+Data: [
+  26188
+]
+
+[2025-05-29T19:09:05.060Z] [CONSOLE] [Avatar] Deep research utilisé (extrait): Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang..."
+]
+
+[2025-05-29T19:09:05.060Z] [CONSOLE-WARN] [Avatar] Prompt trop long, troncature intelligente...
+
+[2025-05-29T19:09:05.062Z] [CONSOLE-ERROR] [Avatar] Erreur lors du traitement du profil: TypeError: Cannot read properties of undefined (reading 'length')
+Data: [
+  {}
+]
+
+[2025-05-29T19:09:05.072Z] [CONSOLE] [Avatar] Utilisation du profil généré localement en cas d'erreur: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:09:05.072Z] [CONSOLE] [Avatar] Profil avatar extrait avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:09:05.072Z] [CONSOLE] [Avatar] === FIN GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:09:05.072Z] [CONSOLE] [Main] Profil avatar généré avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Mise à jour du profil avatar avec les données: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Vérification des éléments DOM:
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Traitement de l'âge: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Élément avatarAge trouvé, mise à jour...
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Âge mis à jour avec X
+
+[2025-05-29T19:09:05.073Z] [CONSOLE] [Avatar Display] Traitement du genre: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:09:05.075Z] [CONSOLE] [Avatar Display] Élément avatarGender trouvé, mise à jour...
+
+[2025-05-29T19:09:05.075Z] [CONSOLE] [Avatar Display] Genre mis à jour avec X
+
+[2025-05-29T19:09:05.075Z] [CONSOLE] [Main] Génération du profil avatar terminée
+
+[2025-05-29T19:09:05.075Z] [CONSOLE] [Main] Section avatar trouvée dans le DOM, affichage...
+
+[2025-05-29T19:09:05.075Z] [CONSOLE] [Main] Affichage de la section avatar
+
+[2025-05-29T19:15:20.343Z] [CONSOLE] [Avatar] Vidage du cache avatar
+
+[2025-05-29T19:16:44.386Z] [CONSOLE] [Main] Début de la génération du profil avatar
+
+[2025-05-29T19:16:44.386Z] [CONSOLE] [Main] Deep research length: 23518
+Data: [
+  23518
+]
+
+[2025-05-29T19:16:44.388Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:16:44.388Z] [CONSOLE] [Avatar Display] Section avatar déjà existante
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Main] Utilisation de la fonction generateAvatarProfile pour extraire le profil avatar
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] === DÉBUT GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] Deep Research reçu: Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin..."
+]
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] Nom du produit: Pet Get Repair
+Data: [
+  "Pet Get Repair"
+]
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] Timestamp: 2025-05-29T19:16:44.391Z
+Data: [
+  "2025-05-29T19:16:44.391Z"
+]
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] Utilisation de la nouvelle implémentation avatarDisplay
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar Display] Section avatar déjà existante
+
+[2025-05-29T19:16:44.391Z] [CONSOLE] [Avatar] Appel de simulateAvatarProfileExtraction...
+
+[2025-05-29T19:16:44.392Z] [CONSOLE] [Avatar] Début de l'extraction du profil avatar
+
+[2025-05-29T19:16:44.394Z] [CONSOLE] [Avatar] Prompt envoyé à ChatGPT (extrait): En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.
+
+IMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais "je ne sais pas" ou "information manquante". Fais toujours une supposition éclairée basée sur le type de produit et son marché.
+
+RÈGLES SPÉCIALES POUR L'ÂGE:
+- Si la ...
+Data: [
+  "En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.\n\nIMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais \"je ne sais pas\" ou \"information manquante\". Fais toujours une supposition éclairée basée sur le type de produit et son marché.\n\nRÈGLES SPÉCIALES POUR L'ÂGE:\n- Si la ..."
+]
+
+[2025-05-29T19:16:44.394Z] [CONSOLE] [Avatar] Longueur du prompt: 26188
+Data: [
+  26188
+]
+
+[2025-05-29T19:16:44.394Z] [CONSOLE] [Avatar] Deep research utilisé (extrait): Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang..."
+]
+
+[2025-05-29T19:16:44.394Z] [CONSOLE-WARN] [Avatar] Prompt trop long, troncature intelligente...
+
+[2025-05-29T19:16:44.396Z] [CONSOLE-ERROR] [Avatar] Erreur lors du traitement du profil: TypeError: Cannot read properties of undefined (reading 'length')
+Data: [
+  {}
+]
+
+[2025-05-29T19:16:44.396Z] [CONSOLE] [Avatar] Utilisation du profil généré localement en cas d'erreur: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:16:44.396Z] [CONSOLE] [Avatar] Profil avatar extrait avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:16:44.396Z] [CONSOLE] [Avatar] === FIN GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:16:44.397Z] [CONSOLE] [Main] Profil avatar généré avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:16:44.397Z] [CONSOLE] [Avatar Display] Mise à jour du profil avatar avec les données: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Vérification des éléments DOM:
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Traitement de l'âge: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Élément avatarAge trouvé, mise à jour...
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Âge mis à jour avec X
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Traitement du genre: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Élément avatarGender trouvé, mise à jour...
+
+[2025-05-29T19:16:44.410Z] [CONSOLE] [Avatar Display] Genre mis à jour avec X
+
+[2025-05-29T19:16:44.411Z] [CONSOLE] [Main] Génération du profil avatar terminée
+
+[2025-05-29T19:16:44.411Z] [CONSOLE] [Main] Section avatar trouvée dans le DOM, affichage...
+
+[2025-05-29T19:16:44.411Z] [CONSOLE] [Main] Affichage de la section avatar
+
+[2025-05-29T19:19:43.861Z] [CONSOLE] [Avatar] Vidage du cache avatar
+
+[2025-05-29T19:20:55.300Z] [CONSOLE] [Main] Début de la génération du profil avatar
+
+[2025-05-29T19:20:55.300Z] [CONSOLE] [Main] Deep research length: 23518
+Data: [
+  23518
+]
+
+[2025-05-29T19:20:55.302Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:20:55.302Z] [CONSOLE] [Avatar Display] Section avatar déjà existante
+
+[2025-05-29T19:20:55.303Z] [CONSOLE] [Main] Utilisation de la fonction generateAvatarProfile pour extraire le profil avatar
+
+[2025-05-29T19:20:55.303Z] [CONSOLE] [Avatar] === DÉBUT GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:20:55.303Z] [CONSOLE] [Avatar] Deep Research reçu: Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often callin..."
+]
+
+[2025-05-29T19:20:55.303Z] [CONSOLE] [Avatar] Nom du produit: Pet Get Repair
+Data: [
+  "Pet Get Repair"
+]
+
+[2025-05-29T19:20:55.303Z] [CONSOLE] [Avatar] Timestamp: 2025-05-29T19:20:55.303Z
+Data: [
+  "2025-05-29T19:20:55.303Z"
+]
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar] Utilisation de la nouvelle implémentation avatarDisplay
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar Display] Création dynamique de la section avatar
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar Display] Section avatar déjà existante
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar] Appel de simulateAvatarProfileExtraction...
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar] Début de l'extraction du profil avatar
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar] Prompt envoyé à ChatGPT (extrait): En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.
+
+IMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais "je ne sais pas" ou "information manquante". Fais toujours une supposition éclairée basée sur le type de produit et son marché.
+
+RÈGLES SPÉCIALES POUR L'ÂGE:
+- Si la ...
+Data: [
+  "En tant qu'expert en analyse comportementale et marketing, analyse cette description détaillée d'un produit et de son marché cible pour identifier le profil type de l'acheteur.\n\nIMPORTANT: Même si les informations sont limitées, tu dois faire des suppositions basées sur ton expertise. Ne laisse AUCUN champ vide et ne réponds jamais \"je ne sais pas\" ou \"information manquante\". Fais toujours une supposition éclairée basée sur le type de produit et son marché.\n\nRÈGLES SPÉCIALES POUR L'ÂGE:\n- Si la ..."
+]
+
+[2025-05-29T19:20:55.306Z] [CONSOLE] [Avatar] Longueur du prompt: 26188
+Data: [
+  26188
+]
+
+[2025-05-29T19:20:55.307Z] [CONSOLE] [Avatar] Deep research utilisé (extrait): Consumer Psychology of MuzzleGlow Pet Oral Repair Gel
+
+Psychographic Profile of the Buyer
+
+The typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang...
+Data: [
+  "Consumer Psychology of MuzzleGlow Pet Oral Repair Gel\n\nPsychographic Profile of the Buyer\n\nThe typical purchaser of MuzzleGlow Pet Oral Repair Gel sees their pet as a true family member – often calling themselves a “pet parent” rather than just an owner. They likely fall into the Millennial age rang..."
+]
+
+[2025-05-29T19:20:55.307Z] [CONSOLE-WARN] [Avatar] Prompt trop long, troncature intelligente...
+
+[2025-05-29T19:20:55.309Z] [CONSOLE-ERROR] [Avatar] Erreur lors du traitement du profil: TypeError: Cannot read properties of undefined (reading 'length')
+Data: [
+  {}
+]
+
+[2025-05-29T19:20:55.320Z] [CONSOLE] [Avatar] Utilisation du profil généré localement en cas d'erreur: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar] Profil avatar extrait avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar] === FIN GÉNÉRATION PROFIL AVATAR ===
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Main] Profil avatar généré avec succès: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Mise à jour du profil avatar avec les données: [object Object]
+Data: [
+  {
+    "age": "X",
+    "gender": "X",
+    "familyStatus": "En couple sans enfant",
+    "fears": [
+      "Investissement trop coûteux",
+      "Difficulté d'utilisation",
+      "Pas de résultats visibles"
+    ],
+    "expectations": [
+      "Gain de temps significatif",
+      "Résultats professionnels",
+      "Facilité d'utilisation"
+    ]
+  }
+]
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Vérification des éléments DOM:
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Traitement de l'âge: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Élément avatarAge trouvé, mise à jour...
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Âge mis à jour avec X
+
+[2025-05-29T19:20:55.321Z] [CONSOLE] [Avatar Display] Traitement du genre: X
+Data: [
+  "X"
+]
+
+[2025-05-29T19:20:55.323Z] [CONSOLE] [Avatar Display] Élément avatarGender trouvé, mise à jour...
+
+[2025-05-29T19:20:55.323Z] [CONSOLE] [Avatar Display] Genre mis à jour avec X
+
+[2025-05-29T19:20:55.323Z] [CONSOLE] [Main] Génération du profil avatar terminée
+
+[2025-05-29T19:20:55.323Z] [CONSOLE] [Main] Section avatar trouvée dans le DOM, affichage...
+
+[2025-05-29T19:20:55.323Z] [CONSOLE] [Main] Affichage de la section avatar

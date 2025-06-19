@@ -1,0 +1,242 @@
+/* 
+ * Surcharge forcée pour toutes les cellules de sélection
+ * Ce fichier harmonise les cellules de sélection avec les propositions générées
+ */
+
+/* === MODIFICATIONS POUR RÉDUIRE LES ESPACEMENTS === */
+
+/* Réduction des marges et paddings pour angle-impact */
+.angle-impact {
+    padding: 0px 15px 12px 15px !important; /* Réduit le padding top à 0 */
+    margin-top: 10px !important; /* Ajoute une marge top de 10px */
+    
+    /* Design moderne simplifié */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 12px !important;
+    min-width: 80px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    min-height: 80px !important;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+    position: relative !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.angle-impact:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Suppression de l'effet ::before qui peut causer des problèmes de performance */
+.angle-impact::before {
+    content: none !important;
+}
+
+.impact-percentage {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    margin-bottom: 2px !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.impact-label {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Suppression de tous les paddings pour marketing-angle-section */
+.marketing-angle-section {
+    padding: 0 !important;
+}
+
+/* Réduction des marges et paddings pour section-title (h2) */
+.marketing-angle-section .section-title,
+.section-title {
+    margin: 5px 0 5px 0 !important; /* Réduit margin top et bottom à 5px */
+    padding: 5px 0 5px 0 !important; /* Réduit padding top et bottom à 5px */
+}
+
+/* === FIN MODIFICATIONS ESPACEMENTS === */
+
+/* === CORRECTIONS SÉLECTION ANGLES MARKETING === */
+
+/* 1. Masquer complètement l'indicateur "Sélectionné" */
+.marketing-angle-card .selection-indicator,
+.marketing-angle-card.selected .selection-indicator {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* 2. Améliorer la sélection avec une bordure lumineuse */
+.marketing-angle-card.selected {
+    border: 2px solid #00d4ff !important;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%) !important;
+    box-shadow: 
+        0 0 30px rgba(0, 212, 255, 0.3),
+        0 0 60px rgba(0, 212, 255, 0.1),
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-6px) scale(1.01) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* 3. Centrer verticalement le contenu de angle-impact */
+/* Déjà appliqué dans la section précédente */
+
+/* 4. Forcer l'affichage du titre même quand l'angle est sélectionné */
+.marketing-angle-card .angle-title,
+.marketing-angle-card.selected .angle-title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ffffff !important;
+}
+
+/* Ciblage général de tous les conteneurs possibles */
+div[class*="selection"],
+div[class*="faq"],
+.selection-container,
+.faq-container,
+.faq-selection-container,
+.selection-box,
+.selection-wrapper,
+.selection-panel,
+.faq-selection-panel,
+.faq-selection-wrapper,
+.faq-selection-box,
+.selection-group,
+.faq-selection-group,
+.selection-item,
+.faq-selection-item,
+.faq-item,
+.selection-element {
+    background-color: var(--dark-surface-2) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--border-radius) !important;
+    font-family: var(--font-main) !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+
+/* Ciblage spécifique pour le message de sélection FAQ */
+.faq-selection-message,
+.selection-message,
+.faq-message,
+.selection-count,
+.faq-count,
+.faq-selection-count,
+.selection-header,
+.faq-header,
+.faq-selection-header {
+    color: var(--text-secondary) !important;
+    font-size: 0.9rem !important;
+}
+
+/* Ciblage direct des éléments par leur structure HTML */
+.faq-selection-container,
+.selection-container {
+    background-color: var(--dark-surface-2) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+    padding: 15px !important;
+}
+
+/* Ciblage spécifique pour les éléments de type FAQ */
+.faq-question,
+.faq-answer {
+    color: var(--text-primary) !important;
+    font-family: var(--font-main) !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+
+/* Ciblage des éléments internes */
+.faq-selection-container *:not(button):not(.btn),
+.selection-container *:not(button):not(.btn) {
+    color: var(--text-primary) !important;
+}
+
+/* Exception pour les boutons et éléments interactifs */
+.faq-selection-container button,
+.selection-container button,
+.faq-selection-container .btn,
+.selection-container .btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark)) !important;
+    color: var(--dark-bg) !important;
+    font-weight: 600 !important;
+    border-radius: var(--border-radius) !important;
+    transition: all var(--transition-speed) !important;
+}
+
+/* Ciblage direct du texte à l'intérieur des cellules */
+.faq-selection-container p,
+.selection-container p,
+.faq-selection-container span,
+.selection-container span,
+.faq-selection-container div,
+.selection-container div {
+    color: var(--text-primary) !important;
+    font-family: var(--font-main) !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+
+/* Ciblage spécifique pour le compteur de sélection */
+.selection-count,
+.faq-selection-count {
+    color: var(--text-secondary) !important;
+    font-size: 0.9rem !important;
+}
+
+/* Style pour le texte du message de sélection */
+.selection-message,
+.faq-selection-message {
+    color: var(--text-secondary) !important;
+    font-style: italic !important;
+    font-size: 0.9rem !important;
+}
+
+/* Styles pour les éléments de sélection individuels */
+.selection-item,
+.faq-selection-item {
+    background-color: var(--dark-surface-2) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--border-radius) !important;
+    margin-bottom: 8px !important;
+}
+
+/* === SUPPRESSION DES ANIMATIONS SPARKLE === */
+
+/* Désactiver toutes les animations sparkle/scintillantes */
+*[class*="angle"] *,
+*[class*="marketing"] *,
+.angle-title,
+.angle-description,
+.angle-impact,
+.angle-icon,
+.selection-indicator {
+    animation: none !important;
+}
+
+/* Désactiver spécifiquement les animations communes */
+.angle-title[style*="animation"],
+.angle-description[style*="animation"],
+.angle-impact[style*="animation"],
+.angle-icon[style*="animation"] {
+    animation: none !important;
+}
+
+/* Ciblage général de tous les conteneurs possibles */

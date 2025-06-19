@@ -1,0 +1,2 @@
+# Debug Logs - Product Content Generator
+# Les logs seront automatiquement ajoutés ici

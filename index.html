@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Content Generator | Media Buyer Tool</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- CSS Files with version parameter to prevent caching -->
+    <link rel="stylesheet" href="css/dark-futuristic.css?v=2.0">
+    <link rel="stylesheet" href="css/benefits-selector.css?v=1.5">
+    <link rel="stylesheet" href="css/emotional-benefits-selector.css?v=1.3">
+    <link rel="stylesheet" href="css/customer-reviews-selector.css?v=1.3">
+    <link rel="stylesheet" href="css/marketing-angles-premium.css?v=1.3">
+    <link rel="stylesheet" href="css/dark-selectors.css?v=1.3">
+    <link rel="stylesheet" href="css/usecases-selector.css?v=1.3">
+    <link rel="stylesheet" href="css/characteristics-selector.css?v=1.2">
+    <link rel="stylesheet" href="css/competitive-advantages-selector.css?v=1.2">
+    <link rel="stylesheet" href="css/product-title-selector.css?v=1.2">
+    <link rel="stylesheet" href="css/edit-button.css?v=1.2">
+    <link rel="stylesheet" href="css/faq-selector.css?v=1.2">
+    <!-- Surcharge forcée pour les cellules de sélection -->
+    <link rel="stylesheet" href="css/selection-override.css?v=1.5">
+    <!-- CSS pour le profil avatar -->
+    <link rel="stylesheet" href="css/avatar-profile.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Styles pour les options de titres -->
+    <style>
+        /* Styles spécifiques pour les options de titres dans le contenu */
+        #productTitle .title-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        #productTitle .title-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        #productTitle .title-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Styles pour les propositions de titres dans Pre-lander */
+        .title-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .title-option {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.3s ease;
+            min-height: auto;
+        }
+        
+        .title-option:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .title-content {
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            flex: 1;
+        }
+        
+        .title-option .btn {
+            align-self: flex-end;
+            margin-top: 10px;
+            min-width: 120px;
+        }
+        
+        .generated-content {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .error-text {
+            color: #ff6b6b;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Styles pour les sections de contenu générées */
+        .content-sections {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .section-subtitle {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-subtitle i {
+            color: #00d4ff;
+        }
+        
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .section-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .section-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .section-label {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .edit-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+        
+        .edit-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.5);
+            color: #00d4ff;
+        }
+        
+        .section-content {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            min-height: 40px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            border-left: 3px solid #00d4ff;
+        }
+        
+        .section-content.has-ai-content {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .section-content.empty {
+            color: #888;
+            font-style: italic;
+        }
+        
+        /* Styles pour le tableau de sélection d'angles marketing */
+        .marketing-angles-table-container {
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .marketing-angles-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .marketing-angles-table th {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+        }
+        
+        .marketing-angles-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            vertical-align: top;
+        }
+        
+        .marketing-angle-row {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .marketing-angle-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .marketing-angle-row.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+        }
+        
+        .selection-cell {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .selection-cell input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #10b981;
+        }
+        
+        .angle-name-cell {
+            min-width: 150px;
+            font-weight: 600;
+            color: #10b981;
+        }
+        
+        .impact-cell {
+            width: 100px;
+            text-align: center;
+        }
+        
+        .impact-percentage {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .cell-content {
+            max-width: 200px;
+            line-height: 1.4;
+            color: #e5e7eb;
+        }
+        
+        .cell-content em {
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        .market-size-cell,
+        .problem-cell,
+        .emotions-cell,
+        .fears-cell,
+        .tactical-cell,
+        .evidence-cell {
+            max-width: 200px;
+        }
+        
+        .angle-selection-footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .angle-selection-footer .btn-primary {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Responsive pour le tableau */
+        @media (max-width: 1200px) {
+            .marketing-angles-table {
+                font-size: 12px;
+            }
+            
+            .marketing-angles-table th,
+            .marketing-angles-table td {
+                padding: 10px 8px;
+            }
+            
+            .cell-content {
+                max-width: 150px;
+            }
+        }
+        
+        /* Largeurs spécifiques pour les colonnes */
+        .marketing-angles-table th:nth-child(1),
+        .marketing-angles-table td:nth-child(1) {
+            width: 80px; /* Sélection */
+            min-width: 80px;
+        }
+        
+        .marketing-angles-table th:nth-child(2),
+        .marketing-angles-table td:nth-child(2) {
+            width: 150px; /* Nom de l'angle */
+            min-width: 150px;
+        }
+        
+        .marketing-angles-table th:nth-child(3),
+        .marketing-angles-table td:nth-child(3) {
+            width: 100px; /* Impact marché */
+            min-width: 100px;
+        }
+        
+        .marketing-angles-table th:nth-child(4),
+        .marketing-angles-table td:nth-child(4) {
+            width: 200px; /* Taille du marché */
+            min-width: 200px;
+        }
+        
+        .marketing-angles-table th:nth-child(5),
+        .marketing-angles-table td:nth-child(5) {
+            width: 220px; /* Problème à résoudre */
+            min-width: 220px;
+        }
+        
+        .marketing-angles-table th:nth-child(6),
+        .marketing-angles-table td:nth-child(6) {
+            width: 250px; /* Émotions à évoquer */
+            min-width: 250px;
+        }
+        
+        .marketing-angles-table th:nth-child(7),
+        .marketing-angles-table td:nth-child(7) {
+            width: 200px; /* Peurs & Frustrations */
+            min-width: 200px;
+        }
+        
+        .marketing-angles-table th:nth-child(8),
+        .marketing-angles-table td:nth-child(8) {
+            width: 220px; /* Application tactique */
+            min-width: 220px;
+        }
+        
+        .marketing-angles-table th:nth-child(9),
+        .marketing-angles-table td:nth-child(9) {
+            width: 200px; /* Preuves & Données */
+            min-width: 200px;
+        }
+        
+        /* Styles pour les fonctionnalités d'ajout manuel */
+        .manual-input-section {
+            margin-top: 15px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .manual-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .manual-input,
+        .manual-input-title,
+        .manual-input-description,
+        .manual-input-name,
+        .manual-input-comment,
+        .manual-input-question,
+        .manual-input-answer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 15px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+        
+        .manual-input-title,
+        .manual-input-name,
+        .manual-input-question {
+            min-height: auto;
+            height: 45px;
+        }
+        
+        .manual-input,
+        .manual-input-description,
+        .manual-input-comment,
+        .manual-input-answer {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .manual-input-rating {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 15px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            height: 45px;
+        }
+        
+        .manual-input:focus,
+        .manual-input-title:focus,
+        .manual-input-description:focus,
+        .manual-input-name:focus,
+        .manual-input-comment:focus,
+        .manual-input-question:focus,
+        .manual-input-answer:focus,
+        .manual-input-rating:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .manual-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+        
+        .manual-input-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+        
+        .tab-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-manual-toggle {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-manual-toggle:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            transform: translateY(-1px);
+        }
+        
+        .btn-add-manual {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .btn-add-manual:hover {
+            background: linear-gradient(135deg, #0099cc, #007399);
+            transform: translateY(-1px);
+        }
+        
+        .btn-cancel-manual {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        
+        .btn-cancel-manual:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Animation pour l'affichage/masquage de la section manuelle */
+        .manual-input-section.show {
+            display: block !important;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .manual-input-section.hide {
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Styles pour les contenus ajoutés manuellement */
+        .manual-content {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 3px solid #00d4ff;
+            padding: 0;
+            margin: 10px 0;
+            border-radius: 0 6px 6px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .manual-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 8px 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .manual-content-label {
+            color: #00d4ff;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .manual-content-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .manual-content-actions button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 10px;
+        }
+        
+        .manual-content-actions button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .manual-content-actions .btn-delete-manual:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .manual-content-actions .btn-move-up:hover,
+        .manual-content-actions .btn-move-down:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        
+        .manual-content-body {
+            padding: 15px;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .manual-content::before {
+            display: none;
+        }
+        
+        /* Responsive pour les actions des onglets */
+        @media (max-width: 768px) {
+            .tab-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .tab-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .manual-content-actions {
+                flex-wrap: wrap;
+                gap: 3px;
+            }
+            
+            .manual-content-actions button {
+                width: 20px;
+                height: 20px;
+                font-size: 9px;
+            }
+        }
+        
+        /* Styles pour les icônes de paramètres des prompts */
+        .prompt-settings-icon {
+            font-size: 12px;
+            margin-left: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            color: var(--secondary-text-color, #999);
+        }
+        
+        .prompt-settings-icon:hover {
+            opacity: 1;
+            color: var(--primary-color, #00d4ff);
+            transform: rotate(90deg);
+        }
+        
+        .tab-btn {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            padding: 12px 16px;
+        }
+        
+        .tab-content-wrapper {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .tab-btn .badge {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        
+        /* Styles pour le bouton de regénération */
+        .btn-regenerate {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-regenerate:hover {
+            background: linear-gradient(135deg, #218838, #1ea085);
+            transform: translateY(-1px);
+        }
+        
+        .btn-regenerate:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-regenerate i {
+            margin-right: 5px;
+        }
+        
+        /* Styles pour les boutons de validation */
+        .btn-validate {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-validate:hover {
+            background: linear-gradient(135deg, #218838, #1ea085);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-validate:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-validate.validated {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            animation: pulse-success 2s infinite;
+        }
+        
+        @keyframes pulse-success {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h1>Product Content Generator <span class="badge badge-primary">v2.0</span></h1>
+                </div>
+                <div class="header-actions">
+                    <button onclick="debugLog.save()" class="btn btn-secondary" style="margin-right: 10px; font-size: 12px; padding: 5px 10px;">
+                        <i class="fas fa-download"></i> Debug Logs
+                    </button>
+                    <button onclick="clearAvatarCache(); alert('Cache avatar vidé!');" class="btn btn-warning" style="margin-right: 10px; font-size: 12px; padding: 5px 10px;">
+                        <i class="fas fa-trash"></i> Clear Cache
+                    </button>
+                    <div class="tooltip">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="tooltip-text">Générez du contenu marketing optimisé pour vos fiches produit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Suppression de l'ancienne section avatar -->
+
+    <main class="container">
+        <div class="app-grid">
+            <!-- Panneau de gauche: Formulaire d'entrée -->
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-terminal"></i> Input Data</h2>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productName"><i class="fas fa-tag"></i> Nom du Produit</label>
+                        <input type="text" id="productName" name="productName" placeholder="ex: Blender automatique" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deepResearch"><i class="fas fa-search"></i> Deep Research</label>
+                        <textarea id="deepResearch" name="deepResearch" rows="6" placeholder="Décrivez en détail votre produit, son objectif, ses avantages et toute information pertinente pour générer un contenu de qualité..." required></textarea>
+                        <div class="hint">Plus votre description est détaillée, meilleur sera le contenu généré</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="competitorUrl"><i class="fas fa-link"></i> URL du Concurrent <span class="code-block">optional</span></label>
+                        <input type="url" id="competitorUrl" name="competitorUrl" placeholder="https://example.com/product">
+                    </div>
+
+                    <!-- Champs cachés qui seront remplis automatiquement -->
+                    <input type="hidden" id="productDescription" name="productDescription">
+                    <input type="hidden" id="targetAudience" name="targetAudience">
+                    <input type="hidden" id="productFeatures" name="productFeatures">
+                    <input type="hidden" id="problemsSolved" name="problemsSolved">
+
+                    <!-- Sélecteur de modèle IA - Toggle Switch -->
+                    <div class="form-group ai-model-toggle">
+                        <label class="ai-toggle-label">
+                            <i class="fas fa-robot"></i> 
+                            <span>Modèle IA de génération</span>
+                        </label>
+                        <div class="toggle-wrapper">
+                            <div class="toggle-labels">
+                                <span class="toggle-label-left active">
+                                    <i class="fas fa-brain"></i>
+                                    ChatGPT 3.5 Turbo
+                                </span>
+                                <span class="toggle-label-right">
+                                    <i class="fas fa-lightbulb"></i>
+                                    Claude 4
+                                </span>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="aiModelToggle" name="aiModelToggle">
+                                <label for="aiModelToggle" class="toggle-slider">
+                                    <span class="toggle-button"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="aiModel" name="aiModel" value="chatgpt">
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <i class="fas fa-bolt"></i> Générer le Contenu
+                    </button>
+                    
+                    <div id="loadingContainer" style="display:none;">
+                        <div class="loading-text">Génération en cours <span id="loadingPercentage">0%</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="generation-steps">
+                            <div class="step" id="step1"><i class="fas fa-database"></i> Analyse des données</div>
+                            <div class="step" id="step2"><i class="fas fa-brain"></i> Création du profil psychographique</div>
+                            <div class="step" id="step3"><i class="fas fa-pen-fancy"></i> Génération du contenu marketing</div>
+                            <div class="step" id="step4"><i class="fas fa-check-circle"></i> Finalisation des résultats</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Section Avatar (2/3 droite) -->
+            <div class="avatar-section" id="avatarSection" style="display:none;">
+                <!-- Le contenu de l'avatar sera inséré ici dynamiquement -->
+            </div>
+
+            <!-- Section Sélection d'Angles Marketing -->
+            <div class="marketing-angle-section" id="marketingAngleSection" style="display:none;">
+                <h2 class="section-title"><i class="fas fa-bullseye"></i> Sélection d'Angle Marketing <span class="badge badge-accent" id="marketing-angle-badge">0</span></h2>
+                <div id="marketingAngleContent">
+                    <!-- Le contenu des angles marketing sera inséré ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Panneau de droite: Résultats -->  
+            <div class="results-section" id="resultsSection" style="display:none;">
+                <h2 class="section-title"><i class="fas fa-code-branch"></i> Output Generator <span class="badge badge-accent">AI</span></h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="tab3">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-heading"></i> Titre
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('productTitle', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab4">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-star"></i> Bénéfices <span class="badge badge-primary">Core</span>
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('productBenefits', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab5">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-cogs"></i> Comment ça marche
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('howItWorks', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab6">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-heart"></i> Bénéfices Émotionnels <span class="badge badge-primary">Core</span>
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('emotionalBenefits', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab7">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-tasks"></i> Cas d'Utilisation
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('useCases', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab8">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-list"></i> Specs
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('characteristics', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab9">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-trophy"></i> Avantages Concurrentiels
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('competitiveAdvantages', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab10">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-comments"></i> Reviews
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('customerReviews', event)" title="Voir le prompt"></i>
+                    </button>
+                    <button class="tab-btn" data-tab="tab11">
+                        <span class="tab-content-wrapper">
+                            <i class="fas fa-question-circle"></i> FAQ
+                        </span>
+                        <i class="fas fa-cog prompt-settings-icon" onclick="showPromptModal('faq', event)" title="Voir le prompt"></i>
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="tab3" class="tab-pane active">
+                        <h3><i class="fas fa-heading"></i> Titre du Produit</h3>
+                        <div class="content-box" id="productTitle"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <textarea class="manual-input" placeholder="Saisissez votre titre personnalisé..."></textarea>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="productTitle"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('productTitle')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="productTitle"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab3"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab4" class="tab-pane">
+                        <h3><i class="fas fa-star"></i> Bénéfices</h3>
+                        <div class="content-box" id="productBenefits"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre du bénéfice...">
+                                <textarea class="manual-input-description" placeholder="Description du bénéfice..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="productBenefits"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('productBenefits')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="productBenefits"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab4"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                        <div class="hint">Note: Ces bénéfices sont utilisés pour générer le template Shopify</div>
+                    </div>
+                    
+                    <div id="tab5" class="tab-pane">
+                        <h3><i class="fas fa-cogs"></i> Fonctionnement</h3>
+                        <div class="content-box" id="howItWorks"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre de l'étape...">
+                                <textarea class="manual-input-description" placeholder="Description de l'étape..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="howItWorks"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('howItWorks')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="howItWorks"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab5"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab6" class="tab-pane">
+                        <h3><i class="fas fa-heart"></i> Bénéfices Émotionnels</h3>
+                        <div class="content-box" id="emotionalBenefits"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre du bénéfice émotionnel...">
+                                <textarea class="manual-input-description" placeholder="Description du bénéfice émotionnel..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="emotionalBenefits"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('emotionalBenefits')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="emotionalBenefits"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab6"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab7" class="tab-pane">
+                        <h3><i class="fas fa-tasks"></i> Cas d'Utilisation</h3>
+                        <div class="content-box" id="useCases"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre du cas d'utilisation...">
+                                <textarea class="manual-input-description" placeholder="Description du cas d'utilisation..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="useCases"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('useCases')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="useCases"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab7"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab8" class="tab-pane">
+                        <h3><i class="fas fa-list"></i> Caractéristiques</h3>
+                        <div class="content-box" id="characteristics"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre de la caractéristique...">
+                                <textarea class="manual-input-description" placeholder="Description de la caractéristique..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="characteristics"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('characteristics')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="characteristics"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab8"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab9" class="tab-pane">
+                        <h3><i class="fas fa-trophy"></i> Avantages Concurrentiels</h3>
+                        <div class="content-box" id="competitiveAdvantages"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-title" placeholder="Titre de l'avantage concurrentiel...">
+                                <textarea class="manual-input-description" placeholder="Description de l'avantage concurrentiel..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="competitiveAdvantages"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('competitiveAdvantages')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="competitiveAdvantages"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab9"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab10" class="tab-pane">
+                        <h3><i class="fas fa-comments"></i> Avis Clients</h3>
+                        <div class="content-box" id="customerReviews"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-name" placeholder="Nom du client...">
+                                <select class="manual-input-rating">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5 étoiles)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4 étoiles)</option>
+                                    <option value="3">⭐⭐⭐ (3 étoiles)</option>
+                                    <option value="2">⭐⭐ (2 étoiles)</option>
+                                    <option value="1">⭐ (1 étoile)</option>
+                                </select>
+                                <textarea class="manual-input-comment" placeholder="Commentaire du client..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="customerReviews"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('customerReviews')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="customerReviews"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab10"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tab11" class="tab-pane">
+                        <h3><i class="fas fa-question-circle"></i> FAQ</h3>
+                        <div class="content-box" id="faq"></div>
+                        <div class="manual-input-section" style="display: none;">
+                            <div class="manual-input-group">
+                                <input type="text" class="manual-input-question" placeholder="Question...">
+                                <textarea class="manual-input-answer" placeholder="Réponse..."></textarea>
+                            </div>
+                            <div class="manual-input-buttons">
+                                <button class="btn btn-primary btn-add-manual" data-target="faq"><i class="fas fa-plus"></i> Ajouter</button>
+                                <button class="btn btn-secondary btn-cancel-manual"><i class="fas fa-times"></i> Annuler</button>
+                            </div>
+                        </div>
+                        <div class="tab-actions">
+                            <button class="btn btn-regenerate" onclick="regenerateContent('faq')" title="Regénérer avec l'IA">
+                                <i class="fas fa-sync-alt"></i> Regénérer
+                            </button>
+                            <button class="btn btn-copy" data-content="faq"><i class="fas fa-copy"></i> Copier</button>
+                            <button class="btn btn-outline btn-manual-toggle" data-target="tab11"><i class="fas fa-edit"></i> Ajouter manuellement</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="export-options">
+                    <button id="generateTemplateBtn" class="btn btn-accent"><i class="fas fa-file-export"></i> Générer le template Shopify</button>
+                </div>
+            </div>
+
+            <!-- Nouvelle section Pre-lander -->
+            <div class="results-section" id="prelanderSection" style="display:none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <div>
+                        <h2 class="section-title"><i class="fas fa-rocket"></i> Pre-Lander Generator <span class="badge badge-accent">AI</span></h2>
+                        <p class="section-subtitle">Generating content for: <strong>Beauty: Trygiana</strong></p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="showPrelanderTemplates()" style="margin-left: 20px;">
+                        <i class="fas fa-arrow-left"></i> Retour aux templates
+                    </button>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="prelander-title">
+                        <i class="fas fa-heading"></i> TITLE
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-subtitle">
+                        <i class="fas fa-text-height"></i> SUBTITLE
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-1-heading">
+                        <i class="fas fa-star"></i> BENEFIT_1_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-1-text">
+                        <i class="fas fa-align-left"></i> BENEFIT_1_TEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-2-heading">
+                        <i class="fas fa-star"></i> BENEFIT_2_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-2-text">
+                        <i class="fas fa-align-left"></i> BENEFIT_2_TEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-2-text-next">
+                        <i class="fas fa-align-left"></i> BENEFIT_2_TEXT_NEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-ingredients-list">
+                        <i class="fas fa-list-ul"></i> INGREDIENTS_LIST
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-3-heading">
+                        <i class="fas fa-star"></i> BENEFIT_3_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-product-variants">
+                        <i class="fas fa-boxes"></i> PRODUCT_VARIANTS
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-3-text">
+                        <i class="fas fa-align-left"></i> BENEFIT_3_TEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-4-heading">
+                        <i class="fas fa-star"></i> BENEFIT_4_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-4-text">
+                        <i class="fas fa-align-left"></i> BENEFIT_4_TEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-5-heading">
+                        <i class="fas fa-star"></i> BENEFIT_5_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-benefit-5-text">
+                        <i class="fas fa-align-left"></i> BENEFIT_5_TEXT
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-social-proof-heading">
+                        <i class="fas fa-users"></i> SOCIAL_PROOF_HEADING
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-q1">
+                        <i class="fas fa-question"></i> FAQ_Q1
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-a1">
+                        <i class="fas fa-comment"></i> FAQ_A1
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-q2">
+                        <i class="fas fa-question"></i> FAQ_Q2
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-a2">
+                        <i class="fas fa-comment"></i> FAQ_A2
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-q3">
+                        <i class="fas fa-question"></i> FAQ_Q3
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-a3">
+                        <i class="fas fa-comment"></i> FAQ_A3
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-q4">
+                        <i class="fas fa-question"></i> FAQ_Q4
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-a4">
+                        <i class="fas fa-comment"></i> FAQ_A4
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-q5">
+                        <i class="fas fa-question"></i> FAQ_Q5
+                    </button>
+                    <button class="tab-btn" data-tab="prelander-faq-a5">
+                        <i class="fas fa-comment"></i> FAQ_A5
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- TITLE -->
+                    <div class="tab-pane active" id="prelander-title">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-heading"></i> TITLE</h3>
+                            
+                            <!-- Bouton de génération -->
+                            <div style="margin-bottom: 15px;">
+                                <button class="btn btn-accent" onclick="generateTitlePropositions()" id="generateTitlesBtn">
+                                    <i class="fas fa-magic"></i> Générer 5 propositions de titres
+                                </button>
+                            </div>
+                            
+                            <!-- Zone de contenu -->
+                            <div class="content-area" id="content-title">
+                                <div class="placeholder-text">Cliquez sur "Générer 5 propositions de titres" pour créer des titres accrocheurs...</div>
+                            </div>
+                            
+                            <!-- Zone pour afficher les 5 propositions -->
+                            <div id="title-propositions" style="display: none; margin-top: 20px;">
+                                <h4><i class="fas fa-lightbulb"></i> Propositions de titres :</h4>
+                                <div id="title-options" class="title-options">
+                                    <!-- Les 5 propositions seront générées ici -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBTITLE -->
+                    <div class="tab-pane" id="prelander-subtitle">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-text-height"></i> SUBTITLE</h3>
+                            
+                            <!-- Bouton de génération -->
+                            <div style="margin-bottom: 15px;">
+                                <button class="btn btn-accent" onclick="generateSubtitlePropositions()" id="generateSubtitlesBtn">
+                                    <i class="fas fa-magic"></i> Générer 5 propositions de sous-titres
+                                </button>
+                            </div>
+                            
+                            <!-- Zone de contenu -->
+                            <div class="content-area" id="content-subtitle">
+                                <div class="placeholder-text">Cliquez sur "Générer 5 propositions de sous-titres" pour créer des sous-titres percutants...</div>
+                            </div>
+                            
+                            <!-- Zone pour afficher les 5 propositions -->
+                            <div id="subtitle-propositions" style="display: none; margin-top: 20px;">
+                                <h4><i class="fas fa-lightbulb"></i> Propositions de sous-titres :</h4>
+                                <div id="subtitle-options" class="title-options">
+                                    <!-- Les 5 propositions seront générées ici -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_1_HEADING -->
+                    <div class="tab-pane" id="prelander-benefit-1-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-star"></i> BENEFIT_1_HEADING</h3>
+                            <div class="content-area" id="content-benefit-1-heading">
+                                <div class="placeholder-text">Premier bénéfice principal...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_1_TEXT -->
+                    <div class="tab-pane" id="prelander-benefit-1-text">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_1_TEXT</h3>
+                            <div class="content-area" id="content-benefit-1-text">
+                                <div class="placeholder-text">Description détaillée du premier bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_2_HEADING -->
+                    <div class="tab-pane" id="prelander-benefit-2-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-star"></i> BENEFIT_2_HEADING</h3>
+                            <div class="content-area" id="content-benefit-2-heading">
+                                <div class="placeholder-text">Deuxième bénéfice principal...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_2_TEXT -->
+                    <div class="tab-pane" id="prelander-benefit-2-text">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_2_TEXT</h3>
+                            <div class="content-area" id="content-benefit-2-text">
+                                <div class="placeholder-text">Description détaillée du deuxième bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_2_TEXT_NEXT -->
+                    <div class="tab-pane" id="prelander-benefit-2-text-next">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_2_TEXT_NEXT</h3>
+                            <div class="content-area" id="content-benefit-2-text-next">
+                                <div class="placeholder-text">Extension du deuxième bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INGREDIENTS_LIST -->
+                    <div class="tab-pane" id="prelander-ingredients-list">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-list-ul"></i> INGREDIENTS_LIST</h3>
+                            <div class="content-area" id="content-ingredients-list">
+                                <div class="placeholder-text">Liste complète des ingrédients...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_3_HEADING -->
+                    <div class="tab-pane" id="prelander-benefit-3-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-star"></i> BENEFIT_3_HEADING</h3>
+                            <div class="content-area" id="content-benefit-3-heading">
+                                <div class="placeholder-text">Troisième bénéfice principal...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT_VARIANTS -->
+                    <div class="tab-pane" id="prelander-product-variants">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-boxes"></i> PRODUCT_VARIANTS</h3>
+                            <div class="content-area" id="content-product-variants">
+                                <div class="placeholder-text">Variantes du produit disponibles...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_3_TEXT -->
+                    <div class="tab-pane" id="prelander-benefit-3-text">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_3_TEXT</h3>
+                            <div class="content-area" id="content-benefit-3-text">
+                                <div class="placeholder-text">Description détaillée du troisième bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_4_HEADING -->
+                    <div class="tab-pane" id="prelander-benefit-4-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-star"></i> BENEFIT_4_HEADING</h3>
+                            <div class="content-area" id="content-benefit-4-heading">
+                                <div class="placeholder-text">Quatrième bénéfice principal...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_4_TEXT -->
+                    <div class="tab-pane" id="prelander-benefit-4-text">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_4_TEXT</h3>
+                            <div class="content-area" id="content-benefit-4-text">
+                                <div class="placeholder-text">Description détaillée du quatrième bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_5_HEADING -->
+                    <div class="tab-pane" id="prelander-benefit-5-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-star"></i> BENEFIT_5_HEADING</h3>
+                            <div class="content-area" id="content-benefit-5-heading">
+                                <div class="placeholder-text">Cinquième bénéfice principal...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BENEFIT_5_TEXT -->
+                    <div class="tab-pane" id="prelander-benefit-5-text">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-align-left"></i> BENEFIT_5_TEXT</h3>
+                            <div class="content-area" id="content-benefit-5-text">
+                                <div class="placeholder-text">Description détaillée du cinquième bénéfice...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SOCIAL_PROOF_HEADING -->
+                    <div class="tab-pane" id="prelander-social-proof-heading">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-users"></i> SOCIAL_PROOF_HEADING</h3>
+                            <div class="content-area" id="content-social-proof-heading">
+                                <div class="placeholder-text">Titre de preuve sociale...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_Q1 -->
+                    <div class="tab-pane" id="prelander-faq-q1">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-question"></i> FAQ_Q1</h3>
+                            <div class="content-area" id="content-faq-q1">
+                                <div class="placeholder-text">Première question FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_A1 -->
+                    <div class="tab-pane" id="prelander-faq-a1">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-comment"></i> FAQ_A1</h3>
+                            <div class="content-area" id="content-faq-a1">
+                                <div class="placeholder-text">Première réponse FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_Q2 -->
+                    <div class="tab-pane" id="prelander-faq-q2">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-question"></i> FAQ_Q2</h3>
+                            <div class="content-area" id="content-faq-q2">
+                                <div class="placeholder-text">Deuxième question FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_A2 -->
+                    <div class="tab-pane" id="prelander-faq-a2">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-comment"></i> FAQ_A2</h3>
+                            <div class="content-area" id="content-faq-a2">
+                                <div class="placeholder-text">Deuxième réponse FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_Q3 -->
+                    <div class="tab-pane" id="prelander-faq-q3">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-question"></i> FAQ_Q3</h3>
+                            <div class="content-area" id="content-faq-q3">
+                                <div class="placeholder-text">Troisième question FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_A3 -->
+                    <div class="tab-pane" id="prelander-faq-a3">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-comment"></i> FAQ_A3</h3>
+                            <div class="content-area" id="content-faq-a3">
+                                <div class="placeholder-text">Troisième réponse FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_Q4 -->
+                    <div class="tab-pane" id="prelander-faq-q4">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-question"></i> FAQ_Q4</h3>
+                            <div class="content-area" id="content-faq-q4">
+                                <div class="placeholder-text">Quatrième question FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_A4 -->
+                    <div class="tab-pane" id="prelander-faq-a4">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-comment"></i> FAQ_A4</h3>
+                            <div class="content-area" id="content-faq-a4">
+                                <div class="placeholder-text">Quatrième réponse FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_Q5 -->
+                    <div class="tab-pane" id="prelander-faq-q5">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-question"></i> FAQ_Q5</h3>
+                            <div class="content-area" id="content-faq-q5">
+                                <div class="placeholder-text">Cinquième question FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ_A5 -->
+                    <div class="tab-pane" id="prelander-faq-a5">
+                        <div class="content-block">
+                            <h3 class="content-title"><i class="fas fa-comment"></i> FAQ_A5</h3>
+                            <div class="content-area" id="content-faq-a5">
+                                <div class="placeholder-text">Cinquième réponse FAQ...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-options">
+                    <button id="generatePrelanderBtn" class="btn btn-accent" disabled style="opacity: 0.5;"><i class="fas fa-magic"></i> Générer Pre-lander</button>
+                </div>
+            </div>
+
+            <!-- Section des templates Pre-lander -->
+            <div class="results-section" id="prelanderTemplatesSection" style="display:block;">
+                <h2 class="section-title"><i class="fas fa-rocket"></i> Pre-lander <span class="badge badge-accent">AI</span></h2>
+                
+                <div class="prelander-cards">
+                    <div class="prelander-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-palette"></i> Template Beauty: Trygiana</h3>
+                            <span class="test-badge">BEAUTY</span>
+                        </div>
+                        <div class="card-content" id="prelanderTest1">
+                            <img src="images/image1.png" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;" alt="Trygiana Beauty Template">
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://terica-store.com/pages/trygiani', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Link
+                            </button>
+                            <button class="btn btn-info" onclick="generateAndOpenTemplate()" style="margin-left: 10px;">
+                                <i class="fas fa-eye"></i> Try
+                            </button>
+                            <button class="btn btn-success" onclick="showPrelanderGenerator('Beauty: Trygiana')" style="margin-left: 10px;">
+                                <i class="fas fa-magic"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="prelander-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-rocket"></i> Template Toy: SpaceBuddy</h3>
+                            <span class="test-badge">TOY</span>
+                        </div>
+                        <div class="card-content" id="prelanderTest2">
+                            <img src="images/image2.png" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;" alt="SpaceBuddy Toy Template">
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://terica-store.com/pages/space', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Link
+                            </button>
+                            <button class="btn btn-success" onclick="showPrelanderGenerator('Toy: SpaceBuddy')" style="margin-left: 10px;">
+                                <i class="fas fa-magic"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="prelander-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-leaf"></i> Template Relax: Hizoo</h3>
+                            <span class="test-badge">RELAX</span>
+                        </div>
+                        <div class="card-content" id="prelanderTest3">
+                            <img src="images/image3.png" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;" alt="Hizoo Relax Template">
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://terica-store.com/pages/hizoo', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Link
+                            </button>
+                            <button class="btn btn-success" onclick="showPrelanderGenerator('Relax: Hizoo')" style="margin-left: 10px;">
+                                <i class="fas fa-magic"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="prelander-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-flask"></i> Template Consumable: NovaHair</h3>
+                            <span class="test-badge">CONSUMABLE</span>
+                        </div>
+                        <div class="card-content" id="prelanderTest4">
+                            <img src="images/image4.png" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;" alt="NovaHair Consumable Template">
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://terica-store.com/pages/nova-hair', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Link
+                            </button>
+                            <button class="btn btn-success" onclick="showPrelanderGenerator('Consumable: NovaHair')" style="margin-left: 10px;">
+                                <i class="fas fa-magic"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="export-options">
+                    <button id="generatePrelanderBtn" class="btn btn-accent"><i class="fas fa-magic"></i> Générer Pre-lander</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-code"></i> Template Shopify</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">shopify_template.html</span>
+                        <div class="code-actions">
+                            <button id="copyTemplateBtn" class="btn btn-sm"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <pre id="templateContent" class="code-block"></pre>
+                </div>
+                <div class="hint">Note: Les 4 avantages produits sont extraits uniquement de productBenefits.version1</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2023 Product Content Generator <span class="version">v2.0</span></p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link"><i class="fas fa-code"></i> API</a>
+                    <a href="#" class="footer-link"><i class="fas fa-book"></i> Docs</a>
+                    <a href="#" class="footer-link"><i class="fas fa-question-circle"></i> Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Debug Logger - doit être chargé en premier -->
+    <script src="js/debug-logger.js?v=1.0"></script>
+    <script src="js/openai-api.js?v=5.1"></script>
+    <script src="js/avatar-profile.js?v=1.7"></script>
+    <script src="js/strategy-generator.js?v=1.0"></script>
+    <script src="js/avatar-display.js?v=2.5"></script>
+    <script src="js/marketing-angles.js?v=4.1"></script>
+    <script src="js/marketing-angle-selection.js?v=7.2"></script>
+    <script src="js/tab-controller.js?v=2.0"></script>
+    <script src="js/content-formatters.js?v=2.7"></script>
+    <script src="js/selection-handlers.js?v=2.2"></script>
+   <script src="js/minimal-template.js?v=1.8"></script>
+    <script src="js/generate-template.js?v=2.5"></script>
+    <script src="js/edit-functionality.js?v=1.8"></script>
+    <script src="js/direct-edit.js?v=1.8"></script>
+    <script src="js/ai-content-generator.js?v=1.0"></script>
+    <script src="js/manual-input.js?v=1.0"></script>
+    <script src="js/prompt-viewer.js?v=1.0"></script>
+    <script src="js/main.js?v=5.1"></script>
+    <!-- Script pour corriger la marge de la section avatar -->
+    <script src="js/fix-avatar-margin.js?v=1.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Script pour gérer les sections de contenu -->
+    <script>
+        // Fonction pour revenir aux templates
+        window.showPrelanderTemplates = function() {
+            const prelanderSection = document.getElementById('prelanderSection');
+            if (prelanderSection) {
+                prelanderSection.style.display = 'none';
+            }
+            
+            const templatesSection = document.getElementById('prelanderTemplatesSection');
+            if (templatesSection) {
+                templatesSection.style.display = 'block';
+            }
+        }
+        
+        // Fonction pour générer 5 propositions de titres
+        window.generateTitlePropositions = async function() {
+            console.log('🚀 Génération des propositions de titres...');
+            
+            const generateBtn = document.getElementById('generateTitlesBtn');
+            const originalText = generateBtn.innerHTML;
+            
+            // Désactiver le bouton pendant la génération
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération en cours...';
+            
+            try {
+                // Récupérer les données nécessaires
+                const productName = document.getElementById('productName')?.value || 'Produit';
+                const deepResearch = document.getElementById('deepResearch')?.value || 'Aucune recherche disponible';
+                
+                // Récupérer le modèle sélectionné dans l'interface (même logique que les autres fonctions)
+                const aiToggle = document.getElementById('aiModelToggle');
+                let selectedModel = 'gpt-3.5-turbo'; // Valeur par défaut
+                
+                if (aiToggle && aiToggle.checked) {
+                    selectedModel = 'claude-sonnet-4-20250514'; // Claude Sonnet 4 (nom technique correct)
+                } else {
+                    selectedModel = 'gpt-3.5-turbo'; // ChatGPT quand le toggle est désactivé
+                }
+                
+                console.log('🤖 Modèle sélectionné:', selectedModel);
+                console.log('🔄 Toggle state:', aiToggle ? aiToggle.checked : 'Toggle not found');
+                
+                // Construire le prompt
+                const prompt = `Vous êtes un expert copywriter spécialisé dans la création de pré-landers avec une compréhension approfondie de la psychologie du consommateur et de l'optimisation de conversion. Créez un pré-lander convaincant pour le produit suivant :
+
+NOM DU PRODUIT : ${productName}
+
+RECHERCHE APPROFONDIE : ${deepResearch}
+
+INSTRUCTIONS :
+
+1. Analysez d'abord la recherche approfondie pour identifier les émotions principales qui déclenchent l'achat de ce produit.
+
+2. Listez ces émotions avec les données/pourcentages qui les supportent dans la recherche
+
+3. Créez 5 titres accrocheurs différents qui :
+
+   - Mettent en évidence 5 à 7 avantages clés ou raisons pour lesquelles ce produit est supérieur aux alternatives
+
+   - Déclenchent immédiatement l'ÉMOTION PRINCIPALE identifiée
+
+   - Suivent le format : "[Nombre] Raisons [Bénéfice émotionnel fort] [Comparaison avec alternatives]"
+
+   
+
+Exemple: "5 Reasons Why NovaHair Shampoo Is Better Than Traditional Beard Dye"
+
+LIVRABLE :
+
+- D'abord : Liste des émotions clés identifiées
+
+- Ensuite : 5 titres uniquement, un par ligne, numérotés de 1 à 5`;
+
+                console.log('📄 Contenu généré:', prompt.substring(0, 200) + '...');
+                
+                // Appeler l'API IA
+                const response = await fetch('http://localhost:3000/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        messages: [
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 4096
+                    })
+                });
+                
+                console.log('📥 Réponse reçue - Status:', response.status);
+                console.log('📥 Réponse reçue - OK:', response.ok);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erreur API détaillée:', errorText);
+                    
+                    // Si Claude 4 échoue, proposer un fallback vers GPT-3.5
+                    if (selectedModel === 'claude-sonnet-4-20250514' && response.status === 404) {
+                        console.log('⚠️ Claude 4 non disponible, tentative avec GPT-3.5...');
+                        
+                        const fallbackResponse = await fetch('http://localhost:3000/api/generate', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                model: 'gpt-3.5-turbo',
+                                messages: [
+                                    {
+                                        role: 'user',
+                                        content: prompt
+                                    }
+                                ],
+                                temperature: 0.7,
+                                max_tokens: 4096
+                            })
+                        });
+                        
+                        if (fallbackResponse.ok) {
+                            const fallbackData = await fallbackResponse.json();
+                            const generatedTitles = fallbackData.choices[0].message.content;
+                            
+                            // Parser les titres
+                            const titleLines = generatedTitles.split('\n').filter(line => line.trim());
+                            const titles = titleLines
+                                .filter(line => line.match(/^\d+\.\s*\d+\s+(reasons?|ways?|secrets?|benefits?|advantages?|tips?|steps?)/i))
+                                .map(line => line.replace(/^\d+\.\s*/, '').trim())
+                                .slice(0, 5); // Limiter à 5 titres maximum
+                            
+                            // Afficher les propositions avec un message d'avertissement
+                            displayTitlePropositions(titles);
+                            alert('⚠️ Claude 4 n\'est pas disponible. Les titres ont été générés avec GPT-3.5 Turbo.');
+                            return;
+                        }
+                    }
+                    
+                    throw new Error(`Erreur API: ${response.status} - ${errorText}`);
+                }
+                
+                const data = await response.json();
+                const generatedTitles = data.choices[0].message.content;
+                
+                // Parser les titres en ignorant la section des émotions
+                console.log('📄 Contenu généré:', generatedTitles);
+                
+                // Diviser le contenu en lignes
+                const allLines = generatedTitles.split('\n').filter(line => line.trim());
+                
+                // Chercher la section des titres (après les émotions)
+                let titleStartIndex = -1;
+                for (let i = 0; i < allLines.length; i++) {
+                    const line = allLines[i].toLowerCase();
+                    // Chercher des indicateurs de début de section titres
+                    if (line.includes('titres') || line.includes('propositions') || 
+                        (line.match(/^\d+\.\s*\d+\s+reasons?/i) && !line.includes('émotion') && !line.includes('emotion'))) {
+                        titleStartIndex = i;
+                        break;
+                    }
+                }
+                
+                // Si on n'a pas trouvé de section titres claire, chercher les lignes avec le format titre
+                if (titleStartIndex === -1) {
+                    for (let i = 0; i <allLines.length; i++) {
+                        const line = allLines[i];
+                        // Chercher des lignes qui ressemblent à des titres (avec "reasons", "ways", etc.)
+                        if (line.match(/^\d+\.\s*.*(reasons?|ways?|secrets?|benefits?|advantages?|tips?|steps?)/i)) {
+                            titleStartIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                let titles = [];
+                if (titleStartIndex !== -1) {
+                    // Prendre les lignes à partir de la section titres
+                    const titleLines = allLines.slice(titleStartIndex);
+                    titles = titleLines
+                        .filter(line => line.match(/^\d+\.\s+/))
+                        .map(line => line.replace(/^\d+\.\s*/, '').trim())
+                        .slice(0, 5); // Limiter à 5 titres maximum
+                } else {
+                    // Fallback: prendre les 5 dernières lignes numérotées
+                    const numberedLines = allLines.filter(line => line.match(/^\d+\.\s*/));
+                    titles = numberedLines
+                        .slice(-5) // Prendre les 5 dernières
+                        .map(line => line.replace(/^\d+\.\s*/, '').trim());
+                }
+                
+                console.log('📋 Titres extraits:', titles);
+                
+                // Afficher les propositions
+                displayTitlePropositions(titles);
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de la génération des titres:', error);
+                console.error('❌ Détails de l\'erreur:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                // Afficher une erreur plus détaillée à l'utilisateur
+                const errorMessage = error.message || 'Erreur inconnue';
+                alert(`Erreur lors de la génération des titres: ${errorMessage}\n\nVérifiez que le backend IA est en cours d'exécution sur le port 3000.`);
+            } finally {
+                // Réactiver le bouton
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = originalText;
+            }
+        }
+        
+        // Fonction pour afficher les propositions de titres
+        function displayTitlePropositions(titles) {
+            const propositionsDiv = document.getElementById('title-propositions');
+            const optionsDiv = document.getElementById('title-options');
+            
+            if (titles.length === 0) {
+                optionsDiv.innerHTML = '<p class="error-text">Aucun titre généré. Veuillez réessayer.</p>';
+                propositionsDiv.style.display = 'block';
+                return;
+            }
+            
+            // Créer les options de titres
+            optionsDiv.innerHTML = '';
+            titles.forEach((title, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'title-option';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'title-content';
+                contentDiv.innerHTML = `<strong>${index + 1}.</strong> ${title}`;
+                
+                const selectBtn = document.createElement('button');
+                selectBtn.className = 'btn btn-sm btn-primary';
+                selectBtn.innerHTML = '<i class="fas fa-check"></i> Sélectionner';
+                selectBtn.onclick = () => selectTitle(title);
+                
+                optionDiv.appendChild(contentDiv);
+                optionDiv.appendChild(selectBtn);
+                optionsDiv.appendChild(optionDiv);
+            });
+            
+            propositionsDiv.style.display = 'block';
+        }
+        
+        // Fonction pour sélectionner un titre
+        window.selectTitle = function(selectedTitle) {
+            // Store the selected title globally for subtitle generation
+            window.selectedTitle = selectedTitle;
+            
+            const contentArea = document.getElementById('content-title');
+            contentArea.innerHTML = `<div class="generated-content">${selectedTitle}</div>`;
+            
+            // Cacher les propositions
+            document.getElementById('title-propositions').style.display = 'none';
+            
+            // Feedback visuel
+            const generateBtn = document.getElementById('generateTitlesBtn');
+            generateBtn.innerHTML = '<i class="fas fa-check"></i> Titre sélectionné !';
+            generateBtn.classList.add('btn-success');
+            generateBtn.classList.remove('btn-accent');
+            
+            setTimeout(() => {
+                generateBtn.innerHTML = '<i class="fas fa-magic"></i> Générer 5 propositions de titres';
+                generateBtn.classList.remove('btn-success');
+                generateBtn.classList.add('btn-accent');
+            }, 2000);
+        }
+        
+        // Fonction pour générer 5 propositions de sous-titres
+        window.generateSubtitlePropositions = async function() {
+            console.log('🚀 Génération des propositions de sous-titres...');
+            
+            const generateBtn = document.getElementById('generateSubtitlesBtn');
+            const originalText = generateBtn.innerHTML;
+            
+            // Désactiver le bouton pendant la génération
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération en cours...';
+            
+            try {
+                // Récupérer les données nécessaires
+                const productName = document.getElementById('productName')?.value || 'Produit';
+                const deepResearch = document.getElementById('deepResearch')?.value || 'Aucune recherche disponible';
+                
+                // Récupérer le modèle sélectionné dans l'interface (même logique que les autres fonctions)
+                const aiToggle = document.getElementById('aiModelToggle');
+                let selectedModel = 'gpt-3.5-turbo'; // Valeur par défaut
+                
+                if (aiToggle && aiToggle.checked) {
+                    selectedModel = 'claude-sonnet-4-20250514'; // Claude Sonnet 4 (nom technique correct)
+                } else {
+                    selectedModel = 'gpt-3.5-turbo'; // ChatGPT quand le toggle est désactivé
+                }
+                
+                console.log('🤖 Modèle sélectionné:', selectedModel);
+                console.log('🔄 Toggle state:', aiToggle ? aiToggle.checked : 'Toggle not found');
+                
+                // Construire le prompt
+                const prompt = `Vous êtes un expert copywriter spécialisé dans la création de pré-landers avec une compréhension approfondie de la psychologie du consommateur et de l'optimisation de conversion. Créez un sous-titre percutant pour le produit suivant :
+
+NOM DU PRODUIT : ${productName}
+RECHERCHE APPROFONDIE : ${deepResearch}
+TITRE CHOISI : ${window.selectedTitle || 'Titre non sélectionné'}
+ÉMOTION PRINCIPALE À ÉVOQUER : ${primaryEmotion || 'Confiance et urgence'}
+
+INSTRUCTIONS :
+1. Analysez la recherche approfondie pour identifier les 3-4 principaux points de douleur/frustrations des clients
+2. Créez 5 sous-titres différents qui :
+   - Abordent directement ces points de douleur
+   - Utilisent des déclarations négatives puissantes (SANS, PAS DE, AUCUN, ZÉRO)
+   - Intensifient l'ÉMOTION PRINCIPALE À ÉVOQUER
+   - Restent concis et percutants (10-15 mots maximum)
+   - Créent un contraste fort avec les solutions actuelles
+   - Suivent le format : "SANS [problème], SANS [problème], SANS [problème], Et [bénéfice rapide]"
+
+Exemple: "SANS Saleté, SANS Taches, SANS Dommages, Et Seulement 10 Minutes"
+
+LIVRABLE :
+- D'abord : Liste des 3-4 points de douleur principaux identifiés
+- Ensuite : 5 sous-titres uniquement, un par ligne, numérotés de 1 à 5`;
+                
+                console.log('📄 Contenu généré:', prompt.substring(0, 200) + '...');
+                
+                // Appeler l'API IA
+                const response = await fetch('http://localhost:3000/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        messages: [
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 4096
+                    })
+                });
+                
+                console.log('📥 Réponse reçue - Status:', response.status);
+                console.log('📥 Réponse reçue - OK:', response.ok);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erreur API détaillée:', errorText);
+                    
+                    // Si Claude 4 échoue, proposer un fallback vers GPT-3.5
+                    if (selectedModel === 'claude-sonnet-4-20250514' && response.status === 404) {
+                        console.log('⚠️ Claude 4 non disponible, tentative avec GPT-3.5...');
+                        
+                        const fallbackResponse = await fetch('http://localhost:3000/api/generate', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                model: 'gpt-3.5-turbo',
+                                messages: [
+                                    {
+                                        role: 'user',
+                                        content: prompt
+                                    }
+                                ],
+                                temperature: 0.7,
+                                max_tokens: 4096
+                            })
+                        });
+                        
+                        if (fallbackResponse.ok) {
+                            const fallbackData = await fallbackResponse.json();
+                            const generatedSubtitles = fallbackData.choices[0].message.content;
+                            
+                            // Parser les sous-titres
+                            const subtitleLines = generatedSubtitles.split('\n').filter(line => line.trim());
+                            const subtitles = subtitleLines
+                                .filter(line => line.match(/^\d+\.\s*(sans|without|no|zero)/i))
+                                .map(line => line.replace(/^\d+\.\s*/, '').trim())
+                                .slice(0, 5); // Limiter à 5 sous-titres maximum
+                            
+                            // Afficher les propositions avec un message d'avertissement
+                            displaySubtitlePropositions(subtitles);
+                            alert('⚠️ Claude 4 n\'est pas disponible. Les sous-titres ont été générés avec GPT-3.5 Turbo.');
+                            return;
+                        }
+                    }
+                    
+                    throw new Error(`Erreur API: ${response.status} - ${errorText}`);
+                }
+                
+                const data = await response.json();
+                const generatedSubtitles = data.choices[0].message.content;
+                
+                // Parser les sous-titres en ignorant la section des émotions
+                console.log('📄 Contenu généré:', generatedSubtitles);
+                
+                // Diviser le contenu en lignes
+                const allLines = generatedSubtitles.split('\n').filter(line => line.trim());
+                
+                // Chercher la section des sous-titres (après les émotions)
+                let subtitleStartIndex = -1;
+                for (let i = 0; i < allLines.length; i++) {
+                    const line = allLines[i].toLowerCase();
+                    // Chercher des indicateurs de début de section sous-titres
+                    if (line.includes('sous-titres') || line.includes('propositions') || 
+                        (line.match(/^\d+\.\s*(sans|without|no|zero)/i) && !line.includes('douleur') && !line.includes('frustration'))) {
+                        subtitleStartIndex = i;
+                        break;
+                    }
+                }
+                
+                // Si on n'a pas trouvé de section sous-titres claire, chercher les lignes avec le format sous-titre
+                if (subtitleStartIndex === -1) {
+                    for (let i = 0; i < allLines.length; i++) {
+                        const line = allLines[i];
+                        // Chercher des lignes qui ressemblent à des sous-titres (avec "SANS", "WITHOUT", etc.)
+                        if (line.match(/^\d+\.\s*(sans|without|no|zero)/i)) {
+                            subtitleStartIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                let subtitles = [];
+                if (subtitleStartIndex !== -1) {
+                    // Prendre les lignes à partir de la section sous-titres
+                    const subtitleLines = allLines.slice(subtitleStartIndex);
+                    subtitles = subtitleLines
+                        .filter(line => line.match(/^\d+\.\s*(sans|without|no|zero)/i))
+                        .map(line => line.replace(/^\d+\.\s*/, '').trim())
+                        .slice(0, 5); // Limiter à 5 sous-titres maximum
+                } else {
+                    // Fallback: prendre les 5 dernières lignes numérotées
+                    const numberedLines = allLines.filter(line => line.match(/^\d+\.\s*/));
+                    subtitles = numberedLines
+                        .slice(-5) // Prendre les 5 dernières
+                        .map(line => line.replace(/^\d+\.\s*/, '').trim());
+                }
+                
+                console.log('📋 Sous-titres extraits:', subtitles);
+                
+                // Afficher les propositions
+                displaySubtitlePropositions(subtitles);
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de la génération des sous-titres:', error);
+                console.error('❌ Détails de l\'erreur:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                // Afficher une erreur plus détaillée à l'utilisateur
+                const errorMessage = error.message || 'Erreur inconnue';
+                alert(`Erreur lors de la génération des sous-titres: ${errorMessage}\n\nVérifiez que le backend IA est en cours d'exécution sur le port 3000.`);
+            } finally {
+                // Réactiver le bouton
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = originalText;
+            }
+        }
+        
+        // Fonction pour afficher les propositions de sous-titres
+        function displaySubtitlePropositions(subtitles) {
+            const propositionsDiv = document.getElementById('subtitle-propositions');
+            const optionsDiv = document.getElementById('subtitle-options');
+            
+            if (subtitles.length === 0) {
+                optionsDiv.innerHTML = '<p class="error-text">Aucun sous-titre généré. Veuillez réessayer.</p>';
+                propositionsDiv.style.display = 'block';
+                return;
+            }
+            
+            // Créer les options de sous-titres
+            optionsDiv.innerHTML = '';
+            subtitles.forEach((subtitle, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'title-option';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'title-content';
+                contentDiv.innerHTML = `<strong>${index + 1}.</strong> ${subtitle}`;
+                
+                const selectBtn = document.createElement('button');
+                selectBtn.className = 'btn btn-sm btn-primary';
+                selectBtn.innerHTML = '<i class="fas fa-check"></i> Sélectionner';
+                selectBtn.onclick = () => selectSubtitle(subtitle);
+                
+                optionDiv.appendChild(contentDiv);
+                optionDiv.appendChild(selectBtn);
+                optionsDiv.appendChild(optionDiv);
+            });
+            
+            propositionsDiv.style.display = 'block';
+        }
+        
+        // Fonction pour sélectionner un sous-titre
+        window.selectSubtitle = function(selectedSubtitle) {
+            const contentArea = document.getElementById('content-subtitle');
+            contentArea.innerHTML = `<div class="generated-content">${selectedSubtitle}</div>`;
+            
+            // Cacher les propositions
+            document.getElementById('subtitle-propositions').style.display = 'none';
+            
+            // Feedback visuel
+            const generateBtn = document.getElementById('generateSubtitlesBtn');
+            generateBtn.innerHTML = '<i class="fas fa-check"></i> Sous-titre sélectionné !';
+            generateBtn.classList.add('btn-success');
+            generateBtn.classList.remove('btn-accent');
+            
+            setTimeout(() => {
+                generateBtn.innerHTML = '<i class="fas fa-magic"></i> Générer 5 propositions de sous-titres';
+                generateBtn.classList.remove('btn-success');
+                generateBtn.classList.add('btn-accent');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

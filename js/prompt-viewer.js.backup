@@ -1,0 +1,1859 @@
+/**
+ * Gestionnaire pour l'affichage des prompts utilisés dans la génération de contenu
+ */
+
+// Mapping des prompts pour chaque section
+const PROMPTS = {
+    productTitle: {
+        name: "Titre du Produit",
+        prompt: `Génère 3 titres de produit accrocheurs et optimisés pour la conversion pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Chaque titre doit être percutant et créer de l'urgence
+- Utilise des mots-clés émotionnels forts
+- Reste dans la limite de 60 caractères pour l'optimisation SEO
+- Adapte le ton à l'avatar client
+- Mets en avant l'angle marketing choisi
+
+**Format de réponse :**
+Retourne uniquement un array JSON avec 3 titres :
+["Titre 1", "Titre 2", "Titre 3"]`
+    },
+    
+    productBenefits: {
+        name: "Bénéfices Produit",
+        prompt: `Génère une liste complète de bénéfices produit pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 8-12 bénéfices concrets et mesurables
+- Chaque bénéfice doit résoudre un problème spécifique du client
+- Utilise un langage orienté résultats
+- Adapte les bénéfices à l'angle marketing
+- Évite le jargon technique, privilégie les bénéfices émotionnels
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "headline": "Titre du bénéfice",
+    "description": "Description détaillée du bénéfice"
+  }
+]`
+    },
+    
+    howItWorks: {
+        name: "Comment ça marche",
+        prompt: `Génère une explication claire du fonctionnement de ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+
+**Instructions :**
+- Explique le processus en 3-5 étapes simples
+- Utilise un langage accessible et non technique
+- Mets l'accent sur la simplicité d'utilisation
+- Chaque étape doit être actionnable
+- Rassure sur la facilité d'utilisation
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "step": 1,
+    "title": "Titre de l'étape",
+    "description": "Description détaillée de l'étape"
+  }
+]`
+    },
+    
+    emotionalBenefits: {
+        name: "Bénéfices Émotionnels",
+        prompt: `Génère des bénéfices émotionnels puissants pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 8-10 bénéfices émotionnels profonds
+- Connecte-toi aux désirs et peurs de l'avatar
+- Utilise des déclencheurs émotionnels forts
+- Chaque bénéfice doit créer une vision aspirationnelle
+- Adapte le ton émotionnel à l'avatar client
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "headline": "Bénéfice émotionnel",
+    "description": "Description émotionnelle détaillée"
+  }
+]`
+    },
+    
+    useCases: {
+        name: "Cas d'Utilisation",
+        prompt: `Génère des cas d'utilisation concrets pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 6-8 cas d'utilisation spécifiques
+- Chaque cas doit être relatable pour l'avatar
+- Utilise des situations de la vie réelle
+- Montre la polyvalence du produit
+- Crée des scénarios d'usage émotionnels
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "title": "Titre du cas d'usage",
+    "description": "Description du scénario d'utilisation"
+  }
+]`
+    },
+    
+    characteristics: {
+        name: "Caractéristiques",
+        prompt: `Génère les caractéristiques techniques et spécifications de ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+
+**Instructions :**
+- Génère 8-12 caractéristiques techniques importantes
+- Traduis les specs techniques en bénéfices clients
+- Mets en avant les différenciateurs techniques
+- Utilise des termes compréhensibles
+- Priorise les caractéristiques qui supportent l'angle marketing
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "title": "Nom de la caractéristique",
+    "description": "Description de la caractéristique et son bénéfice"
+  }
+]`
+    },
+    
+    competitiveAdvantages: {
+        name: "Avantages Concurrentiels",
+        prompt: `Génère les avantages concurrentiels de ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 6-8 avantages concurrentiels uniques
+- Compare implicitement avec les alternatives
+- Mets en avant les différenciateurs clés
+- Utilise des preuves et des faits
+- Crée un sentiment de supériorité du produit
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "title": "Avantage concurrentiel",
+    "description": "Explication de l'avantage et pourquoi c'est mieux"
+  }
+]`
+    },
+    
+    customerReviews: {
+        name: "Avis Clients",
+        prompt: `Génère des avis clients authentiques et crédibles pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 8-12 avis clients variés et authentiques
+- Utilise des prénoms français réalistes
+- Varie les styles d'écriture et longueurs
+- Inclus des détails spécifiques et crédibles
+- Mets en avant différents bénéfices du produit
+- Adapte les avis à l'avatar client
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "name": "Prénom du client",
+    "review": "Texte de l'avis client",
+    "rating": 5
+  }
+]`
+    },
+    
+    faq: {
+        name: "FAQ",
+        prompt: `Génère une FAQ complète pour ce produit :
+
+**Produit :** {productName}
+**Description :** {productDescription}
+**Angle marketing :** {marketingAngle}
+**Avatar client :** {customerAvatar}
+
+**Instructions :**
+- Génère 8-12 questions fréquentes pertinentes
+- Anticipe les objections et préoccupations clients
+- Réponds de manière rassurante et convaincante
+- Inclus des questions sur l'utilisation, la livraison, la garantie
+- Adapte les questions aux préoccupations de l'avatar
+- Utilise les réponses pour renforcer la vente
+
+**Format de réponse :**
+Retourne un array JSON d'objets avec cette structure :
+[
+  {
+    "question": "Question du client",
+    "answer": "Réponse détaillée et rassurante"
+  }
+]`
+    }
+};
+
+// Garder une copie des prompts par défaut pour la réinitialisation
+const DEFAULT_PROMPTS = JSON.parse(JSON.stringify(PROMPTS));
+
+/**
+ * Récupère les prompts par défaut
+ */
+function getDefaultPrompts() {
+    return DEFAULT_PROMPTS;
+}
+
+/**
+ * Réinitialise le prompt à sa valeur par défaut (temporaire)
+ */
+window.resetPrompt = function(sectionKey) {
+    if (!confirm('Êtes-vous sûr de vouloir réinitialiser ce prompt à sa valeur par défaut ?')) {
+        return;
+    }
+    
+    // Récupérer le prompt par défaut
+    const defaultPrompts = getDefaultPrompts();
+    if (defaultPrompts[sectionKey]) {
+        const textarea = document.getElementById('promptEditor');
+        if (textarea) {
+            textarea.value = defaultPrompts[sectionKey].prompt;
+        }
+        
+        // Remettre le prompt par défaut (temporaire)
+        PROMPTS[sectionKey].prompt = defaultPrompts[sectionKey].prompt;
+        
+        console.log('[PROMPT-EDITOR] Prompt réinitialisé pour:', sectionKey);
+    }
+};
+
+/**
+ * Affiche le modal avec le prompt pour une section donnée
+ */
+window.showPromptModal = function(sectionKey, event) {
+    // Empêcher la propagation pour éviter de changer d'onglet
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    
+    const promptData = PROMPTS[sectionKey];
+    if (!promptData) {
+        console.error('Prompt non trouvé pour la section:', sectionKey);
+        return;
+    }
+    
+    // Créer le modal s'il n'existe pas
+    let modal = document.getElementById('promptModal');
+    if (!modal) {
+        modal = createPromptModal();
+        document.body.appendChild(modal);
+    }
+    
+    // Stocker la section actuelle pour l'édition
+    modal.dataset.currentSection = sectionKey;
+    
+    // Mettre à jour le contenu du modal
+    document.getElementById('promptModalTitle').textContent = `Prompt - ${promptData.name}`;
+    
+    // Créer le contenu éditable
+    const promptContent = document.getElementById('promptModalContent');
+    promptContent.innerHTML = '';
+    
+    // Ajouter les options de génération
+    const optionsDiv = document.createElement('div');
+    optionsDiv.className = 'generation-options';
+    optionsDiv.style.cssText = `
+        background: var(--dark-bg, #1a1a1a);
+        border: 1px solid var(--border-color, #333);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    `;
+    
+    optionsDiv.innerHTML = `
+        <h4 style="margin: 0 0 15px 0; color: var(--primary-color, #00d4ff);">
+            <i class="fas fa-sliders-h"></i> Options de génération
+        </h4>
+        <div class="options-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="options-column">
+                <label style="display: flex; align-items: center; cursor: pointer; margin-bottom: 12px;">
+                    <input type="checkbox" id="includeProductName" checked style="margin-right: 10px; transform: scale(1.2);">
+                    <span>Inclure le nom du produit</span>
+                </label>
+                <label style="display: flex; align-items: center; cursor: pointer; margin-bottom: 12px;">
+                    <input type="checkbox" id="includeDeepResearch" checked style="margin-right: 10px; transform: scale(1.2);">
+                    <span>Inclure la description/recherche produit</span>
+                </label>
+            </div>
+            <div class="options-column">
+                <label style="display: flex; align-items: center; cursor: pointer; margin-bottom: 12px;">
+                    <input type="checkbox" id="includeMarketingAngle" style="margin-right: 10px; transform: scale(1.2);">
+                    <span>Inclure l'angle marketing sélectionné</span>
+                </label>
+                <label style="display: flex; align-items: center; cursor: pointer; margin-bottom: 12px;">
+                    <input type="checkbox" id="includeCustomerAvatar" style="margin-right: 10px; transform: scale(1.2);">
+                    <span>Inclure le profil avatar sélectionné</span>
+                </label>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color, #333);">
+            <button onclick="savePromptChanges('${sectionKey}')" class="save-prompt-btn" style="
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                margin-right: 10px;
+            ">
+                <i class="fas fa-save"></i> Sauvegarder le prompt
+            </button>
+            <small style="color: var(--text-secondary, #888); font-size: 12px;">
+                Sauvegarde le prompt modifié pour cette section
+            </small>
+        </div>
+    `;
+    
+    promptContent.appendChild(optionsDiv);
+    
+    // Ajouter le textarea pour l'édition
+    const textarea = document.createElement('textarea');
+    textarea.id = 'promptEditor';
+    textarea.value = promptData.prompt;
+    textarea.style.cssText = `
+        width: 100%;
+        height: 400px;
+        background: var(--dark-bg, #1a1a1a);
+        border: 1px solid var(--border-color, #333);
+        border-radius: 8px;
+        padding: 15px;
+        color: var(--text-color, #e0e0e0);
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: vertical;
+        outline: none;
+    `;
+    
+    promptContent.appendChild(textarea);
+    
+    // Mettre à jour les boutons d'action
+    updateModalActions(sectionKey);
+    
+    // Afficher le modal
+    modal.style.display = 'flex';
+    
+    // Focus sur le textarea
+    setTimeout(() => textarea.focus(), 100);
+};
+
+/**
+ * Met à jour les boutons d'action du modal
+ */
+function updateModalActions(sectionKey) {
+    const actionsContainer = document.querySelector('.modal-actions');
+    if (!actionsContainer) return;
+    
+    actionsContainer.innerHTML = `
+        <button class="regenerate-with-prompt-btn" onclick="regenerateWithCurrentPrompt('${sectionKey}')" style="
+            padding: 12px 20px;
+            border: none;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        ">
+            <i class="fas fa-magic"></i> Generate
+        </button>
+        <button class="copy-prompt-btn" onclick="copyCurrentPrompt()" style="
+            padding: 12px 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-color, #00d4ff), var(--primary-hover, #0099cc));
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        ">
+            <i class="fas fa-copy"></i> Copier le prompt
+        </button>
+        <button class="reset-prompt-btn" onclick="resetPrompt('${sectionKey}')" style="
+            padding: 12px 20px;
+            border: 2px solid #dc3545;
+            background: transparent;
+            color: #dc3545;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        ">
+            <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+        <button onclick="window.closePromptModal()" style="
+            padding: 12px 20px;
+            border: 2px solid var(--border-color, #444);
+            background: transparent;
+            color: var(--text-color, #e0e0e0);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        ">Fermer</button>
+    `;
+}
+
+/**
+ * Ferme le modal des prompts
+ */
+window.closePromptModal = function() {
+    const modal = document.getElementById('promptModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+/**
+ * Crée le modal HTML pour l'affichage des prompts
+ */
+function createPromptModal() {
+    const modal = document.createElement('div');
+    modal.id = 'promptModal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    `;
+    
+    modal.innerHTML = `
+        <div class="modal-content" style="
+            background: var(--card-bg, #2a2a2a);
+            color: var(--text-color, #e0e0e0);
+            padding: 30px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color, #444);
+        ">
+            <div class="modal-header" style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                border-bottom: 1px solid var(--border-color, #444);
+                padding-bottom: 15px;
+            ">
+                <h3 id="promptModalTitle" style="margin: 0; color: var(--primary-color, #00d4ff);">
+                    <i class="fas fa-cog"></i> Prompt
+                </h3>
+                <button onclick="window.closePromptModal()" style="
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: var(--secondary-text-color, #999);
+                    padding: 5px;
+                ">×</button>
+            </div>
+            
+            <div class="prompt-info" style="
+                background: var(--dark-bg, #1a1a1a);
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border: 1px solid var(--border-color, #333);
+            ">
+                <h4 style="margin: 0 0 10px 0; color: var(--primary-color, #00d4ff);">
+                    <i class="fas fa-info-circle"></i> Instructions d'édition
+                </h4>
+                <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+                    • Modifiez le prompt ci-dessous selon vos besoins<br>
+                    • Les variables <code>{productName}</code>, <code>{productDescription}</code>, <code>{marketingAngle}</code>, <code>{customerAvatar}</code> seront automatiquement remplacées<br>
+                    • Cliquez sur "Generate" pour générer du nouveau contenu immédiatement<br>
+                    • Vos modifications sont sauvegardées automatiquement
+                </p>
+            </div>
+            
+            <div class="prompt-content" style="margin-bottom: 20px;">
+                <div id="promptModalContent"></div>
+            </div>
+            
+            <div class="modal-actions" style="
+                display: flex;
+                gap: 10px;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            ">
+                <!-- Les boutons seront ajoutés dynamiquement -->
+            </div>
+        </div>
+    `;
+    
+    // Fermer le modal en cliquant sur l'overlay
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            window.closePromptModal();
+        }
+    });
+    
+    // Ajouter les styles CSS pour les icônes de paramètres
+    const promptStyles = document.createElement('style');
+    promptStyles.textContent = `
+        .prompt-settings-icon {
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            margin-left: 8px;
+            font-size: 12px;
+        }
+        
+        .prompt-settings-icon:hover {
+            opacity: 1;
+            color: var(--primary-color, #00d4ff);
+            transform: rotate(90deg);
+        }
+        
+        .tab-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .copy-prompt-btn:hover,
+        .regenerate-with-prompt-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .reset-prompt-btn:hover {
+            background: #dc3545 !important;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        
+        #promptEditor {
+            transition: border-color 0.3s ease;
+        }
+        
+        #promptEditor:focus {
+            border-color: var(--primary-color, #00d4ff) !important;
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+        
+        .prompt-info code {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-color, #00d4ff);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .modal-actions button {
+            transition: all 0.3s ease;
+        }
+        
+        .modal-actions button:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Styles pour les options de génération */
+        .generation-options label {
+            color: var(--text-color, #e0e0e0);
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .generation-options label:hover {
+            color: var(--primary-color, #00d4ff);
+        }
+        
+        .generation-options input[type="checkbox"] {
+            accent-color: var(--primary-color, #00d4ff);
+            cursor: pointer;
+        }
+        
+        .generation-options h4 {
+            border-bottom: 1px solid var(--border-color, #333);
+            padding-bottom: 8px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .options-column label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .options-column label:hover {
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+        
+        .save-prompt-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        .save-prompt-btn:active {
+            transform: translateY(0);
+        }
+    `;
+    document.head.appendChild(promptStyles);
+    
+    return modal;
+}
+
+// Test de fonctionnement au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[PROMPT-VIEWER] Module chargé avec succès');
+    
+    // Charger les prompts sauvegardés depuis localStorage
+    loadSavedPrompts();
+    
+    // Fonction de test pour l'édition de prompts
+    window.testPromptEdit = (sectionKey) => {
+        console.log('[PROMPT-EDITOR] Test d\'édition pour:', sectionKey);
+        showPromptModal(sectionKey);
+    };
+    
+    // Fonction pour tester les options de génération
+    window.testGenerationOptions = (sectionKey, options = {}) => {
+        console.log('[PROMPT-EDITOR] Test avec options pour:', sectionKey, options);
+        regenerateContentWithOptions(sectionKey, {
+            includeProductName: options.includeProductName !== false,
+            includeDeepResearch: options.includeDeepResearch !== false,
+            includeMarketingAngle: options.includeMarketingAngle || false,
+            includeCustomerAvatar: options.includeCustomerAvatar || false
+        });
+    };
+    
+    // Fonction pour tester la génération avec prompt personnalisé
+    window.testCustomPrompt = (sectionKey, customPrompt, options = {}) => {
+        console.log('[PROMPT-EDITOR] Test avec prompt personnalisé pour:', sectionKey);
+        regenerateContentWithCustomPrompt(sectionKey, customPrompt || 'Test prompt', {
+            includeProductName: options.includeProductName !== false,
+            includeDeepResearch: options.includeDeepResearch !== false,
+            includeMarketingAngle: options.includeMarketingAngle || false,
+            includeCustomerAvatar: options.includeCustomerAvatar || false
+        });
+    };
+    
+    // Fonction pour vérifier l'état des prompts
+    window.checkPromptState = (sectionKey) => {
+        console.log('[PROMPT-STATE] État du prompt pour:', sectionKey);
+        console.log('- Prompt actuel:', PROMPTS[sectionKey]?.prompt?.substring(0, 100) + '...');
+        console.log('- Prompt par défaut:', DEFAULT_PROMPTS[sectionKey]?.prompt?.substring(0, 100) + '...');
+        console.log('- Identiques:', PROMPTS[sectionKey]?.prompt === DEFAULT_PROMPTS[sectionKey]?.prompt);
+        
+        // Vérifier localStorage
+        const savedPrompts = JSON.parse(localStorage.getItem('prompts') || '{}');
+        console.log('- Sauvegardé:', !!savedPrompts[sectionKey]);
+        if (savedPrompts[sectionKey]) {
+            console.log('- Prompt sauvegardé:', savedPrompts[sectionKey].prompt?.substring(0, 100) + '...');
+        }
+    };
+    
+    // Fonction pour tester la sauvegarde
+    window.testSavePrompt = (sectionKey, testPrompt) => {
+        console.log('[PROMPT-SAVE] Test de sauvegarde pour:', sectionKey);
+        if (testPrompt) {
+            // Simuler l'édition du prompt dans le textarea
+            const textarea = document.getElementById('promptEditor');
+            if (textarea) {
+                textarea.value = testPrompt;
+            } else {
+                // Si pas de modal ouvert, modifier directement PROMPTS
+                PROMPTS[sectionKey].prompt = testPrompt;
+            }
+        }
+        savePromptChanges(sectionKey);
+    };
+    
+    // Fonction pour vérifier les prompts sauvegardés
+    window.checkSavedPrompts = () => {
+        const savedPrompts = JSON.parse(localStorage.getItem('prompts') || '{}');
+        console.log('[PROMPT-SAVE] Prompts sauvegardés:', Object.keys(savedPrompts));
+        Object.keys(savedPrompts).forEach(key => {
+            console.log(`[PROMPT-SAVE] ${key}:`, savedPrompts[key].prompt?.substring(0, 100) + '...');
+        });
+        return savedPrompts;
+    };
+    
+    // Vérifier que les boutons de regénération sont bien présents
+    setTimeout(() => {
+        const regenerateButtons = document.querySelectorAll('.btn-regenerate');
+        console.log('[PROMPT-VIEWER] Boutons de regénération trouvés:', regenerateButtons.length);
+        regenerateButtons.forEach((btn, index) => {
+            console.log(`[PROMPT-VIEWER] Bouton ${index + 1}:`, btn.getAttribute('onclick'));
+        });
+        
+        // Vérifier le contenu existant
+        if (window.generatedContent) {
+            console.log('[PROMPT-VIEWER] Contenu généré disponible:', Object.keys(window.generatedContent));
+        } else {
+            console.log('[PROMPT-VIEWER] Aucun contenu généré trouvé');
+        }
+    }, 1000);
+});
+
+/**
+ * Regénère le contenu pour une section donnée en utilisant l'IA
+ */
+window.regenerateContent = async function(sectionKey) {
+    console.log('[REGENERATE] Début de la régénération pour:', sectionKey);
+    
+    const promptData = PROMPTS[sectionKey];
+    if (!promptData) {
+        console.error('[REGENERATE] Prompt non trouvé pour la section:', sectionKey);
+        alert('Erreur: Prompt non trouvé pour cette section');
+        return;
+    }
+    
+    // Récupérer les données du formulaire
+    const productName = document.getElementById('productName')?.value?.trim();
+    const productDescription = document.getElementById('deepResearch')?.value?.trim();
+    
+    // Récupérer l'angle marketing sélectionné
+    let marketingAngle = 'Non défini';
+    const selectedAngleElement = document.querySelector('.marketing-angle.selected');
+    if (selectedAngleElement) {
+        const angleTitle = selectedAngleElement.querySelector('.angle-title')?.textContent;
+        const angleDescription = selectedAngleElement.querySelector('.angle-description')?.textContent;
+        marketingAngle = `${angleTitle}: ${angleDescription}`;
+    }
+    
+    // Récupérer l'avatar client sélectionné
+    let customerAvatar = 'Non défini';
+    const selectedAvatarElement = document.querySelector('.avatar-card.selected');
+    if (selectedAvatarElement) {
+        const avatarName = selectedAvatarElement.querySelector('.avatar-name')?.textContent;
+        const avatarDescription = selectedAvatarElement.querySelector('.avatar-description')?.textContent;
+        customerAvatar = `${avatarName}: ${avatarDescription}`;
+    }
+    
+    // Validation des données requises
+    if (!productName) {
+        alert('Veuillez d\'abord renseigner le nom du produit dans le formulaire');
+        return;
+    }
+    
+    if (!productDescription) {
+        alert('Veuillez d\'abord renseigner la description du produit dans le formulaire');
+        return;
+    }
+    
+    // Trouver le bouton de regénération pour afficher l'état de chargement
+    let regenerateBtn = null;
+    try {
+        regenerateBtn = document.querySelector(`[onclick*="regenerateContent('${sectionKey}')"]`);
+    } catch (e) {
+        console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+        // Fallback : chercher tous les boutons de regénération et trouver le bon
+        const allButtons = document.querySelectorAll('[onclick*="regenerateContent"]');
+        regenerateBtn = Array.from(allButtons).find(btn => btn.onclick && btn.onclick.toString().includes(sectionKey));
+    }
+    const originalBtnHTML = regenerateBtn ? regenerateBtn.innerHTML : '';
+    
+    try {
+        // Afficher l'état de chargement
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+            regenerateBtn.disabled = true;
+        }
+        
+        // Construire le prompt personnalisé
+        let customPrompt = promptData.prompt
+            .replace(/{productName}/g, productName)
+            .replace(/{productDescription}/g, productDescription)
+            .replace(/{marketingAngle}/g, marketingAngle)
+            .replace(/{customerAvatar}/g, customerAvatar);
+        
+        console.log('[REGENERATE] Prompt personnalisé créé, longueur:', customPrompt.length);
+        
+        // Appeler l'API IA avec le bon format
+        console.log('[REGENERATE] Appel API avec prompt:', customPrompt.substring(0, 100) + '...');
+        
+        const response = await fetch('http://localhost:3000/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                max_tokens: 2000,
+                messages: [
+                    {
+                        role: 'user',
+                        content: customPrompt
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const generatedContent = data.choices?.[0]?.message?.content || data.content || data.response || data;
+        console.log('[REGENERATE] Réponse IA reçue, longueur:', generatedContent.length);
+        
+        // Parser le contenu généré selon le type de section
+        const parsedContent = parseContentBySection(generatedContent, sectionKey);
+        console.log('[REGENERATE] Contenu parsé:', parsedContent);
+        
+        // Ajouter le nouveau contenu à la section existante
+        await appendContentToSection(sectionKey, parsedContent);
+        
+        console.log('[REGENERATE] Régénération terminée avec succès pour:', sectionKey);
+        
+    } catch (error) {
+        console.error('[REGENERATE] Erreur lors de la régénération:', error);
+        alert(`Erreur lors de la régénération: ${error.message}`);
+    } finally {
+        // Restaurer l'état du bouton
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = originalBtnHTML;
+            regenerateBtn.disabled = false;
+        }
+    }
+};
+
+/**
+ * Regénère le contenu pour une section donnée en utilisant l'IA et les options sélectionnées
+ */
+window.regenerateContentWithOptions = async function(sectionKey, options) {
+    console.log('[REGENERATE] Début de la régénération pour:', sectionKey);
+    
+    const promptData = PROMPTS[sectionKey];
+    if (!promptData) {
+        console.error('[REGENERATE] Prompt non trouvé pour la section:', sectionKey);
+        alert('Erreur: Prompt non trouvé pour cette section');
+        return;
+    }
+    
+    // Récupérer les données du formulaire
+    const productName = document.getElementById('productName')?.value?.trim();
+    const productDescription = document.getElementById('deepResearch')?.value?.trim();
+    
+    // Récupérer l'angle marketing sélectionné
+    let marketingAngle = 'Non défini';
+    const selectedAngleElement = document.querySelector('.marketing-angle.selected');
+    if (selectedAngleElement) {
+        const angleTitle = selectedAngleElement.querySelector('.angle-title')?.textContent;
+        const angleDescription = selectedAngleElement.querySelector('.angle-description')?.textContent;
+        marketingAngle = `${angleTitle}: ${angleDescription}`;
+    }
+    
+    // Récupérer l'avatar client sélectionné
+    let customerAvatar = 'Non défini';
+    const selectedAvatarElement = document.querySelector('.avatar-card.selected');
+    if (selectedAvatarElement) {
+        const avatarName = selectedAvatarElement.querySelector('.avatar-name')?.textContent;
+        const avatarDescription = selectedAvatarElement.querySelector('.avatar-description')?.textContent;
+        customerAvatar = `${avatarName}: ${avatarDescription}`;
+    }
+    
+    // Validation des données requises
+    if (!productName) {
+        alert('Veuillez d\'abord renseigner le nom du produit dans le formulaire');
+        return;
+    }
+    
+    if (!productDescription) {
+        alert('Veuillez d\'abord renseigner la description du produit dans le formulaire');
+        return;
+    }
+    
+    // Trouver le bouton de regénération pour afficher l'état de chargement
+    let regenerateBtn = null;
+    try {
+        regenerateBtn = document.querySelector(`[onclick*="regenerateContentWithOptions('${sectionKey}', {includeProductName: ${options.includeProductName}, includeDeepResearch: ${options.includeDeepResearch}, includeSelectedContent: ${options.includeSelectedContent}})"]`) ||
+                         document.querySelector(`[onclick*="regenerateContentWithCustomPrompt('${sectionKey}'"]`);
+    } catch (e) {
+        console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+        // Fallback : chercher tous les boutons de regénération et trouver le bon
+        const allButtons = document.querySelectorAll('[onclick*="regenerateContentWithOptions"]');
+        regenerateBtn = Array.from(allButtons).find(btn => btn.onclick && btn.onclick.toString().includes(sectionKey));
+    }
+    const originalBtnHTML = regenerateBtn ? regenerateBtn.innerHTML : '';
+    
+    try {
+        // Afficher l'état de chargement
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+            regenerateBtn.disabled = true;
+        }
+        
+        // Construire le prompt personnalisé
+        let customPrompt = promptData.prompt
+            .replace(/{productName}/g, options.includeProductName ? productName : '')
+            .replace(/{productDescription}/g, options.includeDeepResearch ? productDescription : '')
+            .replace(/{marketingAngle}/g, options.includeMarketingAngle ? marketingAngle : '')
+            .replace(/{customerAvatar}/g, options.includeCustomerAvatar ? customerAvatar : '');
+        
+        console.log('[REGENERATE] Prompt personnalisé créé, longueur:', customPrompt.length);
+        
+        // Appeler l'API IA avec le bon format
+        console.log('[REGENERATE] Appel API avec prompt:', customPrompt.substring(0, 100) + '...');
+        
+        const response = await fetch('http://localhost:3000/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                max_tokens: 2000,
+                messages: [
+                    {
+                        role: 'user',
+                        content: customPrompt
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const generatedContent = data.choices?.[0]?.message?.content || data.content || data.response || data;
+        console.log('[REGENERATE] Réponse IA reçue, longueur:', generatedContent.length);
+        
+        // Parser le contenu généré selon le type de section
+        const parsedContent = parseContentBySection(generatedContent, sectionKey);
+        console.log('[REGENERATE] Contenu parsé:', parsedContent);
+        
+        // Ajouter le nouveau contenu à la section existante
+        await appendContentToSection(sectionKey, parsedContent);
+        
+        console.log('[REGENERATE] Régénération terminée avec succès pour:', sectionKey);
+        
+    } catch (error) {
+        console.error('[REGENERATE] Erreur lors de la régénération:', error);
+        alert(`Erreur lors de la régénération: ${error.message}`);
+    } finally {
+        // Restaurer l'état du bouton
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = originalBtnHTML;
+            regenerateBtn.disabled = false;
+        }
+    }
+};
+
+/**
+ * Regénère le contenu pour une section donnée en utilisant l'IA et un prompt personnalisé
+ */
+window.regenerateContentWithCustomPrompt = async function(sectionKey, customPrompt, options) {
+    console.log('[REGENERATE] Début de la régénération pour:', sectionKey);
+    
+    // Récupérer les données du formulaire
+    const productName = document.getElementById('productName')?.value?.trim();
+    const productDescription = document.getElementById('deepResearch')?.value?.trim();
+    
+    // Récupérer l'angle marketing sélectionné
+    let marketingAngle = 'Non défini';
+    const selectedAngleElement = document.querySelector('.marketing-angle.selected');
+    if (selectedAngleElement) {
+        const angleTitle = selectedAngleElement.querySelector('.angle-title')?.textContent;
+        const angleDescription = selectedAngleElement.querySelector('.angle-description')?.textContent;
+        marketingAngle = `${angleTitle}: ${angleDescription}`;
+    }
+    
+    // Récupérer l'avatar client sélectionné
+    let customerAvatar = 'Non défini';
+    const selectedAvatarElement = document.querySelector('.avatar-card.selected');
+    if (selectedAvatarElement) {
+        const avatarName = selectedAvatarElement.querySelector('.avatar-name')?.textContent;
+        const avatarDescription = selectedAvatarElement.querySelector('.avatar-description')?.textContent;
+        customerAvatar = `${avatarName}: ${avatarDescription}`;
+    }
+    
+    // Validation des données requises
+    if (!productName) {
+        alert('Veuillez d\'abord renseigner le nom du produit dans le formulaire');
+        return;
+    }
+    
+    if (!productDescription) {
+        alert('Veuillez d\'abord renseigner la description du produit dans le formulaire');
+        return;
+    }
+    
+    // Trouver le bouton de regénération pour afficher l'état de chargement
+    let regenerateBtn = null;
+    try {
+        regenerateBtn = document.querySelector(`[onclick*="regenerateContentWithCustomPrompt('${sectionKey}', '${customPrompt}', {includeProductName: ${options.includeProductName}, includeDeepResearch: ${options.includeDeepResearch}, includeSelectedContent: ${options.includeSelectedContent}})"]`) ||
+                         document.querySelector(`[onclick*="regenerateContentWithOptions('${sectionKey}', {includeProductName: ${options.includeProductName}, includeDeepResearch: ${options.includeDeepResearch}, includeSelectedContent: ${options.includeSelectedContent}})"]`);
+    } catch (e) {
+        console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+        // Fallback : chercher tous les boutons de regénération et trouver le bon
+        const allButtons = document.querySelectorAll('[onclick*="regenerateContentWithOptions"]');
+        regenerateBtn = Array.from(allButtons).find(btn => btn.onclick && btn.onclick.toString().includes(sectionKey));
+    }
+    const originalBtnHTML = regenerateBtn ? regenerateBtn.innerHTML : '';
+    
+    try {
+        // Afficher l'état de chargement
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+            regenerateBtn.disabled = true;
+        }
+        
+        // Construire le prompt personnalisé
+        let finalPrompt = customPrompt
+            .replace(/{productName}/g, options.includeProductName ? productName : '')
+            .replace(/{productDescription}/g, options.includeDeepResearch ? productDescription : '')
+            .replace(/{marketingAngle}/g, options.includeMarketingAngle ? marketingAngle : '')
+            .replace(/{customerAvatar}/g, options.includeCustomerAvatar ? customerAvatar : '');
+        
+        console.log('[REGENERATE] Prompt personnalisé créé, longueur:', finalPrompt.length);
+        
+        // Appeler l'API IA avec le bon format
+        console.log('[REGENERATE] Appel API avec prompt:', finalPrompt.substring(0, 100) + '...');
+        
+        const response = await fetch('http://localhost:3000/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                max_tokens: 2000,
+                messages: [
+                    {
+                        role: 'user',
+                        content: finalPrompt
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const generatedContent = data.choices?.[0]?.message?.content || data.content || data.response || data;
+        console.log('[REGENERATE] Réponse IA reçue, longueur:', generatedContent.length);
+        
+        // Parser le contenu généré selon le type de section
+        const parsedContent = parseContentBySection(generatedContent, sectionKey);
+        console.log('[REGENERATE] Contenu parsé:', parsedContent);
+        
+        // Ajouter le nouveau contenu à la section existante
+        await appendContentToSection(sectionKey, parsedContent);
+        
+        console.log('[REGENERATE] Régénération terminée avec succès pour:', sectionKey);
+        
+    } catch (error) {
+        console.error('[REGENERATE] Erreur lors de la régénération:', error);
+        alert(`Erreur lors de la régénération: ${error.message}`);
+    } finally {
+        // Restaurer l'état du bouton
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = originalBtnHTML;
+            regenerateBtn.disabled = false;
+        }
+    }
+};
+
+/**
+ * Regénère le contenu avec le prompt actuellement affiché et les options sélectionnées
+ */
+window.regenerateWithCurrentPrompt = function(sectionKey) {
+    const textarea = document.getElementById('promptEditor');
+    if (!textarea) {
+        console.error('[REGENERATE] Textarea non trouvé');
+        return;
+    }
+    
+    // Récupérer les options sélectionnées (nouvelles options séparées)
+    const includeProductName = document.getElementById('includeProductName')?.checked || false;
+    const includeDeepResearch = document.getElementById('includeDeepResearch')?.checked || false;
+    const includeMarketingAngle = document.getElementById('includeMarketingAngle')?.checked || false;
+    const includeCustomerAvatar = document.getElementById('includeCustomerAvatar')?.checked || false;
+    
+    console.log('[REGENERATE] Options sélectionnées:', {
+        includeProductName,
+        includeDeepResearch,
+        includeMarketingAngle,
+        includeCustomerAvatar
+    });
+    
+    // Récupérer le prompt personnalisé (sans modifier PROMPTS globalement)
+    const customPrompt = textarea.value.trim();
+    console.log('[REGENERATE] Prompt récupéré:', customPrompt.substring(0, 100) + '...');
+    console.log('[REGENERATE] Longueur du prompt:', customPrompt.length);
+    
+    if (!customPrompt || customPrompt.length < 10) {
+        alert('Le prompt est trop court. Veuillez saisir un prompt d\'au moins 10 caractères.');
+        return;
+    }
+    
+    // Fermer le modal
+    closePromptModal();
+    
+    // Regénérer avec les options personnalisées et le prompt personnalisé
+    setTimeout(() => {
+        regenerateContentWithCustomPrompt(sectionKey, customPrompt, {
+            includeProductName,
+            includeDeepResearch,
+            includeMarketingAngle,
+            includeCustomerAvatar
+        });
+    }, 300);
+};
+
+/**
+ * Ferme le modal des prompts
+ */
+window.closePromptModal = function() {
+    const modal = document.getElementById('promptModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+/**
+ * Parse le contenu généré selon le type de section
+ */
+function parseContentBySection(content, sectionKey) {
+    try {
+        // Nettoyer le contenu (enlever les markdown, etc.)
+        let cleanContent = content.trim();
+        
+        // Essayer de parser comme JSON d'abord
+        if (cleanContent.startsWith('[') || cleanContent.startsWith('{')) {
+            try {
+                return JSON.parse(cleanContent);
+            } catch (e) {
+                console.log('[PARSE] Pas du JSON valide, essai de parsing manuel');
+            }
+        }
+        
+        // Parsing manuel selon le type de section
+        switch (sectionKey) {
+            case 'productTitle':
+                return parseProductTitles(cleanContent);
+            case 'productBenefits':
+            case 'emotionalBenefits':
+            case 'characteristics':
+            case 'competitiveAdvantages':
+            case 'useCases':
+                return parseListItems(cleanContent);
+            case 'howItWorks':
+                return parseHowItWorks(cleanContent);
+            case 'customerReviews':
+                return parseCustomerReviews(cleanContent);
+            case 'faq':
+                return parseFAQ(cleanContent);
+            default:
+                return parseGenericContent(cleanContent);
+        }
+    } catch (error) {
+        console.error('[PARSE] Erreur de parsing:', error);
+        return parseGenericContent(content);
+    }
+}
+
+/**
+ * Parse les titres de produit
+ */
+function parseProductTitles(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const titles = [];
+    
+    for (const line of lines) {
+        const cleanLine = line.replace(/^[-*•]\s*/, '').replace(/^\d+\.\s*/, '').trim();
+        if (cleanLine && cleanLine.length >= 4) {
+            titles.push(cleanLine);
+        }
+    }
+    
+    return titles.slice(0, 5); // Limiter à 5 titres
+}
+
+/**
+ * Parse les éléments de liste (bénéfices, caractéristiques, etc.)
+ */
+function parseListItems(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const items = [];
+    
+    let currentItem = null;
+    
+    for (const line of lines) {
+        const cleanLine = line.trim();
+        if (!cleanLine) continue;
+        
+        // Détecter un nouveau titre/headline
+        if (cleanLine.match(/^[-*•]\s*/) || cleanLine.match(/^\d+\.\s*/)) {
+            if (currentItem) {
+                items.push(currentItem);
+            }
+            currentItem = {
+                headline: cleanLine.replace(/^[-*•]\s*/, '').replace(/^\d+\.\s*/, '').trim(),
+                description: ''
+            };
+        } else if (currentItem) {
+            // Ajouter à la description
+            currentItem.description += (currentItem.description ? ' ' : '') + cleanLine;
+        }
+    }
+    
+    if (currentItem) {
+        items.push(currentItem);
+    }
+    
+    return items;
+}
+
+/**
+ * Parse le contenu "Comment ça marche"
+ */
+function parseHowItWorks(content) {
+    const items = parseListItems(content);
+    return items.map((item, index) => ({
+        step: index + 1,
+        title: item.headline,
+        description: item.description
+    }));
+}
+
+/**
+ * Parse les avis clients
+ */
+function parseCustomerReviews(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const reviews = [];
+    
+    let currentReview = null;
+    
+    for (const line of lines) {
+        const cleanLine = line.trim();
+        if (!cleanLine) continue;
+        
+        // Détecter un nom (commence par une majuscule, court)
+        if (cleanLine.match(/^[A-Z][a-z]+(\s[A-Z]\.?)?:?$/)) {
+            if (currentReview) {
+                reviews.push(currentReview);
+            }
+            currentReview = {
+                name: cleanLine.replace(':', ''),
+                review: '',
+                rating: 5
+            };
+        } else if (currentReview) {
+            currentReview.review += (currentReview.review ? ' ' : '') + cleanLine;
+        }
+    }
+    
+    if (currentReview) {
+        reviews.push(currentReview);
+    }
+    
+    return reviews;
+}
+
+/**
+ * Parse la FAQ
+ */
+function parseFAQ(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const faqItems = [];
+    
+    let currentFAQ = null;
+    let isAnswer = false;
+    
+    for (const line of lines) {
+        const cleanLine = line.trim();
+        if (!cleanLine) continue;
+        
+        // Détecter une question (contient un ?)
+        if (cleanLine.includes('?')) {
+            if (currentFAQ) {
+                faqItems.push(currentFAQ);
+            }
+            currentFAQ = {
+                question: cleanLine.replace(/^[-*•]\s*/, '').replace(/^\d+\.\s*/, '').trim(),
+                answer: ''
+            };
+            isAnswer = false;
+        } else if (currentFAQ && !isAnswer) {
+            // Première ligne après la question = début de la réponse
+            currentFAQ.answer = cleanLine;
+            isAnswer = true;
+        } else if (currentFAQ && isAnswer) {
+            // Continuer la réponse
+            currentFAQ.answer += ' ' + cleanLine;
+        }
+    }
+    
+    if (currentFAQ) {
+        faqItems.push(currentFAQ);
+    }
+    
+    return faqItems;
+}
+
+/**
+ * Parse générique pour les contenus non structurés
+ */
+function parseGenericContent(content) {
+    return content.split('\n').filter(line => line.trim()).map(line => line.trim());
+}
+
+/**
+ * Ajoute le nouveau contenu à la section existante
+ */
+async function appendContentToSection(sectionKey, newContent) {
+    console.log('[APPEND] Ajout de contenu à la section:', sectionKey);
+    
+    // Récupérer le contenu existant depuis le système de génération principal
+    let existingContent = [];
+    
+    // Le système principal utilise une structure avec version1, version2, etc.
+    if (window.generatedContent && window.generatedContent[sectionKey]) {
+        const sectionData = window.generatedContent[sectionKey];
+        
+        // Si c'est déjà un array, l'utiliser directement
+        if (Array.isArray(sectionData)) {
+            existingContent = sectionData;
+        } 
+        // Si c'est un objet avec des versions, récupérer version1
+        else if (sectionData.version1) {
+            existingContent = Array.isArray(sectionData.version1) ? sectionData.version1 : [sectionData.version1];
+        }
+        // Si c'est un objet, convertir en array
+        else if (typeof sectionData === 'object') {
+            existingContent = Object.values(sectionData);
+        }
+        // Si c'est une string, la mettre dans un array
+        else if (typeof sectionData === 'string') {
+            existingContent = [sectionData];
+        }
+    } else {
+        // Fallback: essayer depuis localStorage
+        const storedContent = JSON.parse(localStorage.getItem('generatedContent') || '{}');
+        if (storedContent[sectionKey]) {
+            if (Array.isArray(storedContent[sectionKey])) {
+                existingContent = storedContent[sectionKey];
+            } else if (storedContent[sectionKey].version1) {
+                existingContent = Array.isArray(storedContent[sectionKey].version1) 
+                    ? storedContent[sectionKey].version1 
+                    : [storedContent[sectionKey].version1];
+            }
+        }
+    }
+    
+    console.log('[APPEND] Contenu existant trouvé:', existingContent);
+    
+    // Combiner l'ancien et le nouveau contenu
+    let combinedContent;
+    if (Array.isArray(newContent)) {
+        combinedContent = existingContent.concat(newContent);
+    } else {
+        combinedContent = existingContent.concat([newContent]);
+    }
+    
+    console.log('[APPEND] Contenu combiné:', combinedContent);
+    
+    // Mettre à jour les variables globales avec la structure appropriée
+    if (!window.generatedContent) {
+        window.generatedContent = {};
+    }
+    
+    // Déterminer comment stocker selon la section
+    if (sectionKey === 'productTitle') {
+        // Les titres sont stockés comme un array simple
+        window.generatedContent[sectionKey] = combinedContent;
+    } else {
+        // Les autres sections utilisent la structure version1
+        if (!window.generatedContent[sectionKey]) {
+            window.generatedContent[sectionKey] = {};
+        }
+        window.generatedContent[sectionKey].version1 = combinedContent;
+    }
+    
+    // Sauvegarder dans le localStorage pour la persistance
+    const allContent = JSON.parse(localStorage.getItem('generatedContent') || '{}');
+    allContent[sectionKey] = window.generatedContent[sectionKey];
+    localStorage.setItem('generatedContent', JSON.stringify(allContent));
+    
+    // Mettre à jour l'affichage avec le contenu combiné
+    await updateSectionDisplay(sectionKey, combinedContent);
+    
+    console.log('[APPEND] Contenu ajouté et affiché avec succès');
+}
+
+/**
+ * Met à jour l'affichage d'une section
+ */
+async function updateSectionDisplay(sectionKey, content) {
+    console.log('[DISPLAY] Mise à jour de l\'affichage pour:', sectionKey);
+    
+    // Utiliser les formatters existants pour afficher le contenu
+    const targetElement = document.getElementById(sectionKey);
+    if (!targetElement) {
+        console.error('[DISPLAY] Élément cible non trouvé:', sectionKey);
+        return;
+    }
+    
+    // Appeler le formatter approprié avec sélecteurs selon la section
+    switch (sectionKey) {
+        case 'productTitle':
+            if (window.formatProductTitleWithSelectors) {
+                targetElement.innerHTML = window.formatProductTitleWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'productBenefits':
+            if (window.formatBenefitsWithSelectors) {
+                targetElement.innerHTML = window.formatBenefitsWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'howItWorks':
+            if (window.formatTextWithVersionSelector) {
+                targetElement.innerHTML = window.formatTextWithVersionSelector(sectionKey, content);
+            }
+            break;
+        case 'emotionalBenefits':
+            if (window.formatEmotionalBenefitsWithSelectors) {
+                targetElement.innerHTML = window.formatEmotionalBenefitsWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'useCases':
+            if (window.formatUseCasesWithSelectors) {
+                targetElement.innerHTML = window.formatUseCasesWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'characteristics':
+            if (window.formatCharacteristicsWithSelectors) {
+                targetElement.innerHTML = window.formatCharacteristicsWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'competitiveAdvantages':
+            if (window.formatCompetitiveAdvantagesWithSelectors) {
+                targetElement.innerHTML = window.formatCompetitiveAdvantagesWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'customerReviews':
+            if (window.formatCustomerReviewsWithSelectors) {
+                targetElement.innerHTML = window.formatCustomerReviewsWithSelectors(sectionKey, content);
+            }
+            break;
+        case 'faq':
+            if (window.formatFAQWithSelectors) {
+                targetElement.innerHTML = window.formatFAQWithSelectors(sectionKey, content);
+            }
+            break;
+        default:
+            // Affichage générique avec sélecteurs
+            if (window.formatTextWithVersionSelector) {
+                targetElement.innerHTML = window.formatTextWithVersionSelector(sectionKey, content);
+            } else {
+                targetElement.innerHTML = Array.isArray(content) 
+                    ? content.map(item => `<div class="content-item">${typeof item === 'string' ? item : JSON.stringify(item)}</div>`).join('')
+                    : `<div class="content-item">${content}</div>`;
+            }
+    }
+    
+    // Réattacher les événements de sélection après la mise à jour du DOM
+    setTimeout(() => {
+        if (window.setupSelectors) {
+            window.setupSelectors();
+        }
+        
+        // Mettre à jour les badges si nécessaire
+        switch (sectionKey) {
+            case 'productBenefits':
+                if (window.updateBenefitSelectionBadges) {
+                    window.updateBenefitSelectionBadges();
+                }
+                break;
+            case 'emotionalBenefits':
+                if (window.updateEmotionalBenefitBadges) {
+                    window.updateEmotionalBenefitBadges();
+                }
+                break;
+            case 'customerReviews':
+                if (window.updateCustomerReviewBadges) {
+                    window.updateCustomerReviewBadges();
+                }
+                break;
+            case 'faq':
+                if (window.updateFAQBadges) {
+                    window.updateFAQBadges();
+                }
+                break;
+        }
+    }, 100);
+}
+
+/**
+ * Copie le prompt actuellement affiché
+ */
+window.copyCurrentPrompt = function() {
+    const textarea = document.getElementById('promptEditor');
+    if (!textarea) return;
+    
+    navigator.clipboard.writeText(textarea.value).then(() => {
+        // Feedback visuel
+        const copyBtn = document.querySelector('.copy-prompt-btn');
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copié !';
+        copyBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+            copyBtn.style.background = '';
+        }, 2000);
+    }).catch(err => {
+        console.error('Erreur lors de la copie:', err);
+        alert('Erreur lors de la copie du prompt');
+    });
+};
+
+/**
+ * Sauvegarde les modifications apportées au prompt
+ */
+window.savePromptChanges = function(sectionKey) {
+    const textarea = document.getElementById('promptEditor');
+    if (!textarea) return;
+    
+    // Récupérer le prompt modifié
+    const modifiedPrompt = textarea.value.trim();
+    
+    // Mettre à jour le prompt dans PROMPTS
+    PROMPTS[sectionKey].prompt = modifiedPrompt;
+    
+    // Sauvegarder dans le localStorage pour la persistance
+    const allPrompts = JSON.parse(localStorage.getItem('prompts') || '{}');
+    allPrompts[sectionKey] = PROMPTS[sectionKey];
+    localStorage.setItem('prompts', JSON.stringify(allPrompts));
+    
+    // Feedback visuel
+    const saveBtn = document.querySelector('.save-prompt-btn');
+    const originalText = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<i class="fas fa-check"></i> Sauvegardé !';
+    saveBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+    
+    setTimeout(() => {
+        saveBtn.innerHTML = originalText;
+        saveBtn.style.background = '';
+    }, 2000);
+};
+
+/**
+ * Regénère le contenu pour une section donnée en utilisant l'IA et les options sélectionnées
+ */
+window.regenerateContentWithOptions = async function(sectionKey, options) {
+    console.log('[REGENERATE] Début de la régénération pour:', sectionKey);
+    
+    const promptData = PROMPTS[sectionKey];
+    if (!promptData) {
+        console.error('[REGENERATE] Prompt non trouvé pour la section:', sectionKey);
+        alert('Erreur: Prompt non trouvé pour cette section');
+        return;
+    }
+    
+    // Récupérer les données du formulaire
+    const productName = document.getElementById('productName')?.value?.trim();
+    const productDescription = document.getElementById('deepResearch')?.value?.trim();
+    
+    // Récupérer l'angle marketing sélectionné
+    let marketingAngle = 'Non défini';
+    const selectedAngleElement = document.querySelector('.marketing-angle.selected');
+    if (selectedAngleElement) {
+        const angleTitle = selectedAngleElement.querySelector('.angle-title')?.textContent;
+        const angleDescription = selectedAngleElement.querySelector('.angle-description')?.textContent;
+        marketingAngle = `${angleTitle}: ${angleDescription}`;
+    }
+    
+    // Récupérer l'avatar client sélectionné
+    let customerAvatar = 'Non défini';
+    const selectedAvatarElement = document.querySelector('.avatar-card.selected');
+    if (selectedAvatarElement) {
+        const avatarName = selectedAvatarElement.querySelector('.avatar-name')?.textContent;
+        const avatarDescription = selectedAvatarElement.querySelector('.avatar-description')?.textContent;
+        customerAvatar = `${avatarName}: ${avatarDescription}`;
+    }
+    
+    // Validation des données requises
+    if (!productName) {
+        alert('Veuillez d\'abord renseigner le nom du produit dans le formulaire');
+        return;
+    }
+    
+    if (!productDescription) {
+        alert('Veuillez d\'abord renseigner la description du produit dans le formulaire');
+        return;
+    }
+    
+    // Trouver le bouton de regénération pour afficher l'état de chargement
+    let regenerateBtn = null;
+    try {
+        regenerateBtn = document.querySelector(`[onclick*="regenerateContentWithOptions('${sectionKey}', {includeProductName: ${options.includeProductName}, includeDeepResearch: ${options.includeDeepResearch}, includeSelectedContent: ${options.includeSelectedContent}})"]`) ||
+                         document.querySelector(`[onclick*="regenerateContentWithCustomPrompt('${sectionKey}'"]`);
+    } catch (e) {
+        console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+        // Fallback : chercher tous les boutons de regénération et trouver le bon
+        const allButtons = document.querySelectorAll('[onclick*="regenerateContentWithOptions"]');
+        regenerateBtn = Array.from(allButtons).find(btn => btn.onclick && btn.onclick.toString().includes(sectionKey));
+    }
+    const originalBtnHTML = regenerateBtn ? regenerateBtn.innerHTML : '';
+    
+    try {
+        // Afficher l'état de chargement
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+            regenerateBtn.disabled = true;
+        }
+        
+        // Construire le prompt personnalisé
+        let customPrompt = promptData.prompt
+            .replace(/{productName}/g, options.includeProductName ? productName : '')
+            .replace(/{productDescription}/g, options.includeDeepResearch ? productDescription : '')
+            .replace(/{marketingAngle}/g, options.includeMarketingAngle ? marketingAngle : '')
+            .replace(/{customerAvatar}/g, options.includeCustomerAvatar ? customerAvatar : '');
+        
+        console.log('[REGENERATE] Prompt personnalisé créé, longueur:', customPrompt.length);
+        
+        // Appeler l'API IA avec le bon format
+        console.log('[REGENERATE] Appel API avec prompt:', customPrompt.substring(0, 100) + '...');
+        
+        const response = await fetch('http://localhost:3000/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                max_tokens: 2000,
+                messages: [
+                    {
+                        role: 'user',
+                        content: customPrompt
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const generatedContent = data.choices?.[0]?.message?.content || data.content || data.response || data;
+        console.log('[REGENERATE] Réponse IA reçue, longueur:', generatedContent.length);
+        
+        // Parser le contenu généré selon le type de section
+        const parsedContent = parseContentBySection(generatedContent, sectionKey);
+        console.log('[REGENERATE] Contenu parsé:', parsedContent);
+        
+        // Ajouter le nouveau contenu à la section existante
+        await appendContentToSection(sectionKey, parsedContent);
+        
+        console.log('[REGENERATE] Régénération terminée avec succès pour:', sectionKey);
+        
+    } catch (error) {
+        console.error('[REGENERATE] Erreur lors de la régénération:', error);
+        alert(`Erreur lors de la régénération: ${error.message}`);
+    } finally {
+        // Restaurer l'état du bouton
+        if (regenerateBtn) {
+            regenerateBtn.innerHTML = originalBtnHTML;
+            regenerateBtn.disabled = false;
+        }
+    }
+};
+
+/**
+ * Charge les prompts sauvegardés depuis localStorage
+ */
+function loadSavedPrompts() {
+    const savedPrompts = JSON.parse(localStorage.getItem('prompts') || '{}');
+    if (Object.keys(savedPrompts).length > 0) {
+        console.log('[PROMPT-EDITOR] Prompts sauvegardés trouvés, chargement...');
+        Object.keys(savedPrompts).forEach((sectionKey) => {
+            if (PROMPTS[sectionKey]) {
+                PROMPTS[sectionKey].prompt = savedPrompts[sectionKey].prompt;
+            }
+        });
+    }
+}
+
+/**
+ * Réinitialise tous les prompts aux valeurs par défaut
+ */
+window.resetPromptsToDefault = function() {
+    console.log('[PROMPT-EDITOR] Réinitialisation des prompts aux valeurs par défaut...');
+    
+    // Supprimer les prompts sauvegardés du localStorage
+    localStorage.removeItem('prompts');
+    
+    // Restaurer les prompts par défaut
+    Object.keys(DEFAULT_PROMPTS).forEach((sectionKey) => {
+        if (PROMPTS[sectionKey]) {
+            PROMPTS[sectionKey].prompt = DEFAULT_PROMPTS[sectionKey].prompt;
+            console.log(`[PROMPT-EDITOR] Prompt ${sectionKey} réinitialisé`);
+        }
+    });
+    
+    console.log('[PROMPT-EDITOR] Tous les prompts ont été réinitialisés aux valeurs par défaut');
+    alert('Tous les prompts ont été réinitialisés aux valeurs par défaut');
+}
+
+/**
+ * Fonction pour tester la génération directement
+ */
+window.testGeneration = async (sectionKey) => {
+    console.log('[TEST-GENERATION] Test de génération pour:', sectionKey);
+    
+    try {
+        // Utiliser un prompt simple pour tester
+        const testPrompt = `Génère 3 titres de produit pour: Heating Pads. 
+        Format: 
+        1. Titre 1
+        2. Titre 2  
+        3. Titre 3`;
+        
+        console.log('[TEST-GENERATION] Envoi du prompt de test...');
+        
+        const response = await fetch('http://localhost:3000/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                max_tokens: 500,
+                messages: [
+                    {
+                        role: 'user',
+                        content: testPrompt
+                    }
+                ]
+            })
+        });
+
+        console.log('[TEST-GENERATION] Réponse reçue, status:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const generatedContent = data.choices?.[0]?.message?.content || data.content || data.response || data;
+        console.log('[TEST-GENERATION] Contenu généré:', generatedContent);
+        
+        // Afficher le résultat dans la console
+        alert(`Test réussi ! Contenu généré:\n${generatedContent.substring(0, 200)}...`);
+        
+        return generatedContent;
+        
+    } catch (error) {
+        console.error('[TEST-GENERATION] Erreur:', error);
+        alert(`Erreur lors du test: ${error.message}`);
+    }
+};
+
+/**
+ * Trouver le bouton de regénération pour afficher l'état de chargement
+ */
+let regenerateBtn = null;
+try {
+    // Éviter d'utiliser le contenu du prompt dans le sélecteur - chercher juste par sectionKey
+    regenerateBtn = document.querySelector(`[onclick*="regenerateContentWithCustomPrompt('${sectionKey}'"]`);
+} catch (e) {
+    console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+    // Fallback : chercher tous les boutons de regénération et trouver le bon
+    const allButtons = document.querySelectorAll('[onclick*="regenerateContentWithCustomPrompt"]');
+    regenerateBtn = Array.from(allButtons).find(btn => btn.onclick && btn.onclick.toString().includes(sectionKey));
+}
+
+// Modification de la ligne problématique du sélecteur CSS
+regenerateBtn = null;
+try {
+    regenerateBtn = document.querySelector(`[onclick*="regenerateContentWithOptions('${sectionKey}', {includeProductName: true, includeDeepResearch: true, includeMarketingAngle: false, includeCustomerAvatar: false})"]`);
+} catch (e) {
+    console.log('[REGENERATE] Erreur de sélecteur, recherche alternative...');
+    regenerateBtn = null; // Pas grave si on ne trouve pas le bouton
+}

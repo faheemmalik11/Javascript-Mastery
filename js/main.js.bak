@@ -1,0 +1,850 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // API Key handling - caché car la clé est maintenant incluse directement dans le script
+    const apiKeySection = document.getElementById('apiKeySection');
+    const productForm = document.getElementById('productForm');
+    const resultsSection = document.getElementById('resultsSection');
+    
+    // Masquer la section API et afficher directement le formulaire
+    apiKeySection.style.display = 'none';
+    productForm.style.display = 'block';
+    
+    // Tab navigation
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-pane');
+    
+    // Copy buttons
+    const copyButtons = document.querySelectorAll('.btn-copy');
+    const downloadBtn = document.getElementById('generateTemplateBtn');
+    
+    // Loading bar functionality
+    const loadingContainer = document.getElementById('loadingContainer');
+    const progressFill = document.getElementById('progressFill');
+    const loadingPercentage = document.getElementById('loadingPercentage');
+    const steps = [
+        document.getElementById('step1'),
+        document.getElementById('step2'),
+        document.getElementById('step3'),
+        document.getElementById('step4')
+    ];
+    
+    // Function to update loading progress
+    function updateLoadingProgress(percent, currentStep) {
+        progressFill.style.width = percent + '%';
+        loadingPercentage.textContent = percent + '%';
+        
+        // Update steps
+        steps.forEach((step, index) => {
+            if (index < currentStep) {
+                step.classList.add('completed');
+                step.classList.remove('active');
+            } else if (index === currentStep) {
+                step.classList.add('active');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('active', 'completed');
+            }
+        });
+    }
+
+    // Handle form submission
+    productForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        loadingContainer.style.display = 'block';
+        
+        // Get form data
+        const formData = new FormData(productForm);
+        const productData = {
+            productName: formData.get('productName'),
+            deepResearch: formData.get('deepResearch'),
+            competitorUrl: formData.get('competitorUrl'),
+            // Ces champs seront extraits automatiquement de la deep research
+            productDescription: formData.get('productDescription') || '',
+            targetAudience: formData.get('targetAudience') || '',
+            productFeatures: formData.get('productFeatures') || '',
+            problemsSolved: formData.get('problemsSolved') || ''
+        };
+        
+        try {
+            // Step 1: Initializing and data extraction (0-20%)
+            updateLoadingProgress(5, 0);
+            
+            // Simulate step progress
+            const animateProgress = (start, end, duration, step) => {
+                const startTime = Date.now();
+                const animate = () => {
+                    const now = Date.now();
+                    const timeElapsed = now - startTime;
+                    const progress = Math.min(timeElapsed / duration, 1);
+                    const currentProgress = start + (end - start) * progress;
+                    
+                    updateLoadingProgress(Math.floor(currentProgress), step);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                animate();
+                return new Promise(resolve => setTimeout(resolve, duration));
+            };
+            
+            // Step 1: Analyzing data
+            await animateProgress(5, 20, 2000, 0);
+            
+            // Step 2: Creating psychographic profile (20-50%)
+            await animateProgress(20, 50, 5000, 1);
+            
+            // Generate content with two versions for each element
+            // This is where the actual API calls are made
+            updateLoadingProgress(50, 2); // Move to step 3
+            const content = await generateAllContent(productData);
+            
+            // Step 3: Generating marketing content (50-80%)
+            await animateProgress(50, 80, 3000, 2);
+            
+            // Step 4: Finalizing results (80-100%)
+            await animateProgress(80, 100, 1000, 3);
+            
+            // Store the content in global variable for version selection
+            window.generatedContent = content;
+            
+            // Short delay to show 100% completion
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Display version 1 of each content in respective tabs with version selector
+            document.getElementById('psychographicProfile').innerHTML = formatTextWithVersionSelector('psychographicProfile', content.psychographicProfile);
+            document.getElementById('strategicSynthesis').innerHTML = formatTextWithVersionSelector('strategicSynthesis', content.strategicSynthesis);
+            document.getElementById('productTitle').innerHTML = formatTitleWithVersionSelector('productTitle', content.productTitle);
+            // Stocker tous les avantages générés pour future référence
+            window.allProductBenefits = content.productBenefits.version1;
+            window.benefitsValidated = false;
+            window.selectedBenefits = []; // Initialiser le tableau des avantages sélectionnés
+            
+            // Initialiser les variables globales pour les sélections
+            window.benefitsValidated = false;
+            window.selectedBenefits = []; // Initialiser le tableau des avantages sélectionnés
+            window.emotionalBenefitsValidated = false;
+            window.selectedEmotionalBenefits = []; // Initialiser le tableau des bénéfices émotionnels sélectionnés
+            
+            // Afficher l'interface de sélection des avantages
+            document.getElementById('productBenefits').innerHTML = formatBenefitsWithSelectors('productBenefits', window.allProductBenefits);
+            document.getElementById('howItWorks').innerHTML = formatTextWithVersionSelector('howItWorks', content.howItWorks);
+            
+            // Afficher l'interface de sélection des bénéfices émotionnels
+            const emotionalBenefitsElement = document.getElementById('emotionalBenefits');
+            emotionalBenefitsElement.innerHTML = formatEmotionalBenefitsWithSelectors('emotionalBenefits', content.emotionalBenefits.version1);
+            
+            // Stocker tous les bénéfices émotionnels pour y accéder facilement
+            window.allEmotionalBenefits = content.emotionalBenefits.version1;
+            
+            document.getElementById('useCases').innerHTML = formatUseCasesWithVersionSelector('useCases', content.useCases);
+            document.getElementById('characteristics').innerHTML = formatCharacteristicsWithVersionSelector('characteristics', content.characteristics);
+            document.getElementById('competitiveAdvantages').innerHTML = formatListWithVersionSelector('competitiveAdvantages', content.competitiveAdvantages);
+            document.getElementById('customerReviews').innerHTML = formatReviewsWithVersionSelector('customerReviews', content.customerReviews);
+            document.getElementById('faq').innerHTML = formatFAQWithVersionSelector('faq', content.faq);
+            
+            // Show results section
+            resultsSection.style.display = 'block';
+            
+            // Scroll to results
+            document.querySelector('.results-section').scrollIntoView({ behavior: 'smooth' });
+            
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            
+            // Ajouter les gestionnaires d'événements pour la sélection des avantages
+            setupBenefitsSelectionHandlers();
+            
+
+            
+            // Ajouter les gestionnaires d'événements pour la sélection des bénéfices émotionnels
+            setupEmotionalBenefitsSelectionHandlers();
+        } catch (error) {
+            console.error('Error generating content:', error);
+            alert('Une erreur est survenue lors de la génération du contenu. Veuillez réessayer.');
+        } finally {
+            // Hide loading container
+            loadingContainer.style.display = 'none';
+            
+            // Reset button state
+            submitBtn.disabled = false;
+        }
+    });
+    
+    // Function to handle version selection
+    window.selectVersion = function(contentType, version) {
+        const content = window.generatedContent[contentType];
+        const contentElement = document.getElementById(contentType);
+        
+        // Enregistrer la version sélectionnée
+        window.selectedVersion = window.selectedVersion || {};
+        window.selectedVersion[contentType] = version;
+        console.log(`Version ${version} sélectionnée pour ${contentType}`);
+        
+        if (contentType === 'productTitle') {
+            contentElement.innerHTML = formatTitleWithVersionSelector(contentType, content, version);
+        } else if (contentType === 'productBenefits' || contentType === 'competitiveAdvantages') {
+            contentElement.innerHTML = formatListWithVersionSelector(contentType, content, version);
+        } else if (contentType === 'useCases') {
+            contentElement.innerHTML = formatUseCasesWithVersionSelector(contentType, content, version);
+        } else if (contentType === 'characteristics') {
+            contentElement.innerHTML = formatCharacteristicsWithVersionSelector(contentType, content, version);
+        } else if (contentType === 'customerReviews') {
+            contentElement.innerHTML = formatReviewsWithVersionSelector(contentType, content, version);
+        } else if (contentType === 'faq') {
+            contentElement.innerHTML = formatFAQWithVersionSelector(contentType, content, version);
+        } else {
+            contentElement.innerHTML = formatTextWithVersionSelector(contentType, content, version);
+        }
+    };
+    
+    // Tab functionality
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and content
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    
+    // Copy functionality
+    copyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const contentId = this.getAttribute('data-content');
+            const contentElement = document.getElementById(contentId);
+            const text = contentElement.innerText;
+            
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    this.textContent = 'Copié !';
+                    setTimeout(() => {
+                        this.textContent = 'Copier';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Erreur lors de la copie:', err);
+        
+        // Simulate step progress
+        const animateProgress = (start, end, duration, step) => {
+            const startTime = Date.now();
+            const animate = () => {
+                const now = Date.now();
+                const timeElapsed = now - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                const currentProgress = start + (end - start) * progress;
+                
+                updateLoadingProgress(Math.floor(currentProgress), step);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            };
+            
+            animate();
+        };
+                } else {
+                    // Retirer de la sélection
+                    const indexToRemove = window.selectedBenefits.indexOf(benefit);
+                    if (indexToRemove !== -1) {
+                        // Retirer de l'array de sélection
+                        window.selectedBenefits.splice(indexToRemove, 1);
+                        // Retirer la classe selected
+                        this.classList.remove('selected');
+                        // Retirer le badge
+                        const badge = this.querySelector('.selection-badge');
+                        if (badge) this.removeChild(badge);
+                        
+                        // Mettre à jour les index des badges pour tous les tags sélectionnés
+                        updateSelectionBadges();
+                    }
+                }
+                
+                // Mettre à jour uniquement les éléments nécessaires
+                updateBenefitsUIState();
+            });
+        });
+        
+        // Fonction pour mettre à jour les badges de numérotation
+        function updateSelectionBadges() {
+            const selectedTags = benefitsTab.querySelectorAll('.benefit-tag.selected');
+            selectedTags.forEach((tag, i) => {
+                const badge = tag.querySelector('.selection-badge');
+                if (badge) badge.textContent = i + 1;
+            });
+        }
+        
+        // Fonction pour mettre à jour l'état de l'interface sans recréer tout le HTML
+        function updateBenefitsUIState() {
+            // Mettre à jour le compteur
+            const counterElement = benefitsTab.querySelector('.counter-number');
+            if (counterElement) {
+                counterElement.textContent = `${window.selectedBenefits.length}/4`;
+                if (window.selectedBenefits.length === 4) {
+                    counterElement.classList.add('counter-complete');
+                } else {
+                    counterElement.classList.remove('counter-complete');
+                }
+            }
+            
+            // Mettre à jour le bouton
+            const validateButton = benefitsTab.querySelector('#validateBenefitsBtn');
+            if (validateButton) {
+                validateButton.disabled = window.selectedBenefits.length !== 4;
+                validateButton.textContent = window.selectedBenefits.length === 4 ? 'Valider la sélection' : 'Sélectionnez 4 avantages';
+            }
+        }
+        
+        // Gestionnaire pour le bouton de validation
+        const validateButton = benefitsTab.querySelector('#validateBenefitsBtn');
+        if (validateButton) {
+            validateButton.addEventListener('click', function() {
+                if (window.selectedBenefits.length === 4) {
+                    // Créer un conteneur qui remplacera tout le contenu
+                    const container = document.createElement('div');
+                    container.className = 'benefits-container';
+                    
+                    // Définir l'état comme validé
+                    window.benefitsValidated = true;
+                    
+                    // Générer le HTML et l'insérer dans le container
+                    container.innerHTML = formatBenefitsWithSelectors('productBenefits', window.allProductBenefits);
+                    
+                    // Remplacer tout le contenu en une seule opération
+                    benefitsTab.innerHTML = '';
+                    benefitsTab.appendChild(container);
+                    
+                    // Attacher à nouveau les gestionnaires d'événements
+                    setTimeout(() => setupBenefitsSelectionHandlers(), 50);
+                }
+            });
+        }
+        
+        // Gestionnaire pour le bouton Modifier
+        const editButton = benefitsTab.querySelector('#editBenefitsBtn');
+        if (editButton) {
+            editButton.addEventListener('click', function() {
+                // Créer un conteneur qui remplacera tout le contenu
+                const container = document.createElement('div');
+                container.className = 'benefits-container';
+                
+                // Définir l'état avant de générer le HTML
+                window.benefitsValidated = false;
+                
+                // Générer le HTML et l'insérer dans le container
+                container.innerHTML = formatBenefitsWithSelectors('productBenefits', window.allProductBenefits);
+                
+                // Remplacer tout le contenu en une seule opération DOM
+                benefitsTab.innerHTML = '';
+                benefitsTab.appendChild(container);
+                
+                // Attacher à nouveau les gestionnaires d'événements avec un petit délai
+                setTimeout(() => setupBenefitsSelectionHandlers(), 50);
+            });
+        }
+    }
+    
+    // Fonction pour configurer les gestionnaires d'événements pour la sélection des bénéfices émotionnels
+    function setupEmotionalBenefitsSelectionHandlers() {
+        const emotionalBenefitsTab = document.getElementById('emotionalBenefits');
+        if (!emotionalBenefitsTab) return;
+        
+        // Gestionnaire pour les tags de bénéfices émotionnels cliquables
+        const emotionalBenefitTags = emotionalBenefitsTab.querySelectorAll('.benefit-tag');
+        window.selectedEmotionalBenefits = window.selectedEmotionalBenefits || [];
+        
+        emotionalBenefitTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                const emotionalBenefit = window.allEmotionalBenefits[index];
+                const isSelected = this.classList.contains('selected');
+                
+                if (isSelected) {
+                    // Désélectionner le bénéfice émotionnel
+                    window.selectedEmotionalBenefits = window.selectedEmotionalBenefits.filter(b => 
+                        b.headline !== emotionalBenefit.headline);
+                    this.classList.remove('selected');
+                    // Supprimer le badge
+                    const badge = this.querySelector('.selection-badge');
+                    if (badge) {
+                        badge.remove();
+                    }
+                } else {
+                    // Limiter à 2 sélections maximum
+                    if (window.selectedEmotionalBenefits.length < 2) {
+                        // Sélectionner le bénéfice émotionnel
+                        window.selectedEmotionalBenefits.push(emotionalBenefit);
+                        this.classList.add('selected');
+                        
+                        // Ajouter un badge avec le numéro de sélection
+                        const selectionIndex = window.selectedEmotionalBenefits.length;
+                        const badge = document.createElement('div');
+                        badge.className = 'selection-badge';
+                        badge.textContent = selectionIndex;
+                        this.appendChild(badge);
+                        
+                        // Animation légère pour le badge
+                        setTimeout(() => badge.style.transform = 'scale(1)', 10);
+                    } else {
+                        // Afficher une notification visuelle si déjà 2 sélectionnés
+                        const counter = emotionalBenefitsTab.querySelector('.counter-number');
+                        if (counter) {
+                            counter.className += ' shake-animation';
+                            counter.style.backgroundColor = '#dc3545';
+                            setTimeout(() => {
+                                counter.classList.remove('shake-animation');
+                                counter.style.backgroundColor = '';
+                            }, 800);
+                        }
+                    }
+                }
+                
+                // Mettre à jour l'affichage des compteurs
+                const counterElement = emotionalBenefitsTab.querySelector('.counter-number');
+                if (counterElement) {
+                    counterElement.textContent = `${window.selectedEmotionalBenefits.length}/2`;
+                    if (window.selectedEmotionalBenefits.length === 2) {
+                        counterElement.classList.add('counter-complete');
+                    } else {
+                        counterElement.classList.remove('counter-complete');
+                    }
+                }
+            });
+        });
+        
+        // Gestionnaire pour le bouton de validation
+        const validateButton = emotionalBenefitsTab.querySelector('.validate-selection-btn');
+        if (validateButton) {
+            validateButton.addEventListener('click', function() {
+                if (window.selectedEmotionalBenefits.length === 2) {
+                    // Afficher les sélections validées
+                    const resultsContainer = document.getElementById('emotionalBenefitsResults');
+                    if (resultsContainer) {
+                        resultsContainer.innerHTML = '';
+                        window.selectedEmotionalBenefits.forEach((benefit, index) => {
+                            const benefitElement = document.createElement('div');
+                            benefitElement.className = 'emotional-benefit-result';
+                            benefitElement.innerHTML = `
+                                <h4>Bénéfice émotionnel ${index + 1}: ${benefit.headline}</h4>
+                                <p>${benefit.description}</p>
+                            `;
+                            resultsContainer.appendChild(benefitElement);
+                        });
+                        resultsContainer.style.display = 'block';
+                    }
+                    
+                    // Changer le texte du bouton
+                    this.textContent = 'Modifier';
+                    this.classList.add('edit-mode');
+                }
+            });
+        }
+    }
+    
+    // Fonction pour formater les bénéfices émotionnels avec des sélecteurs
+    function formatEmotionalBenefitsWithSelectors(contentType, emotionalBenefitsList) {
+                // Réattacher les gestionnaires d'événements
+                setTimeout(() => setupEmotionalBenefitsSelectionHandlers(), 10);
+            });
+        });
+        
+        // Gestionnaire pour le bouton de validation
+        const validateButton = emotionalBenefitsTab.querySelector('#validateEmotionalBenefitsBtn');
+        if (validateButton) {
+            validateButton.addEventListener('click', function() {
+                if (window.selectedEmotionalBenefits.length === 2) {
+                    // Créer un conteneur qui remplacera tout le contenu
+                    const container = document.createElement('div');
+                    container.className = 'emotional-benefits-container';
+                    
+                    // Définir l'état comme validé
+                    window.emotionalBenefitsValidated = true;
+                    
+                    // Générer le HTML et l'insérer dans le container
+                    container.innerHTML = formatEmotionalBenefitsWithSelectors('emotionalBenefits', window.allEmotionalBenefits);
+                    
+                    // Remplacer tout le contenu en une seule opération
+                    emotionalBenefitsTab.innerHTML = '';
+                    emotionalBenefitsTab.appendChild(container);
+                    
+                    // Attacher à nouveau les gestionnaires d'événements
+                    setTimeout(() => setupEmotionalBenefitsSelectionHandlers(), 50);
+                }
+            });
+        }
+        
+        // Gestionnaire pour le bouton Modifier
+        const editButton = emotionalBenefitsTab.querySelector('#editEmotionalBenefitsBtn');
+        if (editButton) {
+            editButton.addEventListener('click', function() {
+                // Créer un conteneur qui remplacera tout le contenu
+                const container = document.createElement('div');
+                container.className = 'emotional-benefits-container';
+                
+                // Définir l'état avant de générer le HTML
+                window.emotionalBenefitsValidated = false;
+                
+                // Générer le HTML et l'insérer dans le container
+                container.innerHTML = formatEmotionalBenefitsWithSelectors('emotionalBenefits', window.allEmotionalBenefits);
+                
+                // Remplacer tout le contenu en une seule opération
+                emotionalBenefitsTab.innerHTML = '';
+                emotionalBenefitsTab.appendChild(container);
+                
+                // Attacher à nouveau les gestionnaires d'événements
+                setTimeout(() => setupEmotionalBenefitsSelectionHandlers(), 50);
+            });
+        }
+    }
+    
+    // Helper functions
+    function formatText(text) {
+        return text.replace(/\n/g, '<br>');
+    }
+    
+    function formatList(items) {
+        return items.map(item => `<div class="list-item">• ${item}</div>`).join('');
+    }
+    
+    function formatEmotionalBenefits(benefits) {
+        return benefits.map(benefit => {
+            return `<div class="benefit-block">
+                <h4>${benefit.headline}</h4>
+                <p>${benefit.text}</p>
+            </div>`;
+        }).join('<hr>');
+    }
+    
+    function formatUseCases(useCases) {
+        return useCases.map(useCase => {
+            return `<div class="use-case">
+                <strong>${useCase.title}</strong><br>
+                ${useCase.explanation}
+            </div>`;
+        }).join('<hr>');
+    }
+    
+    function formatCharacteristics(characteristics) {
+        return characteristics.map(characteristic => {
+            return `<div class="characteristic">
+                <strong>${characteristic.title}</strong><br>
+                ${characteristic.explanation}
+            </div>`;
+        }).join('<hr>');
+    }
+    
+    function formatReviews(reviews) {
+        return reviews.map(review => {
+            return `<div class="review">
+                <h4>${review.title}</h4>
+                <p>${review.description}</p>
+                <div class="review-author">- ${review.author}</div>
+            </div>`;
+        }).join('<hr>');
+    }
+    
+    function formatFAQ(faqs) {
+        return faqs.map(faq => {
+            return `<div class="faq-item">
+                <div class="faq-question"><strong>Q: ${faq.question}</strong></div>
+                <div class="faq-answer">R: ${faq.answer}</div>
+            </div>`;
+        }).join('<hr>');
+    }
+    
+    // Version selector functions
+    function createVersionSelector(contentType, selectedVersion = 1) {
+        return `
+        <div class="version-selector">
+            <button class="version-btn ${selectedVersion === 1 ? 'active' : ''}" onclick="selectVersion('${contentType}', 1)">Version 1</button>
+            <button class="version-btn ${selectedVersion === 2 ? 'active' : ''}" onclick="selectVersion('${contentType}', 2)">Version 2</button>
+        </div>`;
+    }
+    
+    function formatTextWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const text = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-text">${formatText(text)}</div>`;
+    }
+    
+    function formatTitleWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const title = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-title">${title}</div>`;
+    }
+    
+    function formatListWithVersionSelector(contentType, content, selectedVersion = 1) {
+        // Cette fonction est conservée pour les autres listes (comme les avantages concurrentiels)
+        // mais pas utilisée pour les avantages produit
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const items = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-list">${formatList(items)}</div>`;
+    }
+    
+    function formatBenefitsWithSelectors(contentType, benefitsList) {
+        // Cette fonction est spécifique pour les avantages du produit
+        // benefitsList contient un tableau de 20 avantages
+        
+        // Stockage pour les avantages sélectionnés
+        if (!window.selectedBenefits) {
+            window.selectedBenefits = [];
+        }
+        
+        // État de l'interface (édition ou affichage)
+        const isEditMode = !window.benefitsValidated;
+        
+        // Si nous sommes en mode affichage et que des avantages ont été sélectionnés
+        if (!isEditMode && window.selectedBenefits.length === 4) {
+            let html = '<div class="validated-benefits">';
+            html += '<h4>Avantages sélectionnés pour votre produit</h4>';
+            html += '<p class="validation-message">Ces 4 avantages seront utilisés dans votre template Shopify.</p>';
+            html += '<div class="selected-benefits-grid">';
+            window.selectedBenefits.forEach((benefit, index) => {
+                html += `<div class="selected-benefit-item">
+                           <span class="benefit-number">${index + 1}</span>
+                           ${benefit}
+                         </div>`;
+            });
+            html += '</div>';
+            html += `<button id="editBenefitsBtn">Modifier la sélection</button>`;
+            html += '</div>';
+            return html;
+        }
+        
+        // Mode édition avec cartes cliquables
+        let html = '<div class="benefits-selector">';
+        html += '<h4>Sélectionnez 4 avantages pour votre produit</h4>';
+        
+        // Compteur de sélection
+        const isComplete = window.selectedBenefits.length === 4;
+        html += `<div class="selection-counter">
+                    <div class="counter-text">Ces avantages seront placés sous le prix du produit dans le template Shopify</div>
+                    <div class="counter-number ${isComplete ? 'counter-complete' : ''}">
+                        ${window.selectedBenefits.length}/4
+                    </div>
+                </div>`;
+        
+        // Container de tags d'avantages
+        html += '<div class="benefits-tags-container" id="benefitsTags">';
+        
+        // Création des tags d'avantages
+        benefitsList.forEach((benefit, index) => {
+            const isSelected = window.selectedBenefits.includes(benefit);
+            const selectionIndex = window.selectedBenefits.indexOf(benefit) + 1;
+            html += `<div class="benefit-tag ${isSelected ? 'selected' : ''}" 
+                       data-benefit="${benefit}" data-index="${index}">
+                    ${isSelected ? `<div class="selection-badge">${selectionIndex}</div>` : ''}
+                    ${benefit}
+                </div>`;
+        });
+        
+        html += '</div>';
+        
+        // Boutons d'action
+        html += `<div class="benefits-actions">
+                    <button id="validateBenefitsBtn" ${isComplete ? '' : 'disabled'}>
+                        ${isComplete ? 'Valider la sélection' : 'Sélectionnez 4 avantages'}
+                    </button>
+                </div>`;
+        
+        html += '</div>';
+        return html;
+    }
+    
+    function formatEmotionalBenefitsWithSelectors(contentType, emotionalBenefitsList) {
+        // Cette fonction est spécifique pour les bénéfices émotionnels
+        // emotionalBenefitsList contient un tableau de 10 objets avec headline et text
+        
+        // Stockage pour les bénéfices émotionnels sélectionnés
+        if (!window.selectedEmotionalBenefits) {
+            window.selectedEmotionalBenefits = [];
+        }
+        
+        // État de l'interface (édition ou affichage)
+        const isEditMode = !window.emotionalBenefitsValidated;
+        
+        // Si nous sommes en mode affichage et que des bénéfices émotionnels ont été sélectionnés
+        if (!isEditMode && window.selectedEmotionalBenefits.length === 2) {
+            let html = '<div class="validated-benefits">';
+            html += '<h4>Bénéfices émotionnels sélectionnés pour votre produit</h4>';
+            html += '<p class="validation-message">Ces 2 bénéfices émotionnels seront utilisés dans votre template.</p>';
+            html += '<div class="selected-benefits-grid">';
+            window.selectedEmotionalBenefits.forEach((benefit, index) => {
+                html += `<div class="selected-benefit-item">
+                           <span class="benefit-number">${index + 1}</span>
+                           <div class="emotional-benefit-preview">
+                               <h3>${benefit.headline}</h3>
+                               <p>${benefit.text}</p>
+                           </div>
+                         </div>`;
+            });
+            html += '</div>';
+            html += `<button id="editEmotionalBenefitsBtn">Modifier la sélection</button>`;
+            html += '</div>';
+            return html;
+        }
+        
+        // Mode édition avec cartes cliquables
+        let html = '<div class="benefits-selector emotional-benefits-selector">';
+        html += '<h4>Sélectionnez 2 bénéfices émotionnels pour votre produit</h4>';
+        
+        // Compteur de sélection
+        const isComplete = window.selectedEmotionalBenefits.length === 2;
+        html += `<div class="selection-counter">
+                    <div class="counter-text">Ces bénéfices émotionnels seront placés dans le template Shopify</div>
+                    <div class="counter-number ${isComplete ? 'counter-complete' : ''}">
+                        ${window.selectedEmotionalBenefits.length}/2
+                    </div>
+                </div>`;
+        
+        // Container de tags de bénéfices émotionnels (titres uniquement)
+        html += '<div class="benefits-tags-container" id="emotionalBenefitsTags">';
+        
+        // Création des tags de bénéfices émotionnels (titres uniquement)
+        emotionalBenefitsList.forEach((benefit, index) => {
+            const isSelected = window.selectedEmotionalBenefits.some(b => b.headline === benefit.headline);
+            const selectionIndex = window.selectedEmotionalBenefits.findIndex(b => b.headline === benefit.headline) + 1;
+            html += `<div class="benefit-tag ${isSelected ? 'selected' : ''}" 
+                       data-index="${index}">
+                    ${isSelected ? `<div class="selection-badge">${selectionIndex}</div>` : ''}
+                    ${benefit.headline}
+                </div>`;
+        });
+        
+        html += '</div>';
+        
+        // Boutons d'action
+        html += `<div class="benefits-actions">
+                    <button id="validateEmotionalBenefitsBtn" ${isComplete ? '' : 'disabled'}>
+                        ${isComplete ? 'Valider la sélection' : 'Sélectionnez 2 bénéfices'}
+                    </button>
+                </div>`;
+        
+        html += '</div>';
+        return html;
+    }
+    
+    function formatUseCasesWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const useCases = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-use-cases">${formatUseCases(useCases)}</div>`;
+    }
+    
+    function formatCharacteristicsWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const characteristics = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-characteristics">${formatCharacteristics(characteristics)}</div>`;
+    }
+    
+    function formatReviewsWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const reviews = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-reviews">${formatReviews(reviews)}</div>`;
+    }
+    
+    function formatFAQWithVersionSelector(contentType, content, selectedVersion = 1) {
+        const versionSelector = createVersionSelector(contentType, selectedVersion);
+        const faqs = selectedVersion === 1 ? content.version1 : content.version2;
+        return `${versionSelector}<div class="content-faq">${formatFAQ(faqs)}</div>`;
+    }
+    
+    function getAllContent() {
+        const productName = document.getElementById('productName').value;
+        let content = `FICHE PRODUIT : ${productName}\n\n`;
+        
+        // Add each section
+        content += '=== ANALYSE PSYCHOGRAPHIQUE ===\n';
+        content += document.getElementById('psychographicProfile').innerText + '\n\n';
+        
+        content += '=== SYNTHÈSE STRATÉGIQUE ===\n';
+        content += document.getElementById('strategicSynthesis').innerText + '\n\n';
+        
+        content += '=== TITRE DU PRODUIT ===\n';
+        content += document.getElementById('productTitle').innerText + '\n\n';
+        
+        content += '=== AVANTAGES ===\n';
+        content += document.getElementById('productBenefits').innerText + '\n\n';
+        
+        content += '=== COMMENT ÇA MARCHE ===\n';
+        content += document.getElementById('howItWorks').innerText + '\n\n';
+        
+        content += '=== BÉNÉFICES ÉMOTIONNELS ===\n';
+        content += document.getElementById('emotionalBenefits').innerText + '\n\n';
+        
+        content += '=== CAS D\'UTILISATION ===\n';
+        content += document.getElementById('useCases').innerText + '\n\n';
+        
+        content += '=== CARACTÉRISTIQUES ===\n';
+        content += document.getElementById('characteristics').innerText + '\n\n';
+        
+        content += '=== AVANTAGES CONCURRENTIELS ===\n';
+        content += document.getElementById('competitiveAdvantages').innerText + '\n\n';
+        
+        content += '=== AVIS CLIENTS ===\n';
+        content += document.getElementById('customerReviews').innerText + '\n\n';
+        
+        content += '=== FAQ ===\n';
+        content += document.getElementById('faq').innerText + '\n\n';
+        
+        return content;
+    }
+    
+    // Template generation button event handling
+    const generateTemplateBtn = document.getElementById('generateTemplateBtn');
+    if (generateTemplateBtn) {
+        generateTemplateBtn.addEventListener('click', async function() {
+            try {
+                // Vérifier si le contenu a été généré
+                if (!window.generatedContent) {
+                    alert('Veuillez d\'abord générer le contenu du produit avant de créer le template.');
+                    return;
+                }
+                
+                // Récupérer le nom du produit
+                const productName = document.getElementById('productName').value;
+                if (!productName) {
+                    alert('Le nom du produit est manquant. Veuillez le renseigner.');
+                    return;
+                }
+                
+                // Générer le template JSON (la fonction est asynchrone)
+                const result = await generateShopifyTemplate(window.generatedContent, productName);
+                
+                // Vérifier que le résultat est valide
+                if (!result || !result.template || !result.filename) {
+                    throw new Error('Le template généré est invalide');
+                }
+                
+                // Créer un objet Blob pour le fichier JSON
+                const jsonBlob = new Blob([JSON.stringify(result.template, null, 2)], {type: 'application/json'});
+                
+                // Créer un lien pour télécharger le fichier
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(jsonBlob);
+                downloadLink.download = result.filename;
+                
+                // Ajouter le lien au document et cliquer dessus
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                
+                // Nettoyer
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(downloadLink.href);
+                
+                // Afficher un message de succès
+                alert(`Le template produit a été généré avec succès: ${result.filename}`);
+            } catch (error) {
+                console.error('Erreur lors de la génération du template:', error);
+                alert('Une erreur est survenue lors de la génération du template. Veuillez réessayer.');
+            }
+        });
+    }
+});

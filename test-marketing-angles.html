@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Sélection d'Angles Marketing Futuriste</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/marketing-angles-premium.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-color);
+        }
+        .test-header h1 {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .test-header p {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+        .trigger-button {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 30px;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary-cyan);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        .trigger-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1><i class="fas fa-rocket"></i> Test du Design Futuriste</h1>
+            <p>Interface de sélection des angles marketing avec le nouveau design</p>
+        </div>
+
+        <button class="trigger-button" onclick="showMarketingAngles()">
+            <i class="fas fa-play"></i> Afficher la Sélection d'Angles Marketing
+        </button>
+
+        <!-- Container pour les angles marketing -->
+        <section id="marketing-angles" style="display: none;">
+            <!-- Le contenu sera généré dynamiquement par JavaScript -->
+        </section>
+    </div>
+
+    <script>
+        // Données de test pour les angles marketing
+        const testAnglesData = {
+            angles: [
+                {
+                    id: "performance",
+                    name: "Performance & Efficacité",
+                    marketShare: 35,
+                    problemDescription: "Votre audience recherche des solutions qui optimisent leur temps et leurs résultats",
+                    strategicImpact: "Fort",
+                    tags: ["Productivité", "ROI", "Optimisation"]
+                },
+                {
+                    id: "innovation", 
+                    name: "Innovation & Technologie",
+                    marketShare: 28,
+                    problemDescription: "Votre marché valorise l'innovation et les avancées technologiques",
+                    strategicImpact: "Élevé",
+                    tags: ["Tech", "Innovation", "Modernité"]
+                },
+                {
+                    id: "sustainability",
+                    name: "Durabilité & Éco-responsabilité", 
+                    marketShare: 22,
+                    problemDescription: "Les consommateurs privilégient des solutions respectueuses de l'environnement",
+                    strategicImpact: "Moyen",
+                    tags: ["Écologie", "Durable", "Responsable"]
+                },
+                {
+                    id: "premium",
+                    name: "Qualité Premium & Excellence",
+                    marketShare: 30,
+                    problemDescription: "Votre audience recherche le haut de gamme et l'excellence",
+                    strategicImpact: "Très élevé", 
+                    tags: ["Premium", "Qualité", "Excellence"]
+                }
+            ]
+        };
+
+        function showMarketingAngles() {
+            // Afficher la section
+            const section = document.getElementById('marketing-angles');
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+
+            // Générer le contenu après un court délai
+            setTimeout(() => {
+                generateMarketingAnglesCards(testAnglesData.angles, 'marketing-angles');
+            }, 500);
+        }
+    </script>
+    
+    <!-- Charger le script des angles marketing -->
+    <script src="js/marketing-angles.js"></script>
+</body>
+</html>

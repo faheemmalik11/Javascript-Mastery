@@ -1,0 +1,185 @@
+/* Styles pour le sélecteur de bénéfices émotionnels */
+
+.emotional-benefits-selection-container {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.emotional-benefits-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.emotional-benefits-instruction {
+    font-size: 14px;
+    color: var(--secondary-text-color);
+    margin-bottom: 15px;
+}
+
+.emotional-benefits-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0 25px 0;
+}
+
+.emotional-benefit-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    border: 1px solid #333333;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.3;
+    position: relative;
+    white-space: nowrap;
+    box-sizing: content-box;
+    margin: 2px;
+    width: fit-content;
+    height: fit-content;
+}
+
+.emotional-benefit-tag:hover {
+    background-color: #262626;
+    border-color: #2196f3;
+    transform: translateY(-1px);
+}
+
+.emotional-benefit-tag:active {
+    transform: translateY(0);
+}
+
+/* Style pour un avantage sélectionné */
+.emotional-benefit-tag.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: transparent;
+    padding-right: 16px; /* Espace pour le badge */
+    font-weight: 600;
+}
+
+/* Badge de sélection */
+.emotional-benefits-selector .selection-badge,
+.emotional-selection-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    border: 3px solid white;
+    transition: all 0.3s ease;
+    z-index: 2;
+    pointer-events: none; /* Le badge ne doit pas intercepter les clics */
+    opacity: 0;
+    transform: scale(0);
+}
+
+.emotional-benefit-tag.selected .selection-badge,
+.emotional-benefit-tag.selected .emotional-selection-badge {
+    opacity: 1;
+    transform: scale(1);
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Forcer l'affichage des badges avec contenu */
+.emotional-benefits-selector .selection-badge:not(:empty),
+.emotional-selection-badge:not(:empty) {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Boutons de validation et modification */
+.emotional-benefits-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.validate-emotional-benefits-btn, 
+.edit-emotional-benefits-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.validate-emotional-benefits-btn {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.validate-emotional-benefits-btn:hover {
+    background-color: #38a169;
+}
+
+.validate-emotional-benefits-btn:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.edit-emotional-benefits-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.edit-emotional-benefits-btn:hover {
+    background-color: #2b6cb0;
+}
+
+/* Sélections validées */
+.selected-emotional-benefits-container {
+    margin-top: 20px;
+    display: none;
+}
+
+.selected-emotional-benefits-container.active {
+    display: block;
+}
+
+.selected-emotional-benefit-item {
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 15px;
+}
+
+.selected-emotional-benefit-item h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+}
+
+.selected-emotional-benefit-item p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-color);
+}

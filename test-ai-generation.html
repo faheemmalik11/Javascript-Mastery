@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Content Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        button {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0099cc, #007acc);
+            transform: translateY(-1px);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 AI Content Generation Test</h1>
+    
+    <div class="container">
+        <h2>Product Information</h2>
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" placeholder="e.g., NovaHair Shampoo" value="NovaHair Shampoo">
+        
+        <label for="deepResearch">Deep Research:</label>
+        <textarea id="deepResearch" rows="4" placeholder="Enter detailed product research, target audience, benefits, etc.">NovaHair is a revolutionary hair coloring shampoo that targets busy professionals aged 25-45 who want to cover gray hair without the hassle of traditional hair dye. Key benefits include instant results, natural ingredients, long-lasting color, and mess-free application. The target audience values convenience, natural products, and professional appearance. Main pain points addressed: time constraints, chemical concerns, messy application, and high salon costs.</textarea>
+        
+        <button id="generateBtn" onclick="generateContent()">🚀 Generate AI Content</button>
+    </div>
+    
+    <div class="container">
+        <h2>Actions</h2>
+        <button onclick="openTemplate()" style="margin-right: 10px;">👁️ Open Template</button>
+        <button onclick="clearStorage()">🗑️ Clear Stored Content</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script>
+        async function generateContent() {
+            const productName = document.getElementById('productName').value.trim();
+            const deepResearch = document.getElementById('deepResearch').value.trim();
+            const btn = document.getElementById('generateBtn');
+            const resultDiv = document.getElementById('result');
+            
+            if (!productName || !deepResearch) {
+                showError('Please fill in both product name and deep research fields.');
+                return;
+            }
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Generating...';
+                resultDiv.innerHTML = '';
+                
+                const prompt = constructPrompt(productName, deepResearch);
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 4000
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'API request failed');
+                }
+                
+                const data = await response.json();
+                const generatedContent = data.choices[0].message.content;
+                
+                // Parse and store the content
+                const contentSections = parseGeneratedContent(generatedContent);
+                localStorage.setItem('aiGeneratedContent', JSON.stringify(contentSections));
+                
+                showResult('✅ Content generated and stored successfully!\n\nGenerated sections: ' + Object.keys(contentSections).join(', '));
+                
+            } catch (error) {
+                showError('❌ Error: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Generate AI Content';
+            }
+        }
+        
+        function constructPrompt(productName, deepResearch) {
+            return `You are an expert copywriter specializing in high-converting pre-lander content with deep psychology and persuasion expertise. 
+
+PRODUCT: ${productName}
+DEEP RESEARCH: ${deepResearch}
+
+Create a complete pre-lander content that triggers targeted emotional responses and optimizes conversion. Use advanced psychological triggers including:
+- Social proof and authority
+- Scarcity and urgency
+- Pain point amplification
+- Desire amplification
+- Fear of missing out (FOMO)
+- Reciprocity and commitment
+- Cognitive biases exploitation
+
+Generate content for these specific sections (use EXACT section names as headers):
+
+[TITLE]
+Create a compelling, emotion-driven headline that immediately captures attention and creates desire. Use power words and psychological triggers.
+
+[SUBTITLE]
+A supporting subtitle that amplifies the main promise and creates urgency.
+
+[BENEFIT_1_HEADING]
+First major benefit heading - focus on the primary transformation
+
+[BENEFIT_1_DESCRIPTION]
+Detailed description of the first benefit with emotional language and specific outcomes
+
+[BENEFIT_2_HEADING]
+Second major benefit heading - focus on social/lifestyle improvement
+
+[BENEFIT_2_DESCRIPTION]
+Detailed description of the second benefit with social proof elements
+
+[BENEFIT_3_HEADING]
+Third major benefit heading - focus on long-term value
+
+[BENEFIT_3_DESCRIPTION]
+Detailed description of the third benefit with authority and credibility
+
+[BENEFIT_4_HEADING]
+Fourth major benefit heading - focus on convenience/ease
+
+[BENEFIT_4_DESCRIPTION]
+Detailed description of the fourth benefit with simplicity emphasis
+
+[CTA_PRIMARY]
+Main call-to-action button text - action-oriented and urgent
+
+[CTA_SECONDARY]
+Secondary call-to-action text - softer approach
+
+[GUARANTEE_HEADING]
+Risk-reversal guarantee heading
+
+[GUARANTEE_DESCRIPTION]
+Detailed guarantee description that removes purchase anxiety
+
+[TESTIMONIAL_1_NAME]
+First testimonial author name
+
+[TESTIMONIAL_1_TEXT]
+First testimonial text - specific results and emotional transformation
+
+[TESTIMONIAL_2_NAME]
+Second testimonial author name
+
+[TESTIMONIAL_2_TEXT]
+Second testimonial text - different angle, social proof
+
+[TESTIMONIAL_3_NAME]
+Third testimonial author name
+
+[TESTIMONIAL_3_TEXT]
+Third testimonial text - authority and credibility focus
+
+[FAQ_Q1]
+First FAQ question - addressing main objection
+
+[FAQ_A1]
+First FAQ answer - comprehensive objection handling
+
+[FAQ_Q2]
+Second FAQ question - about usage/application
+
+[FAQ_A2]
+Second FAQ answer - detailed usage explanation
+
+[FAQ_Q3]
+Third FAQ question - about results/timeline
+
+[FAQ_A3]
+Third FAQ answer - realistic expectations with urgency
+
+[FAQ_Q4]
+Fourth FAQ question - about guarantee/risk
+
+[FAQ_A4]
+Fourth FAQ answer - risk reversal reinforcement
+
+[FAQ_Q5]
+Fifth FAQ question - about ingredients/components
+
+[FAQ_A5]
+Fifth FAQ answer - quality and safety emphasis
+
+[FAQ_Q6]
+Sixth FAQ question - about shipping/delivery
+
+[FAQ_A6]
+Sixth FAQ answer - convenience and speed
+
+[FAQ_Q7]
+Seventh FAQ question - about pricing/value
+
+[FAQ_A7]
+Seventh FAQ answer - value justification and scarcity
+
+[URGENCY_TEXT]
+Scarcity/urgency text to create immediate action
+
+[SOCIAL_PROOF_TEXT]
+Social proof statement with numbers and credibility
+
+IMPORTANT: 
+- Use the EXACT section names in brackets as shown above
+- Make each section psychologically compelling and conversion-focused
+- Incorporate the deep research insights naturally
+- Use emotional triggers and power words throughout
+- Ensure consistency in tone and messaging across all sections
+- Focus on benefits, not features
+- Create a sense of urgency and scarcity
+- Address objections proactively
+
+Generate compelling, conversion-optimized content for each section now:`;
+        }
+        
+        function parseGeneratedContent(content) {
+            const sections = {};
+            const sectionRegex = /\[([^\]]+)\]\s*\n([^[]*?)(?=\n\[|$)/g;
+            let match;
+
+            while ((match = sectionRegex.exec(content)) !== null) {
+                const sectionName = match[1].trim();
+                const sectionContent = match[2].trim();
+                sections[sectionName] = sectionContent;
+            }
+
+            return sections;
+        }
+        
+        function openTemplate() {
+            window.open('template-nova.html', '_blank');
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('aiGeneratedContent');
+            showResult('🗑️ Stored content cleared.');
+        }
+        
+        function showResult(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result';
+            resultDiv.textContent = message;
+        }
+        
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'error';
+            resultDiv.textContent = message;
+        }
+    </script>
+</body>
+</html>

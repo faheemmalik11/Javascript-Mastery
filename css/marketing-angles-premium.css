@@ -1,0 +1,961 @@
+/* ================================================
+   INTERFACE MARKETING ANGLES - DESIGN ULTRA FUTURISTE
+   Interface Cyberpunk Premium - Style Spectaculaire
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Exo+2:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* === SECTION PRINCIPALE === */
+.marketing-angle-section {
+    background: radial-gradient(ellipse at center, #0a0a23 0%, #000000 70%), 
+                linear-gradient(45deg, #ff006e22 0%, #8338ec22 25%, #3a86ff22 50%, #06ffa522 75%, #ffbe0b22 100%) !important;
+    background-size: 100% 100%, 400% 400% !important;
+    animation: gradientShift 15s ease infinite !important;
+    min-height: 100vh !important;
+    padding: 5px 2rem 5px 2rem !important;
+    border-radius: 20px !important;
+    border: 2px solid transparent !important;
+    background-clip: padding-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+    font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%, 0% 50%; }
+    50% { background-position: 100% 50%, 100% 50%; }
+}
+
+.marketing-angle-section::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b) !important;
+    border-radius: 22px !important;
+    z-index: -1 !important;
+    animation: borderGlow 3s ease-in-out infinite alternate !important;
+}
+
+@keyframes borderGlow {
+    0% { filter: blur(3px) brightness(1); }
+    100% { filter: blur(8px) brightness(1.5); }
+}
+
+.marketing-angle-section::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: repeating-linear-gradient(90deg, transparent, transparent 98px, rgba(6, 255, 165, 0.03) 100px),
+                repeating-linear-gradient(0deg, transparent, transparent 98px, rgba(255, 0, 110, 0.03) 100px) !important;
+    background-size: 100px 100px !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+.marketing-angle-section > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* === CONTAINER GRID POUR 2 COLONNES === */
+.marketing-angles-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem !important;
+    margin-top: 2rem !important;
+    padding: 0 1rem !important;
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 768px) {
+    .marketing-angles-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
+
+/* === TITRE SPECTACULAIRE === */
+.marketing-angle-section .section-title {
+    font-family: 'Exo 2', sans-serif !important;
+    font-size: 3.2rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b) !important;
+    background-size: 400% 400% !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: gradientText 4s ease infinite !important;
+    text-align: center !important;
+    margin-bottom: 5px !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    filter: drop-shadow(0 0 20px rgba(255, 0, 110, 0.5)) !important;
+    position: relative !important;
+}
+
+@keyframes gradientText {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.marketing-angle-section .section-subtitle {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 1.3rem !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    margin-bottom: 3rem !important;
+    opacity: 0.9 !important;
+    text-shadow: 0 0 10px rgba(6, 255, 165, 0.5) !important;
+}
+
+/* === CARTES ULTRA FUTURISTES === */
+.marketing-angle-card {
+    background: linear-gradient(145deg, 
+        rgba(10, 10, 35, 0.9) 0%, 
+        rgba(25, 25, 50, 0.9) 50%, 
+        rgba(15, 15, 40, 0.9) 100%) !important;
+    border: 2px solid transparent !important;
+    border-radius: 24px !important;
+    padding: 2.5rem !important;
+    cursor: pointer !important;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(10px) !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+.marketing-angle-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5) !important;
+    border-radius: 26px !important;
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
+    z-index: -1 !important;
+}
+
+.marketing-angle-card::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent) !important;
+    transition: left 0.8s ease !important;
+}
+
+.marketing-angle-card.selected {
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    transform: none !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.marketing-angle-card.selected::before {
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+@keyframes selectedGlow {
+    0% { filter: none; }
+    100% { filter: none; }
+}
+
+.marketing-angle-card.selected .angle-title {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+    background-size: 100% 100% !important;
+    animation: none !important;
+    filter: none !important;
+}
+
+@keyframes selectedTitleGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 0% 50%; }
+}
+
+.marketing-angle-card.selected .angle-icon {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.marketing-angle-card.selected .angle-description {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.marketing-angle-card.selected .angle-tag {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.marketing-angle-card.selected .angle-impact {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.marketing-angle-card.selected .angle-impact-text {
+    color: #ffffff !important;
+}
+
+.marketing-angle-card.selected .selection-indicator {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #000000 !important;
+    border: none !important;
+}
+
+/* === CONTENU DES CARTES === */
+.angle-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    margin-bottom: 2rem !important;
+    gap: 1.5rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 2px solid transparent !important;
+    background: linear-gradient(90deg, rgba(255, 0, 110, 0.3), rgba(131, 56, 236, 0.3), rgba(58, 134, 255, 0.3)) !important;
+    background-clip: border-box !important;
+    border-image: linear-gradient(90deg, #ff006e, #8338ec, #3a86ff) 1 !important;
+}
+
+.angle-title {
+    font-family: 'Exo 2', sans-serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(45deg, #ffffff, #06ffa5, #3a86ff) !important;
+    background-size: 200% 200% !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: titleShimmer 3s ease infinite !important;
+    margin: 0 !important;
+    flex: 1 !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+}
+
+@keyframes titleShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.angle-icon {
+    width: 56px !important;
+    height: 56px !important;
+    background: radial-gradient(circle, rgba(255, 0, 110, 0.2) 0%, rgba(131, 56, 236, 0.2) 100%) !important;
+    border: 2px solid transparent !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.4rem !important;
+    color: #ffffff !important;
+    transition: all 0.4s ease !important;
+    flex-shrink: 0 !important;
+    background-clip: padding-box !important;
+    position: relative !important;
+}
+
+.angle-icon::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5) !important;
+    border-radius: 18px !important;
+    z-index: -1 !important;
+}
+
+/* === DESCRIPTION AVEC EFFET NÉON === */
+.angle-description {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    color: #e0e0e0 !important;
+    line-height: 1.6 !important;
+    margin-bottom: 2rem !important;
+    padding: 1.5rem !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(5px) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.angle-description::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, #06ffa5, transparent) !important;
+    animation: descriptionScan 4s ease infinite !important;
+}
+
+@keyframes descriptionScan {
+    0%, 100% { left: -100%; }
+    50% { left: 100%; }
+}
+
+/* === SECTIONS MARKETING MISES EN VALEUR === */
+.angle-section {
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(5px) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* === HEADER DES SECTIONS AVEC ICÔNES === */
+.angle-section-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.angle-section-icon {
+    font-size: 1.5rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.angle-section-title {
+    font-family: 'Exo 2', sans-serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin: 0 !important;
+}
+
+.angle-section-content {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* TAILLE DU MARCHÉ - Couleur Or/Jaune */
+.angle-section[data-section="market-size"] {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.15) 0%, 
+        rgba(255, 193, 7, 0.15) 50%, 
+        rgba(255, 235, 59, 0.15) 100%) !important;
+    border: 2px solid rgba(255, 215, 0, 0.6) !important;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3) !important;
+}
+
+.angle-section[data-section="market-size"] .angle-section-icon {
+    background: rgba(255, 215, 0, 0.2) !important;
+    border-color: rgba(255, 215, 0, 0.4) !important;
+    color: #ffd700 !important;
+}
+
+.angle-section[data-section="market-size"] .angle-section-title {
+    color: #ffd700 !important;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+}
+
+/* PROBLÈME À RÉSOUDRE - Couleur Rouge/Orange */
+.angle-section[data-section="problem"] {
+    background: linear-gradient(135deg, 
+        rgba(255, 69, 0, 0.15) 0%, 
+        rgba(255, 99, 71, 0.15) 50%, 
+        rgba(255, 140, 0, 0.15) 100%) !important;
+    border: 2px solid rgba(255, 69, 0, 0.6) !important;
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.3) !important;
+}
+
+.angle-section[data-section="problem"] .angle-section-icon {
+    background: rgba(255, 69, 0, 0.2) !important;
+    border-color: rgba(255, 69, 0, 0.4) !important;
+    color: #ff4500 !important;
+}
+
+.angle-section[data-section="problem"] .angle-section-title {
+    color: #ff4500 !important;
+    text-shadow: 0 0 15px rgba(255, 69, 0, 0.8) !important;
+}
+
+/* PEURS & FRUSTRATIONS - Couleur Violet/Magenta */
+.angle-section[data-section="fears"] {
+    background: linear-gradient(135deg, 
+        rgba(138, 43, 226, 0.15) 0%, 
+        rgba(186, 85, 211, 0.15) 50%, 
+        rgba(255, 20, 147, 0.15) 100%) !important;
+    border: 2px solid rgba(138, 43, 226, 0.6) !important;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.3) !important;
+}
+
+.angle-section[data-section="fears"] .angle-section-icon {
+    background: rgba(138, 43, 226, 0.2) !important;
+    border-color: rgba(138, 43, 226, 0.4) !important;
+    color: #8a2be2 !important;
+}
+
+.angle-section[data-section="fears"] .angle-section-title {
+    color: #8a2be2 !important;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.8) !important;
+}
+
+/* APPLICATION TACTIQUE - Couleur Vert/Cyan */
+.angle-section[data-section="tactical"] {
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 127, 0.15) 0%, 
+        rgba(32, 178, 170, 0.15) 50%, 
+        rgba(0, 206, 209, 0.15) 100%) !important;
+    border: 2px solid rgba(0, 255, 127, 0.6) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 127, 0.3) !important;
+}
+
+.angle-section[data-section="tactical"] .angle-section-icon {
+    background: rgba(0, 255, 127, 0.2) !important;
+    border-color: rgba(0, 255, 127, 0.4) !important;
+    color: #00ff7f !important;
+}
+
+.angle-section[data-section="tactical"] .angle-section-title {
+    color: #00ff7f !important;
+    text-shadow: 0 0 15px rgba(0, 255, 127, 0.8) !important;
+}
+
+/* PREUVES & DONNÉES - Couleur Bleu/Cyan */
+.angle-section[data-section="evidence"] {
+    background: linear-gradient(135deg, 
+        rgba(30, 144, 255, 0.15) 0%, 
+        rgba(0, 191, 255, 0.15) 50%, 
+        rgba(135, 206, 250, 0.15) 100%) !important;
+    border: 2px solid rgba(30, 144, 255, 0.6) !important;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.3) !important;
+}
+
+.angle-section[data-section="evidence"] .angle-section-icon {
+    background: rgba(30, 144, 255, 0.2) !important;
+    border-color: rgba(30, 144, 255, 0.4) !important;
+    color: #1e90ff !important;
+}
+
+.angle-section[data-section="evidence"] .angle-section-title {
+    color: #1e90ff !important;
+    text-shadow: 0 0 15px rgba(30, 144, 255, 0.8) !important;
+}
+
+/* === TAGS SPECTACULAIRES === */
+.angle-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.8rem !important;
+    margin-bottom: 2rem !important;
+}
+
+.angle-tag {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    background: linear-gradient(45deg, rgba(255, 0, 110, 0.2), rgba(131, 56, 236, 0.2)) !important;
+    border: 1px solid transparent !important;
+    border-radius: 20px !important;
+    padding: 0.5rem 1rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.angle-tag::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -1px !important;
+    left: -1px !important;
+    right: -1px !important;
+    bottom: -1px !important;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff) !important;
+    border-radius: 21px !important;
+    z-index: -1 !important;
+    opacity: 0.6 !important;
+}
+
+.marketing-angle-card.selected .angle-tag {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+/* === IMPACT ULTRA VISUEL === */
+.angle-impact {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    background: radial-gradient(ellipse at center, rgba(6, 255, 165, 0.15) 0%, rgba(255, 190, 11, 0.15) 100%) !important;
+    border: 2px solid transparent !important;
+    border-radius: 16px !important;
+    padding: 0px 1.5rem 1.2rem 1.5rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin-top: 0 !important;
+}
+
+.angle-impact::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    background: linear-gradient(45deg, #06ffa5, #ffbe0b, #ff006e, #8338ec) !important;
+    border-radius: 18px !important;
+    z-index: -1 !important;
+    animation: impactGlow 3s ease infinite !important;
+}
+
+@keyframes impactGlow {
+    0%, 100% { opacity: 0.6; filter: blur(2px); }
+    50% { opacity: 1; filter: blur(4px); }
+}
+
+.angle-impact::after {
+    content: '⚡' !important;
+    position: absolute !important;
+    top: 1rem !important;
+    left: 1.2rem !important;
+    font-size: 1.2rem !important;
+}
+
+.angle-impact-text {
+    margin-left: 2rem !important;
+    font-style: italic !important;
+    text-shadow: 0 0 10px rgba(6, 255, 165, 0.5) !important;
+}
+
+.marketing-angle-card.selected .angle-impact {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.marketing-angle-card.selected .angle-impact-text {
+    color: #ffffff !important;
+}
+
+/* === INDICATEUR DE SÉLECTION === */
+.selection-indicator {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #000000 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0 !important;
+    transform: scale(0.5) !important;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    box-shadow: 0 0 20px rgba(6, 255, 165, 0.8) !important;
+}
+
+.selection-indicator::before {
+    content: '✓' !important;
+    color: #000000 !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.marketing-angle-card.selected .selection-indicator {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    animation: checkmarkPulse 2s ease infinite !important;
+}
+
+@keyframes checkmarkPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(6, 255, 165, 0.8); }
+    50% { box-shadow: 0 0 40px rgba(6, 255, 165, 1), 0 0 60px rgba(255, 190, 11, 0.6); }
+}
+
+/* === BOUTON DE VALIDATION SPECTACULAIRE === */
+.validate-btn {
+    font-family: 'Orbitron', monospace !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    background: linear-gradient(45deg, #06ffa5, #ffbe0b, #ff006e) !important;
+    background-size: 300% 300% !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 1rem 3rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    display: block !important;
+    margin: 3rem auto 0 auto !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(6, 255, 165, 0.3), 0 4px 16px rgba(255, 190, 11, 0.2) !important;
+    animation: buttonGradient 3s ease infinite !important;
+}
+
+@keyframes buttonGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.validate-btn::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent) !important;
+    transition: left 0.6s ease !important;
+}
+
+.validate-btn:hover {
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 0 16px 64px rgba(6, 255, 165, 0.4), 
+                0 8px 32px rgba(255, 190, 11, 0.3),
+                0 4px 16px rgba(255, 0, 110, 0.2) !important;
+    filter: brightness(1.1) !important;
+}
+
+.validate-btn:hover::before {
+    left: 100% !important;
+}
+
+.validate-btn:active {
+    transform: translateY(-2px) scale(1.03) !important;
+    transition: all 0.1s ease !important;
+}
+
+.validate-btn:disabled {
+    background: linear-gradient(45deg, #404040, #505050, #404040) !important;
+    color: #888888 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+    animation: none !important;
+}
+
+.validate-btn:disabled::before {
+    display: none !important;
+}
+
+/* === BOUTON CONTINUER MODERNE === */
+.continue-button {
+    font-family: 'Orbitron', monospace !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
+    background-size: 300% 300% !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 18px 36px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    display: block !important;
+    margin: 3rem auto 0 auto !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3), 0 4px 16px rgba(139, 92, 246, 0.2) !important;
+    animation: buttonGradientFlow 3s ease infinite !important;
+    min-width: 280px !important;
+}
+
+@keyframes buttonGradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.continue-button::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent) !important;
+    transition: left 0.6s ease !important;
+}
+
+.continue-button:hover {
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 0 16px 64px rgba(99, 102, 241, 0.4), 
+                0 8px 32px rgba(139, 92, 246, 0.3),
+                0 4px 16px rgba(217, 70, 239, 0.2) !important;
+    filter: brightness(1.1) !important;
+    background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #f59e0b 100%) !important;
+}
+
+.continue-button:hover::before {
+    left: 100% !important;
+}
+
+.continue-button:active {
+    transform: translateY(-2px) scale(1.03) !important;
+    transition: all 0.1s ease !important;
+}
+
+.continue-button:disabled {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+    color: #9ca3af !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+    animation: none !important;
+    opacity: 0.6 !important;
+}
+
+.continue-button:disabled:hover {
+    transform: none !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.continue-button:disabled::before {
+    display: none !important;
+}
+
+.continue-button i {
+    margin-right: 8px !important;
+    font-size: 1.1rem !important;
+    transition: transform 0.3s ease !important;
+}
+
+.continue-button:hover i {
+    transform: rotate(15deg) scale(1.1) !important;
+}
+
+/* === STYLES RESPONSIFS ULTRA MODERNES === */
+@media (max-width: 768px) {
+    .marketing-angle-section {
+        padding: 2rem 1rem !important;
+        min-height: auto !important;
+    }
+    
+    .marketing-angle-section .section-title {
+        font-size: 2.2rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .marketing-angle-section .section-subtitle {
+        font-size: 1.1rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .marketing-angles-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .marketing-angle-card {
+        padding: 2rem !important;
+    }
+    
+    .angle-header {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .angle-title {
+        font-size: 1.3rem !important;
+    }
+    
+    .angle-icon {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .angle-description {
+        font-size: 1rem !important;
+        padding: 1.2rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .angle-section {
+        padding: 0.8rem 1rem !important;
+    }
+    
+    .angle-section-title {
+        font-size: 0.8rem !important;
+    }
+    
+    .angle-section-content {
+        font-size: 0.9rem !important;
+    }
+    
+    .angle-tags {
+        gap: 0.6rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .angle-tag {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+    
+    .angle-impact {
+        font-size: 0.9rem !important;
+        padding: 1rem 1.2rem !important;
+    }
+    
+    .angle-impact-text {
+        margin-left: 1.8rem !important;
+    }
+    
+    .validate-btn {
+        font-size: 1rem !important;
+        padding: 0.8rem 2rem !important;
+        margin-top: 2rem !important;
+    }
+    
+    .selection-indicator {
+        width: 28px !important;
+        height: 28px !important;
+        top: 0.8rem !important;
+        right: 0.8rem !important;
+    }
+    
+    .selection-indicator::before {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .marketing-angle-section {
+        padding: 1.5rem 0.8rem !important;
+        border-radius: 16px !important;
+    }
+    
+    .marketing-angle-section .section-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .marketing-angles-grid {
+        gap: 1.2rem !important;
+    }
+    
+    .marketing-angle-card {
+        padding: 1.5rem !important;
+        border-radius: 20px !important;
+    }
+    
+    .angle-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .angle-icon {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1rem !important;
+    }
+    
+    .angle-description {
+        font-size: 0.95rem !important;
+        padding: 1rem !important;
+    }
+    
+    .angle-section {
+        padding: 0.7rem 0.8rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .angle-impact {
+        padding: 0.8rem 1rem !important;
+    }
+    
+    .validate-btn {
+        font-size: 0.9rem !important;
+        padding: 0.7rem 1.5rem !important;
+        border-radius: 12px !important;
+    }
+}
+
+/* === ANIMATIONS AVANCÉES === */
+@media (prefers-reduced-motion: no-preference) {
+    .marketing-angle-card {
+        animation: cardFloat 6s ease-in-out infinite !important;
+    }
+    
+    .marketing-angle-card:nth-child(2n) {
+        animation-delay: -2s !important;
+    }
+    
+    .marketing-angle-card:nth-child(3n) {
+        animation-delay: -4s !important;
+    }
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.005); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* === EFFETS DE PARTICULES (OPTIONNEL) === */
+@media (min-width: 1024px) {
+    .marketing-angle-section::after {
+        background: repeating-linear-gradient(90deg, transparent, transparent 98px, rgba(6, 255, 165, 0.03) 100px),
+                    repeating-linear-gradient(0deg, transparent, transparent 98px, rgba(255, 0, 110, 0.03) 100px),
+                    radial-gradient(circle at 25% 25%, rgba(255, 190, 11, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 75% 75%, rgba(131, 56, 236, 0.05) 0%, transparent 50%) !important;
+        background-size: 100px 100px, 100px 100px, 200px 200px, 200px 200px !important;
+        animation: particleFloat 20s linear infinite !important;
+    }
+}
+
+@keyframes particleFloat {
+    0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    100% { background-position: 100px 100px, -100px -100px, 200px 200px, -200px -200px; }
+}

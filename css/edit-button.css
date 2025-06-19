@@ -1,0 +1,205 @@
+/* Styles pour le bouton d'édition */
+.edit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #4ba3e3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #3385c7;
+}
+
+.edit-btn i {
+    margin-right: 5px;
+}
+
+/* Styles pour le mode d'édition */
+.edit-mode {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit-mode textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.save-edit-btn {
+    padding: 5px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-edit-btn:hover {
+    background-color: #388e3c;
+}
+
+.cancel-edit-btn {
+    padding: 5px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-edit-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Styles pour les éléments individuels - appliquer position relative à un large éventail d'éléments */
+.benefit-item, .emotional-benefit-item, .use-case-item, .characteristic-item, 
+.competitive-advantage-item, .customer-review-item, .faq-item, .selected-faq-item,
+.product-title-item, 
+#productBenefits li, #competitiveAdvantages li, 
+.version-item, .title-tag, 
+.version-content, .content-text, 
+.emotional-benefit-title, .use-case-title, .characteristic-title, 
+.review-title, .faq-question, .selected-faq-question {
+    position: relative !important;
+    padding-right: 30px !important; /* Espace pour le bouton d'édition */
+    margin-bottom: 10px !important;
+    min-height: 24px !important;
+    border: 1px dashed transparent !important;
+    transition: border-color 0.2s !important;
+}
+
+/* Effet de survol sur les éléments éditables */
+.benefit-item:hover, .emotional-benefit-item:hover, .use-case-item:hover, .characteristic-item:hover,
+.competitive-advantage-item:hover, .customer-review-item:hover, .faq-item:hover, .selected-faq-item:hover,
+.product-title-item:hover, #productBenefits li:hover, #competitiveAdvantages li:hover,
+.version-item:hover, .title-tag:hover, .version-content:hover, .content-text:hover,
+.emotional-benefit-title:hover, .use-case-title:hover, .characteristic-title:hover,
+.review-title:hover, .faq-question:hover, .selected-faq-question:hover {
+    border-color: #ddd !important;
+    background-color: rgba(230, 230, 230, 0.2) !important;
+}
+
+/* Bouton d'édition pour les éléments individuels */
+.edit-item-btn {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    background-color: #4ba3e3;
+    color: white;
+    border: 1px solid #3385c7;
+    border-radius: 4px;
+    width: auto;
+    height: auto;
+    padding: 3px 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: background-color 0.2s;
+    z-index: 100;
+}
+
+.edit-item-btn:hover {
+    background-color: #3385c7;
+    color: white;
+}
+
+.edit-item-btn::after {
+    content: 'Éditer';
+    margin-left: 4px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+/* Container pour l'édition d'un élément */
+.edit-item-container {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Zone de texte pour l'édition */
+.edit-item-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+}
+
+/* Boutons d'action pour l'édition d'un élément */
+.edit-item-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+/* Boutons de sauvegarde et d'annulation */
+.save-item-btn, .cancel-item-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.save-item-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.save-item-btn:hover {
+    background-color: #388e3c;
+}
+
+.cancel-item-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.cancel-item-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Ajustements pour certains éléments spécifiques */
+.howItWorks-content .edit-item-btn,
+.content-text .edit-item-btn,
+.version-content .edit-item-btn {
+    top: 0;
+    right: 0;
+}

@@ -1,0 +1,166 @@
+/* Styles pour le sélecteur de caractéristiques */
+
+.characteristics-selection-container {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.characteristics-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.characteristics-instruction {
+    font-size: 14px;
+    color: var(--secondary-text-color);
+    margin-bottom: 15px;
+}
+
+.characteristics-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0 25px 0;
+}
+
+.characteristic-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    border: 1px solid #333333;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.3;
+    position: relative;
+    white-space: nowrap;
+    box-sizing: content-box;
+    margin: 2px;
+    width: fit-content;
+    height: fit-content;
+}
+
+.characteristic-tag:hover {
+    background-color: #262626;
+    border-color: #2196f3;
+    transform: translateY(-1px);
+}
+
+.characteristic-tag:active {
+    transform: translateY(0);
+}
+
+/* Style pour une caractéristique sélectionnée */
+.characteristic-tag.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: transparent;
+    padding-right: 16px; /* Espace pour le badge */
+    font-weight: 600;
+}
+
+/* Badge de sélection */
+.characteristic-selection-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--success-color);
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: scale(0);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2;
+    pointer-events: none; /* Le badge ne doit pas intercepter les clics */
+}
+
+.characteristic-tag.selected .characteristic-selection-badge {
+    transform: scale(1);
+}
+
+/* Boutons de validation et modification */
+.characteristics-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.validate-characteristics-btn, 
+.edit-characteristics-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.validate-characteristics-btn {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.validate-characteristics-btn:hover {
+    background-color: #38a169;
+}
+
+.validate-characteristics-btn:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.edit-characteristics-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.edit-characteristics-btn:hover {
+    background-color: #2b6cb0;
+}
+
+/* Sélections validées */
+.selected-characteristics-container {
+    margin-top: 20px;
+    display: none;
+}
+
+.selected-characteristics-container.active {
+    display: block;
+}
+
+.selected-characteristic-item {
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 15px;
+}
+
+.selected-characteristic-item h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+}
+
+.selected-characteristic-item p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-color);
+}

@@ -1,0 +1,1092 @@
+/**
+ * Module de gestion de l'affichage de l'avatar
+ * Ce module s'occupe de créer et mettre à jour la section avatar
+ */
+
+window.avatarDisplay = (function() {
+    'use strict';
+    
+    /**
+     * Crée dynamiquement la section avatar si elle n'existe pas
+     */
+    function createAvatarSection() {
+        console.log('[Avatar Display] Création dynamique de la section avatar');
+        
+        // Trouver le conteneur avatar-section
+        const avatarContainer = document.getElementById('avatarSection');
+        if (!avatarContainer) {
+            console.error('[Avatar Display] Conteneur avatar (avatarSection) introuvable');
+            return;
+        }
+        
+        // Vérifier si la section avatar existe déjà
+        if (document.getElementById('avatarProfileSection')) {
+            console.log('[Avatar Display] Section avatar déjà existante');
+            return;
+        }
+        
+        // Créer la structure HTML complète de la section avatar
+        const avatarSection = document.createElement('div');
+        avatarSection.id = 'avatarProfileSection';
+        avatarSection.className = 'avatar-profile-section';
+        avatarSection.style.display = 'block';
+        avatarSection.style.marginBottom = '0px';
+        avatarSection.style.marginTop = '0px';
+        avatarSection.style.border = '2px solid var(--primary-color)';
+        avatarSection.style.borderRadius = 'var(--border-radius)';
+        avatarSection.style.backgroundColor = 'var(--dark-surface-2)';
+        avatarSection.style.padding = '20px';
+        avatarSection.style.boxShadow = 'var(--card-shadow)';
+        avatarSection.style.width = '100%';
+        avatarSection.style.maxWidth = '100%';
+        avatarSection.style.boxSizing = 'border-box';
+        
+        // Utiliser innerHTML pour définir toute la structure HTML fournie
+        avatarSection.innerHTML = `
+            <div class="avatar-profile-card">
+                <div class="avatar-profile-header">
+                    <h2><i class="fas fa-user-circle"></i> Profil de l'Acheteur Cible</h2>
+                </div>
+                
+                <!-- Onglets Avatar -->
+                <div class="avatar-tabs">
+                    <button class="avatar-tab-btn active" data-tab="avatar-profile-tab">
+                        <i class="fas fa-user"></i> Profil
+                    </button>
+                    <button class="avatar-tab-btn" data-tab="avatar-analysis-tab">
+                        <i class="fas fa-brain"></i> Analyse Psychologique
+                    </button>
+                    <button class="avatar-tab-btn" data-tab="avatar-strategy-tab">
+                        <i class="fas fa-chess"></i> Stratégie
+                    </button>
+                </div>
+                
+                <!-- Contenu des onglets -->
+                <div class="avatar-tab-content">
+                    <!-- Onglet Profil -->
+                    <div id="avatar-profile-tab" class="avatar-tab-pane active">
+                        <div class="avatar-profile-content">
+                            <div class="avatar-profile-grid">
+                                <!-- Âge -->
+                                <div class="avatar-profile-item">
+                                    <div class="avatar-profile-icon age-icon">
+                                        <i class="fas fa-birthday-cake"></i>
+                                    </div>
+                                    <div class="avatar-profile-data">
+                                        <div class="avatar-profile-label">Âge</div>
+                                        <div class="avatar-profile-value" id="avatarAge"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sexe -->
+                                <div class="avatar-profile-item">
+                                    <div class="avatar-profile-icon gender-icon">
+                                        <i class="fas fa-venus-mars"></i>
+                                    </div>
+                                    <div class="avatar-profile-data">
+                                        <div class="avatar-profile-label">Sexe</div>
+                                        <div class="avatar-profile-value" id="avatarGender"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Situation familiale -->
+                                <div class="avatar-profile-item">
+                                    <div class="avatar-profile-icon family-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="avatar-profile-data">
+                                        <div class="avatar-profile-label">Famille</div>
+                                        <div class="avatar-profile-value" id="avatarFamily"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="avatar-profile-bottom">
+                                <div class="avatar-fears-container">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Peurs avant l'achat</h3>
+                                    <div class="avatar-fears-list" id="avatarFears">
+                                    </div>
+                                </div>
+                                
+                                <div class="avatar-expectations-container">
+                                    <h3><i class="fas fa-star"></i> Attentes du produit</h3>
+                                    <div class="avatar-expectations-list" id="avatarExpectations">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Analyse Psychologique -->
+                    <div id="avatar-analysis-tab" class="avatar-tab-pane">
+                        <div class="psychological-analysis-content">
+                            <!-- Section principale du profil psychographique -->
+                            <div class="psycho-section-main">
+                                <h3><i class="fas fa-brain"></i> Profil Psychographique</h3>
+                                <div class="psycho-main-content" id="psychographicMainProfile">
+                                    <!-- Le contenu principal sera inséré ici -->
+                                </div>
+                            </div>
+                            
+                            <!-- Grille des sections psychologiques -->
+                            <div class="psycho-sections-grid">
+                                <!-- Émotions à évoquer -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-heart"></i>
+                                        <h4>Émotions à Évoquer</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="emotionsToEvoke">
+                                        <!-- Contenu des émotions -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Choix de style de vie -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-home"></i>
+                                        <h4>Style de Vie</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="lifestyleChoices">
+                                        <!-- Contenu du style de vie -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Logique de décision d'achat -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <h4>Logique de Décision</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="decisionLogic">
+                                        <!-- Contenu de la logique de décision -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Désir principal -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-bullseye"></i>
+                                        <h4>Désir Principal</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="mainDesire">
+                                        <!-- Contenu du désir principal -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Problèmes à résoudre -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-wrench"></i>
+                                        <h4>Problèmes à Résoudre</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="problemsToSolve">
+                                        <!-- Contenu des problèmes -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Raisons biologiques -->
+                                <div class="psycho-section-card">
+                                    <div class="psycho-section-header">
+                                        <i class="fas fa-dna"></i>
+                                        <h4>Raisons Biologiques</h4>
+                                    </div>
+                                    <div class="psycho-section-content" id="biologicalReasons">
+                                        <!-- Contenu des raisons biologiques -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Stratégie -->
+                    <div id="avatar-strategy-tab" class="avatar-tab-pane">
+                        <div class="strategy-content">
+                            <!-- Section principale de la stratégie -->
+                            <div class="strategy-section-main">
+                                <h3><i class="fas fa-chess"></i> Stratégie Marketing</h3>
+                                <div class="strategy-main-content" id="strategyMainContent">
+                                    <!-- Le contenu principal de la stratégie sera inséré ici -->
+                                </div>
+                            </div>
+                            
+                            <!-- Grille des sections stratégiques -->
+                            <div class="strategy-sections-grid">
+                                <!-- Émotions Clés à Susciter -->
+                                <div class="strategy-section-card">
+                                    <div class="strategy-section-header">
+                                        <i class="fas fa-heart"></i>
+                                        <h4>Émotions Clés à Susciter</h4>
+                                    </div>
+                                    <div class="strategy-section-content" id="keyEmotions">
+                                        <!-- Contenu des émotions clés -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Motivations d'Achat Principales -->
+                                <div class="strategy-section-card">
+                                    <div class="strategy-section-header">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <h4>Motivations d'Achat Principales</h4>
+                                    </div>
+                                    <div class="strategy-section-content" id="purchaseMotivations">
+                                        <!-- Contenu des motivations d'achat -->
+                                    </div>
+                                </div>
+                                
+                                
+                                <!-- Drivers Biologiques Majeurs -->
+                                <div class="strategy-section-card">
+                                    <div class="strategy-section-header">
+                                        <i class="fas fa-dna"></i>
+                                        <h4>Drivers Biologiques Majeurs</h4>
+                                    </div>
+                                    <div class="strategy-section-content" id="biologicalDrivers">
+                                        <!-- Contenu des drivers biologiques -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Angles Marketing Clés -->
+                                <div class="strategy-section-card">
+                                    <div class="strategy-section-header">
+                                        <i class="fas fa-angle-double-right"></i>
+                                        <h4>Angles Marketing Clés</h4>
+                                    </div>
+                                    <div class="strategy-section-content" id="marketingAngles">
+                                        <!-- Contenu des angles marketing -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Messages Marketing à Valeur Ajoutée -->
+                                <div class="strategy-section-card">
+                                    <div class="strategy-section-header">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <h4>Messages Marketing à Valeur Ajoutée</h4>
+                                    </div>
+                                    <div class="strategy-section-content" id="valueAddedMessages">
+                                        <!-- Contenu des messages à valeur ajoutée -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insérer la section avatar dans le conteneur avatar
+        avatarContainer.appendChild(avatarSection);
+        
+        // Initialiser les onglets avatar avec un délai pour s'assurer que le DOM est mis à jour
+        setTimeout(() => {
+            initializeAvatarTabs();
+        }, 100);
+        
+        console.log('[Avatar Display] Section avatar créée et insérée dans avatarSection');
+    }
+    
+    /**
+     * Met à jour le profil avatar avec les données fournies
+     * @param {Object} profile - Données du profil avatar
+     */
+    function updateAvatarProfile(profile) {
+        if (!profile || typeof profile !== 'object') {
+            console.error('[Avatar Display] Profil invalide fourni pour la mise à jour');
+            return;
+        }
+        
+        console.log('[Avatar Display] Mise à jour du profil avatar avec les données:', profile);
+        
+        // Debug: Vérifier que les éléments existent dans le DOM
+        console.log('[Avatar Display] Vérification des éléments DOM:');
+        console.log('- avatarAge existe:', !!document.getElementById('avatarAge'));
+        console.log('- avatarGender existe:', !!document.getElementById('avatarGender'));
+        console.log('- avatarFamily existe:', !!document.getElementById('avatarFamily'));
+        
+        // Mettre à jour l'âge
+        if (profile.age) {
+            console.log('[Avatar Display] Traitement de l\'âge:', profile.age);
+            const avatarAge = document.getElementById('avatarAge');
+            if (avatarAge) {
+                console.log('[Avatar Display] Élément avatarAge trouvé, mise à jour...');
+                if (profile.age === "X") {
+                    avatarAge.innerHTML = `<span class="age-emoji">❓</span> <span class="age-text">X</span>`;
+                    console.log('[Avatar Display] Âge mis à jour avec X');
+                } else {
+                    const ageEmoji = getAgeEmoji(profile.age);
+                    console.log('[Avatar Display] Emoji d\'âge calculé:', ageEmoji);
+                    avatarAge.innerHTML = `<span class="age-emoji">${ageEmoji}</span> <span class="age-text">${profile.age}</span>`;
+                    console.log('[Avatar Display] Âge mis à jour avec:', profile.age);
+                }
+            } else {
+                console.error('[Avatar Display] Élément avatarAge non trouvé dans le DOM');
+            }
+        } else {
+            console.warn('[Avatar Display] Aucun âge fourni dans le profil');
+        }
+        
+        // Mettre à jour le sexe
+        if (profile.gender) {
+            console.log('[Avatar Display] Traitement du genre:', profile.gender);
+            const avatarGender = document.getElementById('avatarGender');
+            if (avatarGender) {
+                console.log('[Avatar Display] Élément avatarGender trouvé, mise à jour...');
+                if (profile.gender === "X") {
+                    avatarGender.innerHTML = `<span class="gender-symbol">❓</span> <span class="gender-text">X</span>`;
+                    console.log('[Avatar Display] Genre mis à jour avec X');
+                } else {
+                    const genderSymbol = profile.gender === "Homme" ? "♂️" : profile.gender === "Femme" ? "♀️" : "❓";
+                    console.log('[Avatar Display] Symbole de genre calculé:', genderSymbol);
+                    avatarGender.innerHTML = `<span class="gender-symbol">${genderSymbol}</span> <span class="gender-text">${profile.gender}</span>`;
+                    console.log('[Avatar Display] Genre mis à jour avec:', profile.gender);
+                }
+            } else {
+                console.error('[Avatar Display] Élément avatarGender non trouvé dans le DOM');
+            }
+        } else {
+            console.warn('[Avatar Display] Aucun genre fourni dans le profil');
+        }
+        
+        // Mettre à jour la situation familiale
+        if (profile.familyStatus) {
+            const avatarFamily = document.getElementById('avatarFamily');
+            if (avatarFamily) {
+                if (profile.familyStatus === "X") {
+                    avatarFamily.innerHTML = `<span class="family-emoji">❓</span> <span class="family-text">X</span>`;
+                } else {
+                    const familyEmoji = getFamilyEmoji(profile.familyStatus);
+                    avatarFamily.innerHTML = `<span class="family-emoji">${familyEmoji}</span> <span class="family-text">${profile.familyStatus}</span>`;
+                }
+            }
+        }
+        
+        // Mettre à jour les peurs
+        if (profile.fears && Array.isArray(profile.fears)) {
+            const avatarFears = document.getElementById('avatarFears');
+            if (avatarFears) {
+                avatarFears.innerHTML = '';
+                profile.fears.forEach(fear => {
+                    const fearItem = document.createElement('div');
+                    fearItem.className = 'fear-item';
+                    
+                    if (fear === "X") {
+                        fearItem.innerHTML = `
+                            <div class="fear-icon"><i class="fas fa-question-circle"></i></div>
+                            <div class="fear-text">X</div>
+                        `;
+                    } else {
+                        const fearIcon = getFearIcon(fear);
+                        fearItem.innerHTML = `
+                            <div class="fear-icon"><i class="fas ${fearIcon}"></i></div>
+                            <div class="fear-text">${fear}</div>
+                        `;
+                    }
+                    
+                    avatarFears.appendChild(fearItem);
+                });
+            }
+        }
+        
+        // Mettre à jour les attentes
+        if (profile.expectations && Array.isArray(profile.expectations)) {
+            const avatarExpectations = document.getElementById('avatarExpectations');
+            if (avatarExpectations) {
+                avatarExpectations.innerHTML = '';
+                profile.expectations.forEach(expectation => {
+                    const expectationItem = document.createElement('div');
+                    expectationItem.className = 'expectation-item';
+                    
+                    if (expectation === "X") {
+                        expectationItem.innerHTML = `
+                            <div class="expectation-icon"><i class="fas fa-question-circle"></i></div>
+                            <div class="expectation-text">X</div>
+                        `;
+                    } else {
+                        const expectationIcon = getExpectationIcon(expectation);
+                        expectationItem.innerHTML = `
+                            <div class="expectation-icon"><i class="fas ${expectationIcon}"></i></div>
+                            <div class="expectation-text">${expectation}</div>
+                        `;
+                    }
+                    
+                    avatarExpectations.appendChild(expectationItem);
+                });
+            }
+        }
+        
+        // Mettre à jour l'analyse psychologique
+        if (profile.psychologicalAnalysis) {
+            // Parser et organiser l'analyse psychologique
+            const parsedAnalysis = parsePsychologicalAnalysis(profile.psychologicalAnalysis);
+            
+            // Mettre à jour le profil principal
+            const psychographicMainProfile = document.getElementById('psychographicMainProfile');
+            if (psychographicMainProfile) {
+                psychographicMainProfile.innerHTML = parsedAnalysis.mainProfile || profile.psychologicalAnalysis;
+            }
+            
+            // Mettre à jour les sections spécifiques
+            updatePsychologicalSection('emotionsToEvoke', parsedAnalysis.emotionsToEvoke);
+            updatePsychologicalSection('lifestyleChoices', parsedAnalysis.lifestyleChoices);
+            updatePsychologicalSection('decisionLogic', parsedAnalysis.decisionLogic);
+            updatePsychologicalSection('mainDesire', parsedAnalysis.mainDesire);
+            updatePsychologicalSection('problemsToSolve', parsedAnalysis.problemsToSolve);
+            updatePsychologicalSection('biologicalReasons', parsedAnalysis.biologicalReasons);
+            
+            // Fallback : afficher le contenu complet si pas de sections spécifiques
+            const avatarPsychologicalAnalysis = document.getElementById('avatarPsychologicalAnalysis');
+            if (avatarPsychologicalAnalysis) {
+                avatarPsychologicalAnalysis.innerHTML = profile.psychologicalAnalysis;
+            }
+        }
+        
+        // Mettre à jour les sections psychologiques
+        if (profile.psychologicalSections) {
+            const psychologicalSections = profile.psychologicalSections;
+            
+            // Profil psychographique
+            if (psychologicalSections.mainProfile) {
+                const psychographicMainProfile = document.getElementById('psychographicMainProfile');
+                if (psychographicMainProfile) {
+                    psychographicMainProfile.innerHTML = psychologicalSections.mainProfile;
+                }
+            }
+            
+            // Émotions à évoquer
+            if (psychologicalSections.emotionsToEvoke) {
+                const emotionsToEvoke = document.getElementById('emotionsToEvoke');
+                if (emotionsToEvoke) {
+                    emotionsToEvoke.innerHTML = psychologicalSections.emotionsToEvoke;
+                }
+            }
+            
+            // Choix de style de vie
+            if (psychologicalSections.lifestyleChoices) {
+                const lifestyleChoices = document.getElementById('lifestyleChoices');
+                if (lifestyleChoices) {
+                    lifestyleChoices.innerHTML = psychologicalSections.lifestyleChoices;
+                }
+            }
+            
+            // Logique de décision d'achat
+            if (psychologicalSections.decisionLogic) {
+                const decisionLogic = document.getElementById('decisionLogic');
+                if (decisionLogic) {
+                    decisionLogic.innerHTML = psychologicalSections.decisionLogic;
+                }
+            }
+            
+            // Désir principal
+            if (psychologicalSections.mainDesire) {
+                const mainDesire = document.getElementById('mainDesire');
+                if (mainDesire) {
+                    mainDesire.innerHTML = psychologicalSections.mainDesire;
+                }
+            }
+            
+            // Problèmes à résoudre
+            if (psychologicalSections.problemsToSolve) {
+                const problemsToSolve = document.getElementById('problemsToSolve');
+                if (problemsToSolve) {
+                    problemsToSolve.innerHTML = psychologicalSections.problemsToSolve;
+                }
+                // Le code concernant la stratégie a été supprimé car il ne devrait pas être dans cette fonction
+            }
+            
+            // Raisons biologiques
+            if (psychologicalSections.biologicalReasons) {
+                const biologicalReasons = document.getElementById('biologicalReasons');
+                if (biologicalReasons) {
+                    biologicalReasons.innerHTML = psychologicalSections.biologicalReasons;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Met à jour le contenu de la stratégie marketing avec les données fournies
+ * @param {Object|string} strategyData - Données de la stratégie marketing ou contenu texte brut
+ */
+function updateStrategyContent(strategyData) {
+    console.log('[Avatar Display] Mise à jour du contenu de la stratégie marketing');
+    
+    // Si strategyData est une chaîne, traiter comme du contenu brut
+    if (typeof strategyData === 'string') {
+        console.log('[Avatar Display] Contenu brut détecté, parsing nécessaire');
+        
+        // Mettre à jour le contenu principal de la stratégie
+        const strategyMainContent = document.getElementById('strategyMainContent');
+        if (strategyMainContent) {
+            strategyMainContent.innerHTML = strategyData;
+            console.log('[Avatar Display] Contenu principal mis à jour avec le texte brut');
+        }
+        
+        // Parser le contenu pour extraire les sections spécifiques
+        parseAndUpdateStrategySections(strategyData);
+        return;
+    }
+    
+    // Si strategyData est un objet, traiter comme avant
+    if (!strategyData || typeof strategyData !== 'object') {
+        console.error('[Avatar Display] Données de stratégie invalides fournie pour la mise à jour');
+        return;
+    }
+    
+    // Mettre à jour le contenu principal de la stratégie
+    const strategyMainContent = document.getElementById('strategyMainContent');
+    if (strategyMainContent && strategyData.mainStrategy) {
+        strategyMainContent.innerHTML = strategyData.mainStrategy;
+    }
+    
+    // Mettre à jour les émotions clés à susciter
+    const keyEmotions = document.getElementById('keyEmotions');
+    if (keyEmotions && strategyData.keyEmotions) {
+        if (Array.isArray(strategyData.keyEmotions)) {
+            keyEmotions.innerHTML = '<ul>' + 
+                strategyData.keyEmotions.map(emotion => `<li>${emotion}</li>`).join('') + 
+                '</ul>';
+        } else {
+            keyEmotions.innerHTML = strategyData.keyEmotions;
+        }
+    }
+    
+    // Mettre à jour les motivations d'achat principales
+    const purchaseMotivations = document.getElementById('purchaseMotivations');
+    if (purchaseMotivations && strategyData.purchaseMotivations) {
+        if (Array.isArray(strategyData.purchaseMotivations)) {
+            purchaseMotivations.innerHTML = '<ul>' + 
+                strategyData.purchaseMotivations.map(motivation => `<li>${motivation}</li>`).join('') + 
+                '</ul>';
+        } else {
+            purchaseMotivations.innerHTML = strategyData.purchaseMotivations;
+        }
+    }
+    
+    // Mettre à jour les drivers biologiques
+    const biologicalDrivers = document.getElementById('biologicalDrivers');
+    if (biologicalDrivers && strategyData.biologicalDrivers) {
+        if (Array.isArray(strategyData.biologicalDrivers)) {
+            biologicalDrivers.innerHTML = '<ul>' + 
+                strategyData.biologicalDrivers.map(driver => `<li>${driver}</li>`).join('') + 
+                '</ul>';
+        } else {
+            biologicalDrivers.innerHTML = strategyData.biologicalDrivers;
+        }
+    }
+
+    // Mettre à jour les angles marketing clés
+    const marketingAngles = document.getElementById('marketingAngles');
+    if (marketingAngles && strategyData.marketingAngles) {
+        if (Array.isArray(strategyData.marketingAngles)) {
+            marketingAngles.innerHTML = '<ul>' + 
+                strategyData.marketingAngles.map(angle => `<li>${angle}</li>`).join('') + 
+                '</ul>';
+        } else {
+            marketingAngles.innerHTML = strategyData.marketingAngles;
+        }
+    }
+
+    // Mettre à jour les messages marketing à valeur ajoutée
+    const valueAddedMessages = document.getElementById('valueAddedMessages');
+    if (valueAddedMessages && strategyData.valueAddedMessages) {
+        if (Array.isArray(strategyData.valueAddedMessages)) {
+            valueAddedMessages.innerHTML = '<ul>' + 
+                strategyData.valueAddedMessages.map(message => `<li>${message}</li>`).join('') + 
+                '</ul>';
+        } else {
+            valueAddedMessages.innerHTML = strategyData.valueAddedMessages;
+        }
+    }
+
+    console.log('[Avatar Display] Contenu stratégie mis à jour avec succès');
+}
+
+/**
+ * Parse le contenu de la stratégie marketing et met à jour les sections spécifiques
+ * @param {string} content - Contenu texte de la stratégie marketing
+ */
+function parseAndUpdateStrategySections(content) {
+    console.log('[Avatar Display] Parsing du contenu de la stratégie marketing');
+    console.log('[Avatar Display] Contenu à parser:', content);
+    
+    try {
+        // Nettoyer le contenu HTML d'abord
+        let cleanContent = content;
+        if (typeof content === 'string' && content.includes('<div')) {
+            // Extraire le contenu textuel du HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            cleanContent = tempDiv.textContent || tempDiv.innerText || '';
+            console.log('[Avatar Display] Contenu nettoyé du HTML:', cleanContent);
+        }
+        
+        // Émotions clés à susciter
+        const emotionsMatch = cleanContent.match(/1\.\s*\*\*[^*]*émotions[^*]*\*\*[^:]*:\s*(.*?)(?=2\.\s*\*\*|$)/si);
+        if (emotionsMatch) {
+            const emotionsText = emotionsMatch[1].trim();
+            console.log('[Avatar Display] Émotions trouvées:', emotionsText);
+            const emotions = extractListItems(emotionsText);
+            updateSectionContent('keyEmotions', emotions);
+        } else {
+            console.log('[Avatar Display] Aucune émotion trouvée');
+        }
+    
+    /**
+     * Parse le contenu de la stratégie marketing et met à jour les sections spécifiques
+     * @param {string} content - Contenu texte de la stratégie marketing
+     */
+    function parseAndUpdateStrategySections(content) {
+        console.log('[Avatar Display] Parsing du contenu de la stratégie marketing');
+        console.log('[Avatar Display] Contenu à parser:', content);
+        
+        try {
+            // Nettoyer le contenu HTML d'abord
+            let cleanContent = content;
+            if (typeof content === 'string' && content.includes('<div')) {
+                // Extraire le contenu textuel du HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                cleanContent = tempDiv.textContent || tempDiv.innerText || '';
+                console.log('[Avatar Display] Contenu nettoyé du HTML:', cleanContent);
+            }
+            
+            // Émotions clés à susciter
+            const emotionsMatch = cleanContent.match(/1\.\s*\*\*[^*]*émotions[^*]*\*\*[^:]*:\s*(.*?)(?=2\.\s*\*\*|$)/si);
+            if (emotionsMatch) {
+                const emotionsText = emotionsMatch[1].trim();
+                console.log('[Avatar Display] Émotions trouvées:', emotionsText);
+            
+            if (!altDriversMatch) {
+                // Pattern alternatif 2 : chercher "biologiques" suivi de ":"
+                altDriversMatch = cleanContent.match(/biologiques[^:]*:\s*(.*?)(?=\d+\.\s*\*\*|angles|$)/si);
+            } else {
+                console.log('[Avatar Display] Aucune motivation trouvée');
+            }
+            
+            // La section "Problèmes à Résoudre" a été supprimée de l'onglet Stratégie
+            // car elle est déjà présente dans l'onglet Analyse Psychologique
+            
+            console.log('[Avatar Display] === DÉBUT PARSING DRIVERS ===');
+            
+            // Drivers biologiques majeurs
+            const section4Match = cleanContent.match(/4\.\s*\*\*[^*]*\*\*[^:]*:[\s\S]{0,200}/i);
+            if (section4Match) {
+                console.log('[Avatar Display] Section 4 trouvée:', section4Match[0]);
+            }
+            
+            const driversMatch = cleanContent.match(/4\.\s*\*\*Drivers [bB]iologiques(?:\s+(?:Majeurs|principaux))?\*\*[^:]*:\s*(.*?)(?=5\.\s*\*\*|$)/si);
+            if (driversMatch) {
+                const driversText = driversMatch[1].trim();
+                console.log('[Avatar Display] Drivers trouvés:', driversText);
+                updateSectionContent('biologicalDrivers', driversText);
+            } else {
+                console.log('[Avatar Display] Aucun driver trouvé avec le pattern principal');
+                
+                // Pattern alternatif 1 : chercher "drivers" suivi de ":"
+                let altDriversMatch = cleanContent.match(/drivers[^:]*:\s*(.*?)(?=\d+\.\s*\*\*|angles|$)/si);
+                
+                if (!altDriversMatch) {
+                    // Pattern alternatif 2 : chercher "biologiques" suivi de ":"
+                    altDriversMatch = cleanContent.match(/biologiques[^:]*:\s*(.*?)(?=\d+\.\s*\*\*|angles|$)/si);
+                }
+                
+                if (!altDriversMatch) {
+                    // Pattern alternatif 3 : très large, chercher tout après "4."
+                    altDriversMatch = cleanContent.match(/4\.\s*[^:]*:\s*(.*?)(?=5\.|angles|$)/si);
+                }
+                
+                if (altDriversMatch) {
+                    const driversText = altDriversMatch[1].trim();
+                    console.log('[Avatar Display] Drivers trouvés (alternative):', driversText);
+                    updateSectionContent('biologicalDrivers', driversText);
+                } else {
+                    console.error('[Avatar Display] Aucun driver trouvé même avec les patterns alternatifs');
+                }
+            }
+            console.log('[Avatar Display] === FIN PARSING DRIVERS ===');
+            
+            // Angles marketing clés
+            const anglesMatch = cleanContent.match(/5\.\s*\*\*[^*]*angles[^*]*\*\*[^:]*:\s*(.*?)(?=6\.\s*\*\*|$)/si);
+            if (anglesMatch) {
+                const anglesText = anglesMatch[1].trim();
+                console.log('[Avatar Display] Angles trouvés:', anglesText);
+                const angles = extractListItems(anglesText);
+                updateSectionContent('marketingAngles', angles);
+            } else {
+                console.log('[Avatar Display] Aucun angle trouvé');
+            }
+            
+            // Messages marketing à valeur ajoutée
+            const messagesMatch = cleanContent.match(/6\.\s*\*\*[^*]*messages[^*]*\*\*[^:]*:\s*(.*?)(?=En utilisant|En intégrant|$)/si);
+            if (messagesMatch) {
+                const messagesText = messagesMatch[1].trim();
+                console.log('[Avatar Display] Messages trouvés:', messagesText);
+                const messages = extractListItems(messagesText);
+                updateSectionContent('valueAddedMessages', messages);
+            } else {
+                console.log('[Avatar Display] Aucun message trouvé');
+            }
+            
+        } catch (error) {
+            console.error('[Avatar Display] Erreur lors du parsing de la stratégie:', error);
+        }
+    }
+    
+    /**
+     * Extrait les éléments d'une liste depuis un texte
+     * @param {string} text - Texte contenant potentiellement une liste
+     * @returns {Array} - Tableau des éléments de la liste
+     */
+    function extractListItems(text) {
+        if (!text) return [];
+        
+        // Nettoyer le texte
+        let cleanText = text.replace(/<[^>]*>/g, '').trim();
+        let items = [];
+        
+        // Rechercher les éléments avec des tirets
+        items = cleanText.match(/-\s*([^-]+?)(?=\s*-|$)/g);
+        if (items && items.length > 1) {
+            return items.map(item => item.replace(/^-\s*/, '').trim()).filter(item => item.length > 0);
+        }
+        
+        // Rechercher les éléments numérotés (1., 2., etc.)
+        items = cleanText.match(/\d+\.\s*([^0-9]+?)(?=\s*\d+\.|$)/g);
+        if (items && items.length > 1) {
+            return items.map(item => item.replace(/^\d+\.\s*/, '').trim()).filter(item => item.length > 0);
+        }
+        
+        // Rechercher les éléments avec des puces
+        items = cleanText.match(/•\s*([^•]+?)(?=\s*•|$)/g);
+        if (items && items.length > 1) {
+            return items.map(item => item.replace(/^•\s*/, '').trim()).filter(item => item.length > 0);
+        }
+        
+        // Rechercher les phrases séparées par des points-virgules
+        if (cleanText.includes(';')) {
+            items = cleanText.split(';').map(item => item.trim()).filter(item => item.length > 0);
+            if (items.length > 1) {
+                return items;
+            }
+        }
+        
+        // Rechercher les phrases séparées par des virgules (si plus de 2 éléments)
+        if (cleanText.includes(',')) {
+            items = cleanText.split(',').map(item => item.trim()).filter(item => item.length > 0);
+            if (items.length > 2) {
+                return items;
+            }
+        }
+        
+        // Rechercher les phrases séparées par des points (si plus de 2 éléments)
+        if (cleanText.includes('.')) {
+            items = cleanText.split('.').map(item => item.trim()).filter(item => item.length > 0);
+            if (items.length > 2) {
+                return items;
+            }
+        }
+        
+        // Si pas de liste détectée, retourner le texte tel quel
+        return [cleanText];
+    }
+    
+    /**
+     * Met à jour le contenu d'une section spécifique
+     * @param {string} sectionId - ID de la section à mettre à jour
+     * @param {string|Array} content - Contenu à afficher
+     */
+    function updateSectionContent(sectionId, content) {
+        const element = document.getElementById(sectionId);
+        if (!element) return;
+        
+        if (Array.isArray(content)) {
+            element.innerHTML = '<ul>' + 
+                content.map(item => `<li>${item}</li>`).join('') + 
+                '</ul>';
+        } else {
+            // Traiter le contenu texte et le convertir en liste si possible
+            const processedContent = extractListItems(content);
+            if (processedContent.length > 1) {
+                element.innerHTML = '<ul>' + 
+                    processedContent.map(item => `<li>${item}</li>`).join('') + 
+                    '</ul>';
+            } else {
+                element.innerHTML = content;
+            }
+        }
+        
+        console.log(`[Avatar Display] Section ${sectionId} mise à jour`);
+    }
+    
+    /**
+     * Synchronise le contenu de la Synthèse Stratégique avec l'onglet Stratégie
+     */
+    function syncStrategicSynthesis() {
+        const strategicSynthesisElement = document.getElementById('strategicSynthesis');
+        if (strategicSynthesisElement) {
+            const content = strategicSynthesisElement.innerHTML;
+            if (content && content.trim() !== '') {
+                console.log('[Avatar Display] Synchronisation de la Synthèse Stratégique avec l\'onglet Stratégie');
+                updateStrategyContent(content);
+            }
+        }
+    }
+    
+    /**
+     * Initialise l'observateur pour la Synthèse Stratégique
+     */
+    function initStrategicSynthesisObserver() {
+        const strategicSynthesisElement = document.getElementById('strategicSynthesis');
+        if (!strategicSynthesisElement) {
+            console.log('[Avatar Display] Élément strategicSynthesis non trouvé, nouvelle tentative dans 1s');
+            setTimeout(initStrategicSynthesisObserver, 1000);
+            return;
+        }
+        
+        console.log('[Avatar Display] Initialisation de l\'observateur pour la Synthèse Stratégique');
+        
+        // Créer un observateur de mutations pour détecter les changements
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                    console.log('[Avatar Display] Changement détecté dans la Synthèse Stratégique');
+                    setTimeout(() => {
+                        syncStrategicSynthesis();
+                    }, 100);
+                }
+            });
+        });
+        
+        // Configurer l'observateur
+        observer.observe(strategicSynthesisElement, {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+        
+        console.log('[Avatar Display] Observateur de la Synthèse Stratégique initialisé');
+    }
+    
+    // Fonction pour parser l'analyse psychologique et l'organiser dans les sections appropriées
+    function parsePsychologicalAnalysis(analysis) {
+        console.log('[Avatar Display] Parsing de l\'analyse psychologique:', analysis);
+        
+        try {
+            // Essayer de parser comme JSON d'abord
+            const jsonAnalysis = JSON.parse(analysis);
+            console.log('[Avatar Display] JSON parsé avec succès:', jsonAnalysis);
+            return jsonAnalysis;
+        } catch (e) {
+            console.log('[Avatar Display] Pas un JSON valide, traitement comme texte...');
+            
+            // Fallback : traitement comme texte (ancien comportement)
+            let cleanedAnalysis = analysis
+                // Supprimer les phrases d'introduction génériques
+                .replace(/Bien sûr,?\s*voici l'analyse demandée pour le produit.*?:/gi, '')
+                .replace(/Voici l'analyse psychologique.*?:/gi, '')
+                .replace(/Analyse psychologique.*?:/gi, '')
+                // Supprimer les titres avec ###
+                .replace(/###\s*\d+\.\s*\*\*.*?\*\*[^:]*:\s*/gi, '')
+                .replace(/###\s*\d+\.\s*.*/gi, '')
+                // Supprimer les titres avec **
+                .replace(/\*\*Profil psychographique\*\*/gi, '')
+                .replace(/\*\*Émotions clés à susciter\*\*/gi, '')
+                .replace(/\*\*Émotions à évoquer\*\*/gi, '')
+                .replace(/\*\*Style de vie\*\*/gi, '')
+                .replace(/\*\*Schémas de vie\*\*/gi, '')
+                .replace(/\*\*Logique de décision d'achat\*\*/gi, '')
+                .replace(/\*\*Logique de décision\*\*/gi, '')
+                .replace(/\*\*Désir principal\*\*/gi, '')
+                .replace(/\*\*Problèmes à résoudre\*\*/gi, '')
+                .replace(/\*\*Raisons biologiques\*\*/gi, '')
+                // Supprimer les numérotations au début
+                .replace(/^\s*\d+\.\s*/gm, '')
+                // Nettoyer les espaces multiples
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Diviser par phrases et distribuer
+            const sentences = cleanedAnalysis.split(/\.\s+/).filter(s => s.trim().length > 20);
+            
+            if (sentences.length >= 6) {
+                return {
+                    mainProfile: sentences.slice(0, 2).join('. ') + '.',
+                    emotionsToEvoke: sentences[2] + '.',
+                    lifestyleChoices: sentences[3] + '.',
+                    decisionLogic: sentences[4] + '.',
+                    mainDesire: sentences[5] + '.',
+                    problemsToSolve: sentences[6] ? sentences[6] + '.' : 'Informations en cours d\'analyse...',
+                    biologicalReasons: sentences[7] ? sentences[7] + '.' : 'Informations en cours d\'analyse...'
+                };
+            } else {
+                // Fallback complet
+                return {
+                    mainProfile: cleanedAnalysis,
+                    emotionsToEvoke: 'Informations en cours d\'analyse...',
+                    lifestyleChoices: 'Informations en cours d\'analyse...',
+                    decisionLogic: 'Informations en cours d\'analyse...',
+                    mainDesire: 'Informations en cours d\'analyse...',
+                    problemsToSolve: 'Informations en cours d\'analyse...',
+                    biologicalReasons: 'Informations en cours d\'analyse...'
+                };
+            }
+        }
+    }
+    
+    // Fonction pour mettre à jour une section psychologique spécifique
+    function updatePsychologicalSection(sectionId, sectionContent) {
+        const sectionElement = document.getElementById(sectionId);
+        if (sectionElement && sectionContent) {
+            sectionElement.innerHTML = `<p>${sectionContent}</p>`;
+        }
+    }
+    
+    // Fonction pour obtenir l'emoji approprié pour l'âge
+    function getAgeEmoji(age) {
+        if (!age || typeof age !== 'string') {
+            return "👤"; // Icône par défaut (personne)
+        }
+        
+        // Gérer le cas "X"
+        if (age === 'X' || age.toLowerCase().includes('information manquante')) {
+            return "❓";
+        }
+        
+        // Extraire le nombre de l'âge (ex: "25 ans" -> 25)
+        const ageMatch = age.match(/(\d+)/);
+        if (ageMatch) {
+            const ageNumber = parseInt(ageMatch[1]);
+            if (ageNumber >= 18 && ageNumber <= 25) return '👦';
+            if (ageNumber >= 26 && ageNumber <= 35) return '👨';
+            if (ageNumber >= 36 && ageNumber <= 45) return '👨‍💼';
+            if (ageNumber >= 46 && ageNumber <= 55) return '🧔';
+            if (ageNumber >= 56) return '👴';
+        }
+        
+        // Fallback pour les anciens formats de tranches d'âge
+        if (age.includes('18-25')) return '👦';
+        if (age.includes('26-35')) return '👨';
+        if (age.includes('36-45') || age.includes('35-45')) return '👨‍💼';
+        if (age.includes('46-55')) return '🧔';
+        if (age.includes('56+') || age.includes('55+')) return '👴';
+        
+        return '👤';
+    }
+    
+    // Fonction pour obtenir l'emoji approprié pour la situation familiale
+    function getFamilyEmoji(familyStatus) {
+        if (!familyStatus || typeof familyStatus !== 'string') {
+            return "👥"; // Icône par défaut (personnes)
+        }
+        
+        if (familyStatus.toLowerCase().includes('célibataire')) return "👤";
+        if (familyStatus.toLowerCase().includes('couple') && familyStatus.toLowerCase().includes('enfant')) return "👨‍👩‍👧‍👦";
+        if (familyStatus.toLowerCase().includes('couple')) return "👫";
+        if (familyStatus.toLowerCase().includes('marié') && familyStatus.toLowerCase().includes('enfant')) return "👨‍👩‍👧‍👦";
+        if (familyStatus.toLowerCase().includes('marié')) return "💑";
+        return "👥";
+    }
+    
+    // Fonction pour obtenir l'icône appropriée pour une peur
+    function getFearIcon(fear) {
+        if (!fear || typeof fear !== 'string') {
+            return "fa-exclamation-triangle"; // Icône par défaut
+        }
+        
+        if (fear.includes("coût") || fear.includes("prix") || fear.includes("investissement")) {
+            return "fa-coins";
+        } else if (fear.includes("difficulté") || fear.includes("complexe")) {
+            return "fa-question-circle";
+        } else if (fear.includes("résultat") || fear.includes("efficacité")) {
+            return "fa-chart-line";
+        } else if (fear.includes("fiabilité") || fear.includes("durabilité")) {
+            return "fa-exclamation-circle";
+        } else if (fear.includes("service") || fear.includes("support")) {
+            return "fa-headset";
+        } else {
+            return "fa-exclamation-triangle";
+        }
+    }
+    
+    // Fonction pour obtenir l'icône appropriée pour une attente
+    function getExpectationIcon(expectation) {
+        if (!expectation || typeof expectation !== 'string') {
+            return "fa-star"; // Icône par défaut
+        }
+        
+        if (expectation.includes("temps") || expectation.includes("rapide")) {
+            return "fa-tachometer-alt";
+        } else if (expectation.includes("résultat") || expectation.includes("professionnel")) {
+            return "fa-trophy";
+        } else if (expectation.includes("facile") || expectation.includes("simple")) {
+            return "fa-tools";
+        } else if (expectation.includes("investissement") || expectation.includes("économie")) {
+            return "fa-hand-holding-usd";
+        } else if (expectation.includes("durable") || expectation.includes("fiable")) {
+            return "fa-shield-alt";
+        } else {
+            return "fa-star";
+        }
+    }
+    
+    // Fonction pour initialiser les onglets avatar
+    function initializeAvatarTabs() {
+        console.log('[Avatar Display] Initialisation des onglets avatar');
+        
+        const avatarTabs = document.querySelectorAll('.avatar-tab-btn');
+        console.log('[Avatar Display] Onglets trouvés:', avatarTabs.length);
+        
+        if (avatarTabs.length === 0) {
+            console.error('[Avatar Display] Aucun onglet avatar trouvé');
+            return;
+        }
+        
+        avatarTabs.forEach((tab, index) => {
+            console.log(`[Avatar Display] Configuration onglet ${index}:`, tab.getAttribute('data-tab'));
+            
+            tab.addEventListener('click', () => {
+                console.log('[Avatar Display] Clic sur onglet:', tab.getAttribute('data-tab'));
+                
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Retirer la classe active de tous les onglets
+                const allTabs = document.querySelectorAll('.avatar-tab-btn');
+                allTabs.forEach(t => t.classList.remove('active'));
+                
+                // Ajouter la classe active à l'onglet cliqué
+                tab.classList.add('active');
+                
+                // Retirer la classe active de tous les contenus d'onglets
+                const allTabPanes = document.querySelectorAll('.avatar-tab-pane');
+                allTabPanes.forEach(pane => pane.classList.remove('active'));
+                
+                // Afficher le contenu de l'onglet sélectionné
+                const tabContent = document.querySelector(`#${tabId}`);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                    console.log('[Avatar Display] Onglet activé:', tabId);
+                } else {
+                    console.error('[Avatar Display] Contenu d\'onglet non trouvé:', tabId);
+                }
+            });
+        });
+        
+        console.log('[Avatar Display] Onglets avatar initialisés avec succès');
+    }
+    
+    // API publique
+    return {
+        createAvatarSection: createAvatarSection,
+        updateAvatarProfile: updateAvatarProfile,
+        updateStrategyContent: updateStrategyContent,
+        syncStrategicSynthesis: syncStrategicSynthesis,
+        initStrategicSynthesisObserver: initStrategicSynthesisObserver
+    };
+})();
+
+// Exposer le module globalement
+window.avatarDisplay = avatarDisplay;
+
+// Initialisation de l'observateur pour la Synthèse Stratégique
+window.avatarDisplay.initStrategicSynthesisObserver();

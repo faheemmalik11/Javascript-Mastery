@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Émotions Claude 4</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .section h3 { margin-top: 0; color: #333; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .result { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin: 10px 0; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        .log { font-family: monospace; font-size: 12px; background: #f1f1f1; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Test de Génération des Émotions avec Claude 4</h1>
+    
+    <div class="section">
+        <h3>Test Basique</h3>
+        <button onclick="testBasic()">Tester génération basique avec Claude 4</button>
+        <button onclick="testGPT()">Tester génération basique avec GPT-3.5 Turbo</button>
+        <div id="basicResult"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Test Complet Profil Psychographique</h3>
+        <button onclick="testFullProfile()">Tester profil complet avec Claude 4</button>
+        <div id="fullResult"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Console de Debug</h3>
+        <div id="debugLog" class="log"></div>
+    </div>
+
+    <script src="js/openai-api.js"></script>
+    <script src="js/strategy-generator.js"></script>
+    <script src="js/avatar-display.js"></script>
+    <script>
+        let debugLog = document.getElementById('debugLog');
+        
+        // Intercepter les console.log pour les afficher
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        function addToLog(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : '';
+            debugLog.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToLog(args.join(' '));
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToLog(args.join(' '), 'error');
+        };
+        
+        async function testBasic() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Test en cours...';
+            
+            try {
+                console.log('=== DÉBUT TEST BASIQUE CLAUDE 4 ===');
+                const result = await callOpenAI(
+                    'Génère une analyse émotionnelle simple pour un produit de fitness. Format: **Émotion**: Description',
+                    0.7,
+                    500,
+                    'claude'
+                );
+                
+                document.getElementById('basicResult').innerHTML = 
+                    `<div class="result"><strong>Résultat:</strong><br>${formatMarkdownToHtml(result)}</div>`;
+                console.log('Résultat reçu:', result);
+                
+            } catch (error) {
+                console.error('Erreur test basique:', error);
+                document.getElementById('basicResult').innerHTML = 
+                    `<div class="result error"><strong>Erreur:</strong> ${error.message}</div>`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Tester génération basique avec Claude 4';
+            }
+        }
+        
+        async function testGPT() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Test en cours...';
+            
+            try {
+                console.log('=== DÉBUT TEST BASIQUE GPT-3.5 ===');
+                const result = await callOpenAI(
+                    'Génère une analyse émotionnelle simple pour un produit de fitness. Format: **Émotion**: Description',
+                    0.7,
+                    500,
+                    'gpt-3.5-turbo'
+                );
+                
+                document.getElementById('basicResult').innerHTML = 
+                    `<div class="result"><strong>Résultat GPT:</strong><br>${formatMarkdownToHtml(result)}</div>`;
+                console.log('Résultat GPT reçu:', result);
+                
+            } catch (error) {
+                console.error('Erreur test GPT:', error);
+                document.getElementById('basicResult').innerHTML = 
+                    `<div class="result error"><strong>Erreur GPT:</strong> ${error.message}</div>`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Tester génération basique avec GPT-3.5 Turbo';
+            }
+        }
+        
+        async function testFullProfile() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Test en cours...';
+            
+            try {
+                console.log('=== DÉBUT TEST PROFIL COMPLET CLAUDE ===');
+                
+                // Test avec Claude 4
+                const claudeResult = await window.generateStrategySections(
+                    'Produit de fitness révolutionnaire qui aide à brûler les graisses rapidement et efficacement', 
+                    'FitnessPro', 
+                    'claude'
+                );
+                
+                console.log('Résultat Claude reçu:', claudeResult);
+                
+                // Test avec GPT-3.5 Turbo
+                console.log('=== DÉBUT TEST PROFIL COMPLET GPT ===');
+                const gptResult = await window.generateStrategySections(
+                    'Produit de fitness révolutionnaire qui aide à brûler les graisses rapidement et efficacement', 
+                    'FitnessPro', 
+                    'gpt-3.5-turbo'
+                );
+                
+                console.log('Résultat GPT reçu:', gptResult);
+                
+                // Comparer les résultats
+                document.getElementById('fullResult').innerHTML = `
+                    <div class="result">
+                        <h4>Comparaison Claude vs GPT-3.5 Turbo</h4>
+                        
+                        <h5>Claude 4 - Nombre de sections générées: ${Object.keys(claudeResult).length}</h5>
+                        <div style="background: #e7f3ff; padding: 10px; margin: 5px 0;">
+                            <strong>Sections Claude:</strong> ${Object.keys(claudeResult).join(', ')}<br>
+                            <strong>Émotions clés (extrait):</strong> ${claudeResult.keyEmotions ? claudeResult.keyEmotions.substring(0, 200) + '...' : 'Non généré'}
+                        </div>
+                        
+                        <h5>GPT-3.5 Turbo - Nombre de sections générées: ${Object.keys(gptResult).length}</h5>
+                        <div style="background: #fff3e0; padding: 10px; margin: 5px 0;">
+                            <strong>Sections GPT:</strong> ${Object.keys(gptResult).join(', ')}<br>
+                            <strong>Émotions clés (extrait):</strong> ${gptResult.keyEmotions ? gptResult.keyEmotions.substring(0, 200) + '...' : 'Non généré'}
+                        </div>
+                        
+                        <h5>Détails Complets:</h5>
+                        <details>
+                            <summary>Voir le résultat Claude complet</summary>
+                            <pre style="white-space: pre-wrap; font-size: 11px;">${JSON.stringify(claudeResult, null, 2)}</pre>
+                        </details>
+                        
+                        <details>
+                            <summary>Voir le résultat GPT complet</summary>
+                            <pre style="white-space: pre-wrap; font-size: 11px;">${JSON.stringify(gptResult, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Erreur test complet:', error);
+                document.getElementById('fullResult').innerHTML = 
+                    `<div class="result error"><strong>Erreur:</strong> ${error.message}</div>`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Tester profil complet avec Claude 4';
+            }
+        }
+        
+        console.log('Page de test chargée - prêt pour les tests');
+    </script>
+</body>
+</html>

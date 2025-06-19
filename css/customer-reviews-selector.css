@@ -1,0 +1,261 @@
+/* Styles pour le sélecteur d'avis clients */
+
+.customer-reviews-selector {
+    margin: 20px 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+/* Compteur de sélection */
+.selection-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 188, 212, 0.05));
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.counter-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-color, #e0e0e0);
+}
+
+.counter-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color, #00d4ff);
+    background: rgba(0, 212, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    min-width: 60px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.counter-number.counter-complete {
+    background: linear-gradient(135deg, var(--success-color, #4caf50), var(--success-hover, #45a049));
+    color: white;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Container des avis */
+.reviews-selection-container {
+    margin-bottom: 20px;
+}
+
+/* Grid pour les avis clients */
+.customer-reviews-grid {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.reviews-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color, #e0e0e0);
+    margin: 0 0 8px 0;
+}
+
+.reviews-instruction {
+    font-size: 15px;
+    color: var(--text-secondary, #b0b0b0);
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+}
+
+.reviews-container {
+    display: grid;
+    gap: 12px;
+}
+
+/* Item d'avis client */
+.customer-review-card {
+    background: var(--card-bg, #2a2a2a);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.customer-review-card:hover {
+    border-color: var(--primary-color, #00d4ff);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
+}
+
+.customer-review-card.selected {
+    border: 2px solid var(--primary-color, #00d4ff) !important;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 188, 212, 0.05)) !important;
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+.review-content {
+    flex: 1;
+}
+
+.review-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--text-color, #e0e0e0);
+}
+
+.review-content p {
+    font-size: 14px;
+    color: var(--text-secondary, #b0b0b0);
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.review-rating {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Badge de sélection - pastille numérotée */
+.selection-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+}
+
+.selection-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    border: 3px solid white;
+    transition: all 0.3s ease;
+}
+
+.customer-review-card.selected .selection-badge {
+    animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Styles pour les avis ajoutés manuellement */
+.customer-review-card.manual-item {
+    border-left: 4px solid var(--primary-color, #00d4ff) !important;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 188, 212, 0.02));
+    position: relative;
+}
+
+.customer-review-card.manual-item::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color, #00d4ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+.manual-label {
+    font-size: 12px !important;
+    color: var(--primary-color, #00d4ff) !important;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Actions container */
+.reviews-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* Bouton de validation */
+.validate-reviews-btn {
+    background: linear-gradient(135deg, var(--primary-color, #00d4ff), var(--primary-accent-color, #00bcd4)) !important;
+    color: var(--dark-bg, #0a0a0a) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 14px 28px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    min-width: 200px !important;
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3) !important;
+    text-transform: none !important;
+    letter-spacing: 0.5px !important;
+}
+
+.validate-reviews-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-hover-color, #00b8e6), var(--primary-color, #00d4ff)) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4) !important;
+}
+
+.validate-reviews-btn:disabled {
+    background: linear-gradient(135deg, var(--disabled-bg-color, #555), var(--disabled-bg-color, #444)) !important;
+    color: var(--disabled-text-color, #888) !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Bouton d'ajout manuel */
+.manual-input-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.add-manual-review-btn {
+    background: linear-gradient(135deg, var(--primary-color, #00d4ff), var(--primary-hover, #0099cc));
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.add-manual-review-btn:hover {
+    background: linear-gradient(135deg, var(--primary-hover, #0099cc), var(--primary-color, #00d4ff));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 212, 255, 0.4);
+}
+
+.add-manual-review-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}

@@ -1,0 +1,278 @@
+/* Styles sombres pour les sélecteurs - surcharge des styles existants */
+
+/* Styles communs pour tous les sélecteurs */
+.benefits-selector,
+.emotional-benefits-selector,
+.usecases-selector,
+.characteristics-selector,
+.competitive-advantages-selector,
+.product-title-selector,
+.customer-reviews-selector,
+.faq-selector,
+.selection-container,
+.faq-selection-container,
+.selection-item,
+.faq-selection-item {
+    background-color: var(--dark-surface-2);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    color: var(--text-primary);
+}
+
+/* Titres des sélecteurs */
+.benefits-selector h4,
+.emotional-benefits-selector h4,
+.usecases-selector h4,
+.characteristics-selector h4,
+.competitive-advantages-selector h4,
+.product-title-selector h4,
+.customer-reviews-selector h4,
+.faq-selector h4 {
+    color: var(--primary-color);
+}
+
+/* Tags et éléments sélectionnables */
+.benefit-tag,
+.emotional-benefit-tag,
+.usecase-tag,
+.characteristic-tag,
+.competitive-advantage-tag,
+.product-title-tag,
+.customer-review-tag,
+.faq-tag {
+    background-color: #1a1a1a !important;
+    border: 1px solid #333333 !important;
+    color: #ffffff !important;
+}
+
+/* Hover sur les éléments sélectionnables */
+.benefit-tag:hover,
+.emotional-benefit-tag:hover,
+.usecase-tag:hover,
+.characteristic-tag:hover,
+.competitive-advantage-tag:hover,
+.product-title-tag:hover,
+.customer-review-tag:hover,
+.faq-tag:hover {
+    background-color: #262626 !important;
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* Éléments sélectionnés */
+.benefit-tag.selected,
+.emotional-benefit-tag.selected,
+.usecase-tag.selected,
+.characteristic-tag.selected,
+.competitive-advantage-tag.selected,
+.product-title-tag.selected,
+.customer-review-tag.selected,
+.faq-tag.selected {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.4) !important;
+}
+
+/* Badge de sélection */
+.selection-badge {
+    background-color: var(--accent-color);
+}
+
+/* Boutons de validation */
+.validate-benefits-btn,
+.validate-emotional-benefits-btn,
+.validate-usecases-btn,
+.validate-characteristics-btn,
+.validate-competitive-advantages-btn,
+.validate-product-title-btn,
+.validate-customer-reviews-btn,
+.validate-faq-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+    color: var(--dark-bg);
+    border: none;
+}
+
+.validate-benefits-btn:hover,
+.validate-emotional-benefits-btn:hover,
+.validate-usecases-btn:hover,
+.validate-characteristics-btn:hover,
+.validate-competitive-advantages-btn:hover,
+.validate-product-title-btn:hover,
+.validate-customer-reviews-btn:hover,
+.validate-faq-btn:hover {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Messages de sélection */
+.selection-message,
+.selection-count {
+    color: var(--text-secondary);
+}
+
+/* Boutons d'édition */
+.edit-btn {
+    background-color: var(--dark-surface-3);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.edit-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+/* Conteneurs de version */
+.version-container {
+    background-color: var(--dark-surface-2);
+    border: 1px solid var(--border-color);
+}
+
+/* Sélecteur de version */
+.version-selector {
+    background-color: var(--dark-surface-3);
+    color: var(--text-secondary);
+}
+
+.version-selector .version-option {
+    color: var(--text-secondary);
+}
+
+.version-selector .version-option.selected {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+/* Contenu des versions */
+.version-content {
+    color: var(--text-primary);
+}
+
+/* Styles spécifiques pour les éléments imbriqués */
+.benefit-item,
+.emotional-benefit-item,
+.usecase-item,
+.characteristic-item,
+.competitive-advantage-item,
+.product-title-item,
+.customer-review-item,
+.faq-item {
+    background-color: var(--dark-surface-2);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Numéros et indicateurs */
+.benefit-number,
+.emotional-benefit-number,
+.usecase-number,
+.characteristic-number,
+.competitive-advantage-number,
+.product-title-number,
+.customer-review-number,
+.faq-number {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+/* Texte des éléments */
+.benefit-text,
+.emotional-benefit-text,
+.usecase-text,
+.characteristic-text,
+.competitive-advantage-text,
+.product-title-text,
+.customer-review-text,
+.faq-text {
+    color: var(--text-primary);
+}
+
+/* Styles spécifiques pour les cellules de sélection FAQ et autres */
+.selection-container,
+.faq-selection-container,
+.faq-container,
+.selection-box,
+.selection-wrapper,
+.selection-panel,
+.faq-selection-panel,
+.faq-selection-wrapper,
+.faq-selection-box,
+.selection-group,
+.faq-selection-group {
+    background-color: var(--dark-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    padding: 15px !important;
+    border-radius: 8px !important;
+    margin-bottom: 15px !important;
+}
+
+.selection-item,
+.faq-selection-item {
+    background-color: var(--dark-surface-2) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 10px !important;
+    padding: 10px !important;
+    border-radius: 6px !important;
+}
+
+.selection-header,
+.faq-selection-header {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.selection-count,
+.faq-selection-count {
+    color: var(--text-secondary) !important;
+}
+
+.selection-message,
+.faq-selection-message {
+    color: var(--text-secondary) !important;
+    font-style: italic !important;
+}
+
+/* Styles pour les éléments de formulaire dans les sélecteurs */
+.benefits-selector input,
+.emotional-benefits-selector input,
+.usecases-selector input,
+.characteristics-selector input,
+.competitive-advantages-selector input,
+.product-title-selector input,
+.customer-reviews-selector input,
+.faq-selector input,
+.benefits-selector textarea,
+.emotional-benefits-selector textarea,
+.usecases-selector textarea,
+.characteristics-selector textarea,
+.competitive-advantages-selector textarea,
+.product-title-selector textarea,
+.customer-reviews-selector textarea,
+.faq-selector textarea {
+    background-color: var(--dark-surface-3);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.benefits-selector input:focus,
+.emotional-benefits-selector input:focus,
+.usecases-selector input:focus,
+.characteristics-selector input:focus,
+.competitive-advantages-selector input:focus,
+.product-title-selector input:focus,
+.customer-reviews-selector input:focus,
+.faq-selector input:focus,
+.benefits-selector textarea:focus,
+.emotional-benefits-selector textarea:focus,
+.usecases-selector textarea:focus,
+.characteristics-selector textarea:focus,
+.competitive-advantages-selector textarea:focus,
+.product-title-selector textarea:focus,
+.customer-reviews-selector textarea:focus,
+.faq-selector textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2);
+}
